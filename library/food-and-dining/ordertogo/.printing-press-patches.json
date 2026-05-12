@@ -58,6 +58,19 @@
         "third_party/kooky/browser/chrome/chrome.go"
       ],
       "validated_outcome": "Build and vet pass. auth login --chrome now imports 8 cookies on macOS (verified end-to-end against a live ordertogo.com session). Live /m/api/* requests return real responses (menu fetch, restaurant detail) instead of 403. PRINTING_PRESS_VERIFY=1 dry-run of orders place produces a request body byte-for-byte identical to the postmicmeshorder body captured from a real successful $2.99 checkout in the browser."
+    },
+    {
+      "id": "ordertogo-fix-orders-list-endpoint-and-jwt-header",
+      "applied_at": "2026-05-12",
+      "summary": "Switch orders list from /m/api/getmicmeshorders (web SHOW path) to /api/getUserOrderHistoryByUserid (real LIST endpoint). Inject Authorization (from _fbtoken cookie) and __requestid headers globally. Resolve and cache meshuser id via /api/getRestmeshUser.",
+      "reason": "As shipped, `orders list` posted to /m/api/getmicmeshorders with empty body and got 400 'Server communication config missing'. That endpoint is the per-orderid SHOW path; the actual LIST endpoint /api/getUserOrderHistoryByUserid was missed during sniff. All /api/* calls also require Authorization=<_fbtoken JWT> (the web client lifts the cookie value into the header in fbbase.post) plus an __requestid idempotency header on POSTs. Without those headers every call returns the same 'Server communication config missing'. Fix: client.go injects both headers automatically; orders_list.go and sync.go's orders branch do a two-call flow (getRestmeshUser to obtain meshuser.id, then getUserOrderHistoryByUserid) and cache the id on Config.MeshUserID after the first lookup.",
+      "files": [
+        "internal/cli/orders_list.go",
+        "internal/cli/sync.go",
+        "internal/client/client.go",
+        "internal/config/config.go"
+      ],
+      "validated_outcome": "ordertogo-pp-cli orders list returns 58 real orders (Sep 2025 through May 2026). sync --orders ingests 58 rows. Verified against the same user account whose live /history page renders the same 58 entries from /api/getUserOrderHistoryByUserid."
     }
   ]
 }

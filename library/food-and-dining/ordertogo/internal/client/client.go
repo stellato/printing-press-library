@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io"
 	"math"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
@@ -21,6 +22,9 @@ import (
 	"github.com/mvanhorn/printing-press-library/library/food-and-dining/ordertogo/internal/cliutil"
 	"github.com/mvanhorn/printing-press-library/library/food-and-dining/ordertogo/internal/config"
 )
+
+// PATCH: small non-crypto random for __requestid idempotency suffix.
+func randInt() int { return rand.Intn(10000) }
 
 type Client struct {
 	BaseURL    string
@@ -257,6 +261,21 @@ func (c *Client) do(method, path string, params map[string]string, body any, hea
 		}
 		if req.Header.Get("Referer") == "" && c.BaseURL != "" {
 			req.Header.Set("Referer", c.BaseURL+"/")
+		}
+		// PATCH: /api/* endpoints (getRestmeshUser, getUserOrderHistoryByUserid,
+		// etc.) gate on Authorization = <_fbtoken> (the Firebase ID JWT from
+		// the cookie), not on the cookie itself. The web client lifts the
+		// cookie value into the header in fbbase.post; without it the server
+		// returns "Server communication config missing".
+		if req.Header.Get("Authorization") == "" {
+			if fbtoken, err := config.CookieValueFromStore("", "_fbtoken"); err == nil && fbtoken != "" {
+				req.Header.Set("Authorization", fbtoken)
+			}
+		}
+		// PATCH: ordertogo.com uses an `__requestid` header for idempotency on
+		// POSTs (epoch_ms + random int). Format: <epoch_ms>_<random>.
+		if method != http.MethodGet && req.Header.Get("__requestid") == "" {
+			req.Header.Set("__requestid", fmt.Sprintf("%d_%d", time.Now().UnixMilli(), randInt()))
 		}
 
 		resp, err := c.HTTPClient.Do(req)
