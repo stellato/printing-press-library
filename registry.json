@@ -2,6 +2,29 @@
   "schema_version": 2,
   "entries": [
     {
+      "name": "adminbyrequest",
+      "category": "devices",
+      "api": "Adminbyrequest",
+      "description": "Every Admin By Request portal action, plus a local SQLite mirror of audit, events, inventory and requests for ad-hoc...",
+      "path": "library/devices/adminbyrequest",
+      "printer": "joltsconsulting",
+      "printer_name": "joltsconsulting",
+      "mcp": {
+        "binary": "adminbyrequest-pp-mcp",
+        "transports": [
+          "stdio"
+        ],
+        "tool_count": 8,
+        "public_tool_count": 0,
+        "auth_type": "api_key",
+        "env_vars": [
+          "ADMINBYREQUEST_API_KEY"
+        ],
+        "mcp_ready": "full",
+        "spec_format": "internal"
+      }
+    },
+    {
       "name": "agent-capture",
       "category": "developer-tools",
       "api": "agent-capture",
