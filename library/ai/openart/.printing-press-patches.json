@@ -64,6 +64,15 @@
         "README.md"
       ],
       "validated_outcome": "go test ./... passes (193 in 12 packages, including 3 new modelRow tests). go vet clean. verify_skill.py clean. `models show nano-banana-pro --agent` returns experimental=true; `models show nano-banana --agent` returns experimental=false; `image gen --help` shows both variants in examples."
+    },
+    {
+      "id": "prompts-replay-family-aware-body",
+      "summary": "prompts replay now builds an image-shaped body for image-family models and a video-shaped body for video models, and routes to the matching Capability form.",
+      "reason": "The earlier resolution-panic fix kept replay from crashing but still constructed a video-shaped body (duration / videoCount / '720p' resolution / autoEnhancePrompt) and routed every submit to Capability(FormText2Video). For image-family models that body went to the create-image endpoint and 4xx'd silently (greptile P1 follow-up on PR #554, posted after the panic-only patch landed).",
+      "files": [
+        "internal/cli/prompts_novel.go"
+      ],
+      "validated_outcome": "go build + go vet + go test ./... pass (193/12). --bump count routes to imageCount on image models / videoCount on video; --bump duration errors on image models with a helpful message instead of silently dropping."
     }
   ]
 }

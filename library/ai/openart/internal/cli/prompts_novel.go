@@ -252,48 +252,75 @@ Use --bump key=value to override individual params (e.g. --bump duration=10
 				return fmt.Errorf("could not resolve a model to replay against")
 			}
 
-			// Build the new submit body, copying the original input shape.
-			body := map[string]any{
-				"prompt":            stringOr(input["prompt"], ""),
-				"model":             newModel.Slug,
-				"projectId":         "",
-				"folderId":          nil,
-				"videoCount":        intOr(input["videoCount"], 1),
-				"duration":          intOr(input["duration"], (newModel.DurationMinSec+newModel.DurationMaxSec)/2),
-				"aspectRatio":       stringOr(input["aspectRatio"], "16:9"),
-				"resolution":        stringOr(input["resolution"], "720p"),
-				"autoEnhancePrompt": false,
-				"enableUnlimited":   true,
-			}
-			// PATCH: image-family models (nano-banana, gpt-image-2,
-			// flux-2-pro, etc.) have `Resolutions == nil` and ship
-			// `PixelResolutions` instead. The previous fallback did
-			// `newModel.Resolutions[0]` unconditionally on a no-match,
-			// which panics with index-out-of-range on every replay of
-			// an image generation (greptile P1 on PR #554). Merge both
-			// resolution sets for the membership check, then fall back
-			// to the first available resolution from whichever list is
-			// populated. If neither is populated (defensive guard for
-			// any future zero-resolution model), leave the user-supplied
-			// value untouched.
-			candidates := newModel.Resolutions
-			if len(candidates) == 0 {
-				candidates = newModel.PixelResolutions
-			}
-			currentRes, _ := body["resolution"].(string)
-			if !modelSupports(candidates, currentRes) {
-				if len(candidates) > 0 {
-					body["resolution"] = candidates[0]
-				}
-			}
-			d := body["duration"].(int)
-			if d < newModel.DurationMinSec {
-				body["duration"] = newModel.DurationMinSec
-			} else if d > newModel.DurationMaxSec {
-				body["duration"] = newModel.DurationMaxSec
+			// PATCH: pick the right submit shape for the target model.
+			// Image models take {prompt, imageCount, aspectRatio,
+			// visualReferences, resolution?} against
+			// create-image:reference:<slug>; video models take the
+			// {prompt, videoCount, duration, aspectRatio, resolution, ...}
+			// body against <slug>:text2video. Sending video fields to
+			// the image endpoint silently 4xx's at submit time (greptile
+			// P1 follow-up on PR #554). The earlier resolution-panic
+			// guard is now folded into the video branch where it
+			// applies; image bodies don't need it.
+			isImage := newModel.Family == openartmodels.FamilyImage
+			formType := openartmodels.FormText2Video
+			if isImage {
+				formType = openartmodels.FormText2Image
 			}
 
-			// Apply --bump overrides.
+			var body map[string]any
+			if isImage {
+				count := intOr(input["imageCount"], intOr(input["videoCount"], 1))
+				body = map[string]any{
+					"prompt":           stringOr(input["prompt"], ""),
+					"model":            newModel.Slug,
+					"projectId":        "",
+					"folderId":         nil,
+					"imageCount":       count,
+					"aspectRatio":      stringOr(input["aspectRatio"], "1:1"),
+					"visualReferences": []string{},
+				}
+				if vr, ok := input["visualReferences"].([]any); ok && len(vr) > 0 {
+					body["visualReferences"] = vr
+				}
+				if r, ok := input["resolution"].(string); ok && r != "" {
+					body["resolution"] = r
+				}
+			} else {
+				body = map[string]any{
+					"prompt":            stringOr(input["prompt"], ""),
+					"model":             newModel.Slug,
+					"projectId":         "",
+					"folderId":          nil,
+					"videoCount":        intOr(input["videoCount"], 1),
+					"duration":          intOr(input["duration"], (newModel.DurationMinSec+newModel.DurationMaxSec)/2),
+					"aspectRatio":       stringOr(input["aspectRatio"], "16:9"),
+					"resolution":        stringOr(input["resolution"], "720p"),
+					"autoEnhancePrompt": false,
+					"enableUnlimited":   true,
+				}
+				candidates := newModel.Resolutions
+				if len(candidates) == 0 {
+					candidates = newModel.PixelResolutions
+				}
+				currentRes, _ := body["resolution"].(string)
+				if !modelSupports(candidates, currentRes) {
+					if len(candidates) > 0 {
+						body["resolution"] = candidates[0]
+					}
+				}
+				d := body["duration"].(int)
+				if d < newModel.DurationMinSec {
+					body["duration"] = newModel.DurationMinSec
+				} else if d > newModel.DurationMaxSec {
+					body["duration"] = newModel.DurationMaxSec
+				}
+			}
+
+			// Apply --bump overrides. "count" routes to imageCount on
+			// image models / videoCount on video; "duration" is
+			// video-only and errors with a helpful message on image
+			// models rather than silently dropping.
 			for _, b := range bumpFlags {
 				k, v, ok := strings.Cut(b, "=")
 				if !ok {
@@ -301,9 +328,16 @@ Use --bump key=value to override individual params (e.g. --bump duration=10
 				}
 				switch k {
 				case "duration":
+					if isImage {
+						return fmt.Errorf("--bump duration is video-only; %s is an image model", newModel.Slug)
+					}
 					body["duration"] = mustAtoi(v)
-				case "count", "videoCount":
-					body["videoCount"] = mustAtoi(v)
+				case "count", "videoCount", "imageCount":
+					if isImage {
+						body["imageCount"] = mustAtoi(v)
+					} else {
+						body["videoCount"] = mustAtoi(v)
+					}
 				case "resolution":
 					body["resolution"] = v
 				case "aspectRatio", "aspect-ratio":
@@ -317,10 +351,10 @@ Use --bump key=value to override individual params (e.g. --bump duration=10
 
 			if cliutil.IsVerifyEnv() || flags.dryRun {
 				return printJSONFiltered(cmd.OutOrStdout(), map[string]any{
-					"would_replay": true,
-					"model":        newModel.Slug,
-					"capability_id": newModel.Capability(openartmodels.FormText2Video),
-					"body":         body,
+					"would_replay":  true,
+					"model":         newModel.Slug,
+					"capability_id": newModel.Capability(formType),
+					"body":          body,
 				}, flags)
 			}
 
@@ -334,7 +368,7 @@ Use --bump key=value to override individual params (e.g. --bump duration=10
 			}
 			body["projectId"] = projectID
 
-			capability := newModel.Capability(openartmodels.FormText2Video)
+			capability := newModel.Capability(formType)
 			path := "/forms/creations/" + url.PathEscape(capability)
 			rawResp, status, err := c.Post(path, body)
 			if err != nil {
