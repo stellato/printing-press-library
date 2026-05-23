@@ -200,6 +200,43 @@ These capabilities aren't available in any other tool for this API.
   prediction-goat-pp-cli new --days 7 --json
   ```
 
+### Live-on-read freshness
+
+Every command that surfaces a price (`yesProbability`, `yes_ask_dollars`, `volume_24h_fp`) refetches from the upstream API at command time. The local SQLite store is treated as a discovery index, never as a price source — so a question like "what are the odds Lakers win tonight" never gets served yesterday's cached spread. The response envelope carries `meta.price_source` (`live` / `stale` / `mixed`) and `meta.index_synced_at` so an agent can detect stale-index conditions. Human-mode output prints a `Index synced 14h ago, prices live` footer.
+
+### Learning surface: `teach` and `recall`
+
+The CLI gets smarter every time an LLM uses it, without any user-typed `learn` commands. The LLM contract:
+
+- **Before** running `topic` / `compare` for a new question:
+
+  ```bash
+  prediction-goat-pp-cli recall "what are Portugal's odds at the world cup" --agent
+  ```
+
+  Returns confirmed mappings from prior sessions matched by token-set Jaccard (>= 0.6). If `found=true` with `confidence>=2`, skip discovery and go straight to live price fetch for the returned tickers - 2 CLI calls instead of 7.
+
+- **After** finalizing a response that includes tickers/slugs, but **before** emitting it to the human:
+
+  ```bash
+  prediction-goat-pp-cli teach \
+    --query "what are Portugal's odds at the world cup" \
+    --resource KXMENWORLDCUP-26-PT \
+    --resource will-portugal-win-the-2026-fifa-world-cup-912 &
+  ```
+
+  Silent on success (zero stdout/stderr), safe to background with `&`. Errors go to `~/.local/share/prediction-goat-pp-cli/teach.log`. Idempotent on `(query_pattern, resource_id, action)` - calling it twice bumps confidence instead of duplicating.
+
+Inspection and undo:
+
+```bash
+prediction-goat-pp-cli learnings list --agent          # all rows
+prediction-goat-pp-cli learnings list --query "btc"    # substring filter
+prediction-goat-pp-cli forget "portugal world cup" --all
+```
+
+Disable for a single call with `--no-learn`, or globally with `PREDICTION_GOAT_NO_LEARN=true`. The reranking layer in `topic` and `compare` applies the learnings automatically (`boost` moves a hit to position 0 or inserts it synthetically; `hide` drops; `alias_of` rewrites).
+
 ## Usage
 
 Run `prediction-goat-pp-cli --help` for the full command reference and flag list.
