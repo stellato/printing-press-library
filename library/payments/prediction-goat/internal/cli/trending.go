@@ -410,6 +410,14 @@ func refreshMarketScreenItems(ctx context.Context, fc freshnessClient, items []m
 			}
 			if v, ok := outcome.Polymarket[items[i].ID]; ok {
 				applyLiveValuesIfPresent(v, &items[i].YesProbability, &items[i].Volume24h, &dummyStatus)
+				// PATCH(refresh-market-screen-items-yespercent): keep
+				// the derived YesPercent field in sync with the just-
+				// refreshed YesProbability so agent-facing JSON never
+				// shows yesProbability=0.60 alongside yesPercent=55.0
+				// (the pre-refresh value). Mirrors compare.go and
+				// mispriced.go post-refresh recomputes. Greptile P1 on
+				// PR #780.
+				items[i].YesPercent = yesPercent(items[i].YesProbability)
 			}
 			items[i].PriceSource = priceSourceLive
 		case "kalshi":
@@ -422,6 +430,11 @@ func refreshMarketScreenItems(ctx context.Context, fc freshnessClient, items []m
 			}
 			if v, ok := outcome.Kalshi[items[i].ID]; ok {
 				applyLiveValuesIfPresent(v, &items[i].YesProbability, &items[i].Volume24h, &dummyStatus)
+				// PATCH(refresh-market-screen-items-yespercent): mirrors
+				// the Polymarket branch above; recompute the derived
+				// YesPercent so it stays in sync with the refreshed
+				// YesProbability after the live-on-read pass.
+				items[i].YesPercent = yesPercent(items[i].YesProbability)
 			}
 			items[i].PriceSource = priceSourceLive
 		}

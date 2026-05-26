@@ -409,6 +409,23 @@
         "dogfood-results.json"
       ],
       "validated_outcome": "go build ./... clean, go vet ./... clean, go test ./... 699/699 passing. 3/3 hand-authored playbooks attach to their canonical example query (odds_for_team -> 'odds Brazil wins world cup' binds $TEAM=Brazil; event_markets -> 'all sibling markets for the NBA Draft'; series_summary -> 'summarize kalshi series KXMENWORLDCUP'). Cross-alias: 'Lusitania odds world cup' against 'Portugal odds world cup' taught row emits cross_alias_match warning and promotes EntityMatch to Exact. Similar-shape: 'Brazil odds world cup' against Portugal-taught row drops correctly with similar_shape_different_entity:Portugal envelope warning. Ambiguous-alias narrow trigger: Cards->{Arizona Cardinals, St. Louis Cardinals} fires ambiguous_alias; Brazil-vs-Portugal multi-entity does NOT (Greptile round-2 guard confirmed). playbook amend writes [amend 2026-05-26THH:MMZ]: marker visible in playbook list --agent. playbook list returns 4 rows (3 playbooks, event_markets seeds under 2 family keys); sentinel __seed_meta__ correctly hidden."
+    },
+    {
+      "id": "greptile-pr780-markets-diff-pm-fallback-timeout",
+      "summary": "Add 15s HTTP timeout to livePolymarketBySlug (markets diff PM fallback path).",
+      "reason": "http.DefaultClient has Timeout: 0, so a slow or unreachable Gamma API would block markets diff indefinitely. Other live HTTP paths use 15-60s timeouts (freshness.go, kalshi.Client). Greptile P1 on PR #780.",
+      "files": [
+        "internal/cli/markets_diff.go"
+      ],
+      "upstream_issue": "Pending: backport into cli-printing-press generator templates if the markets-diff scaffold ships there."
+    },
+    {
+      "id": "greptile-pr780-refresh-market-screen-items-yespercent",
+      "summary": "Recompute YesPercent after live refresh in refreshMarketScreenItems (trending/liquid/movers etc).",
+      "reason": "YesProbability gets refreshed via applyLiveValuesIfPresent but the derived YesPercent field stayed stale, so agent-facing JSON could report yesProbability=0.60 alongside yesPercent=55.0 (the pre-refresh value). Mirrors the post-refresh recompute already in compare.go and mispriced.go. Greptile P1 on PR #780.",
+      "files": [
+        "internal/cli/trending.go"
+      ]
     }
   ]
 }

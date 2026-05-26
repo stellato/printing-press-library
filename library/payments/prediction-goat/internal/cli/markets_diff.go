@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/mvanhorn/printing-press-library/library/payments/prediction-goat/internal/source/kalshi"
@@ -127,7 +128,11 @@ func livePolymarketBySlug(cmd *cobra.Command, slug string) (map[string]any, erro
 	}
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("User-Agent", "prediction-goat-pp-cli/1.0")
-	resp, err := http.DefaultClient.Do(req)
+	// PATCH(markets-diff-pm-fallback-timeout): http.DefaultClient has no
+	// timeout, so a slow or unreachable Gamma API would block `markets
+	// diff` indefinitely. Other live HTTP paths in this CLI use 15-60s
+	// timeouts (freshness.go and kalshi.Client). Greptile P1 on PR #780.
+	resp, err := (&http.Client{Timeout: 15 * time.Second}).Do(req)
 	if err != nil {
 		return nil, err
 	}
