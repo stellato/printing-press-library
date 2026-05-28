@@ -208,9 +208,6 @@ func isReportFresh(db *sql.DB, reportType, marketplaceID, startTime, endTime str
 }
 
 func cacheReportData(db *sql.DB, reportType, marketplaceID, startTime, endTime string, rows []map[string]string) error {
-	if len(rows) == 0 {
-		return nil
-	}
 	tx, err := db.Begin()
 	if err != nil {
 		return err

@@ -273,11 +273,24 @@ func velocityZScore(days map[string]int) float64 {
 	if len(days) < 8 {
 		return 0
 	}
+	now := time.Now().UTC()
+	today := now.Format("2006-01-02")
+	latestKey := now.AddDate(0, 0, -1).Format("2006-01-02")
+	latest, ok := days[latestKey]
+	if !ok {
+		return 0
+	}
 	var vals []float64
-	for _, v := range days {
+	for day, v := range days {
+		if day == today || day == latestKey {
+			continue
+		}
 		vals = append(vals, float64(v))
 	}
-	latest := float64(days[time.Now().UTC().Format("2006-01-02")])
+	if len(vals) < 2 {
+		return 0
+	}
+	latestVal := float64(latest)
 	mean := 0.0
 	for _, v := range vals {
 		mean += v
@@ -288,7 +301,7 @@ func velocityZScore(days map[string]int) float64 {
 		variance += (v - mean) * (v - mean)
 	}
 	std := math.Sqrt(variance / float64(len(vals)))
-	return safeDiv(latest-mean, std)
+	return safeDiv(latestVal-mean, std)
 }
 
 func classifyReturnReason(reason string) (float64, float64) {

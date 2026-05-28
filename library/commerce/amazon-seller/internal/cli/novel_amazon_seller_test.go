@@ -171,12 +171,27 @@ func TestFBAvsFBMCoalescesFBAFeeComponents(t *testing.T) {
 func TestVelocityAnomalyDetection(t *testing.T) {
 	days := map[string]int{}
 	now := time.Now().UTC()
-	for i := 1; i < 10; i++ {
-		days[now.AddDate(0, 0, -i).Format("2006-01-02")] = 1
+	for i := 2; i < 12; i++ {
+		days[now.AddDate(0, 0, -i).Format("2006-01-02")] = 1 + i%2
 	}
-	days[now.Format("2006-01-02")] = 20
+	days[now.AddDate(0, 0, -1).Format("2006-01-02")] = 10
+	days[now.Format("2006-01-02")] = 1
 	if z := velocityZScore(days); z <= 2 {
 		t.Fatalf("expected spike z-score > 2, got %f", z)
+	}
+}
+
+func TestVelocityIgnoresTodayPartialDay(t *testing.T) {
+	days := map[string]int{}
+	now := time.Now().UTC()
+	values := []int{28, 29, 30, 31, 32, 30, 29, 31}
+	for i, value := range values {
+		days[now.AddDate(0, 0, -(i+2)).Format("2006-01-02")] = value
+	}
+	days[now.AddDate(0, 0, -1).Format("2006-01-02")] = 30
+	days[now.Format("2006-01-02")] = 1
+	if z := velocityZScore(days); z < -2 {
+		t.Fatalf("today's partial day should not trigger drop z-score, got %f", z)
 	}
 }
 
@@ -257,6 +272,16 @@ func TestCacheFreshness(t *testing.T) {
 	}
 	if !isReportFresh(db, "GET_FBA_ESTIMATED_FBA_FEES_TXT_DATA", "ATV", "s", "e", time.Hour) {
 		t.Fatal("expected fresh cache")
+	}
+}
+
+func TestCacheEmptyReportFreshness(t *testing.T) {
+	db := openNovelTestDB(t)
+	if err := cacheReportData(db, "GET_FBA_REIMBURSEMENTS_DATA", "ATV", "s", "e", nil); err != nil {
+		t.Fatal(err)
+	}
+	if !isReportFresh(db, "GET_FBA_REIMBURSEMENTS_DATA", "ATV", "s", "e", time.Hour) {
+		t.Fatal("expected empty report to be cached as fresh")
 	}
 }
 
