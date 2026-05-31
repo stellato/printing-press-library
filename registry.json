@@ -9230,48 +9230,6 @@
       }
     },
     {
-      "name": "substack-creator",
-      "category": "media-and-entertainment",
-      "api": "Substack Creator",
-      "description": "Manage Substack posts, drafts, subscribers, notes, comments, and cross-publication analytics from a local SQLite cache.",
-      "search_terms": [
-        "substack-creator",
-        "Substack Creator",
-        "substack-creator-pp-cli",
-        "Manage Substack posts, drafts, subscribers, notes, comments, and cross-publication analytics from a local SQLite cache.",
-        "Portfolio Dashboard",
-        "portfolio",
-        "One-screen status of every publication you own: subscriber count, paid count, last-published-at, drafts pending, next scheduled. No tab-switching, no CSV exports.",
-        "Cross-Publication Twin",
-        "posts twin",
-        "Duplicate a published post into another publication you own as a draft. Preserves paywall markers, sections, and re-uploads images to the target publication's CDN.",
-        "Subscriber Churn Diff",
-        "subscribers churn",
-        "Diff two SQLite snapshots of your subscriber list: who newly subscribed, who unsubscribed, who upgraded free->paid, who downgraded paid->free, since a chosen window.",
-        "Cross-Sell Candidates",
-        "subscribers cross-sell",
-        "SQL join across your publications' subscriber lists: emails paid on one publication but free or absent on the others, sorted by paid-publication coverage. The cross-sell list Substack does not ship.",
-        "Best Posts Cross-Publication",
-        "posts best",
-        "Rank posts by views, likes, comments, or restacks within a window. Optionally aggregate across every publication you own to find your overall top performer.",
-        "Bilingual Pair Tracker",
-        "posts pairs",
-        "Record EN<->DE post pairings in a local table. 'posts pair <en> <de>' adds; 'posts pairs --missing' lists posts in one language with no recorded twin in the other.",
-        "Full-Text Grep",
-        "grep",
-        "FTS5 over post bodies + Notes + comments, ranked by bm25, returning snippets and source URLs. Optional scope (posts/notes/comments/all), publication, and since filter.",
-        "Schedule Board",
-        "ASCII calendar of the next 30 days showing scheduled posts across every publication you own. Multi-pub editorial overview in one screen."
-      ],
-      "path": "library/media-and-entertainment/substack-creator",
-      "printer": "JPresting",
-      "printer_name": "JimPresting",
-      "creator": {
-        "handle": "JPresting",
-        "name": "JimPresting"
-      }
-    },
-    {
       "name": "suno",
       "category": "media-and-entertainment",
       "api": "Suno",
