@@ -52,6 +52,11 @@
       "name": "Podcast Produce",
       "command": "podcast produce",
       "description": "Turn an annotated script into a finished, mixed podcast episode: multi-host VO, music beds ducked under speech, SFX, EBU R128 loudness, plus transcript and chapters. Requires local ffmpeg."
+    },
+    {
+      "name": "Podcast Master",
+      "command": "podcast master",
+      "description": "De-noise and normalize an episode to broadcast loudness (EBU R128, -16/-14 LUFS, true-peak limited) with a before/after report. Requires local ffmpeg."
     }
   ]
 }

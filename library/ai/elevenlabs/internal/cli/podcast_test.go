@@ -117,3 +117,30 @@ func TestBuildPodcastFilterGraphNormalizesAndDucks(t *testing.T) {
 		}
 	}
 }
+
+func TestPodcastMasterVariants(t *testing.T) {
+	variants := podcastMasterVariants(podcastMasterOptions{
+		Out:        "episode.mp3",
+		TargetLUFS: -16,
+		TruePeak:   -1,
+		Variants:   "apple,spotify",
+	})
+	if len(variants) != 2 {
+		t.Fatalf("variants = %d", len(variants))
+	}
+	if variants[0].Path != "episode-apple.mp3" || variants[0].TargetLUFS != -16 {
+		t.Fatalf("apple variant = %+v", variants[0])
+	}
+	if variants[1].Path != "episode-spotify.mp3" || variants[1].TargetLUFS != -14 {
+		t.Fatalf("spotify variant = %+v", variants[1])
+	}
+}
+
+func TestLoudnormPass(t *testing.T) {
+	if !loudnormPass(loudnormMeasurement{InputI: "-16.1", InputTP: "-1.2"}, -16, -1) {
+		t.Fatal("expected loudnorm pass")
+	}
+	if loudnormPass(loudnormMeasurement{InputI: "-18.5", InputTP: "-0.1"}, -16, -1) {
+		t.Fatal("expected loudnorm failure")
+	}
+}

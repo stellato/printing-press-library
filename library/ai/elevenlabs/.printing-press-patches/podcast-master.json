@@ -1,0 +1,18 @@
+{
+  "schema_version": 2,
+  "id": "podcast-master",
+  "applied_at": "2026-06-03",
+  "base_run_id": "20260513T152516Z-e836a3fe",
+  "base_printing_press_version": "4.5.2",
+  "summary": "Add `podcast master`: standalone de-noise and two-pass loudness normalization for finished podcast episodes.",
+  "reason": "ElevenLabs does not provide a finished-episode mastering endpoint; externally recorded episodes need local ffmpeg loudness repair and reporting as a hand-authored novel workflow.",
+  "files": [
+    "internal/cli/podcast.go",
+    "internal/cli/podcast_master.go",
+    "internal/cli/ffmpeg.go",
+    "internal/cli/podcast_test.go",
+    ".printing-press.json",
+    "SKILL.md"
+  ],
+  "validated_outcome": "go build ./...; go vet ./...; go test ./...; govulncheck ./...; python3 .github/scripts/verify-skill/verify_skill.py --dir library/ai/elevenlabs/"
+}

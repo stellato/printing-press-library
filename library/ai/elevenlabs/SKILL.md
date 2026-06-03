@@ -79,6 +79,13 @@ These capabilities aren't available in any other tool for this API.
   ```bash
   elevenlabs-pp-cli podcast produce --script episode.md --out ./episode --agent
   ```
+- **`podcast master`** - De-noise and loudness-normalize an externally recorded episode with EBU R128 two-pass loudnorm, true-peak limiting, optional Apple/Spotify variants, and a JSON before/after report.
+
+  _Agents can enforce a podcast loudness floor before publishing without re-running a full production pipeline._
+
+  ```bash
+  elevenlabs-pp-cli podcast master --input raw.mp3 --out episode.mp3 --target-lufs -16 --true-peak -1 --agent
+  ```
 
 ## Command Reference
 
@@ -249,6 +256,7 @@ These capabilities aren't available in any other tool for this API.
 **podcast** — Podcast production workflows
 
 - `elevenlabs-pp-cli podcast produce` — Turn an annotated podcast script into a mixed episode
+- `elevenlabs-pp-cli podcast master` — De-noise and loudness-normalize a finished podcast episode
 
 **dubbing** — Manage dubbing
 

@@ -205,7 +205,11 @@ func buildPodcastFilterGraph(items []podcastMixItem) string {
 }
 
 func measureLoudnorm(ffmpegPath, input string, targetLUFS float64) (loudnormMeasurement, string, error) {
-	args := []string{"-hide_banner", "-i", input, "-af", loudnormMeasureFilter(targetLUFS), "-f", "null", "-"}
+	return measureLoudnormWithPeak(ffmpegPath, input, targetLUFS, -1.5)
+}
+
+func measureLoudnormWithPeak(ffmpegPath, input string, targetLUFS, truePeak float64) (loudnormMeasurement, string, error) {
+	args := []string{"-hide_banner", "-i", input, "-af", loudnormMeasureFilter(targetLUFS, truePeak), "-f", "null", "-"}
 	cmdText := formatCommand(ffmpegPath, args)
 	out, err := runCommandCapture("", ffmpegPath, args...)
 	if err != nil {
@@ -218,13 +222,17 @@ func measureLoudnorm(ffmpegPath, input string, targetLUFS float64) (loudnormMeas
 	return measurement, cmdText, nil
 }
 
-func loudnormMeasureFilter(targetLUFS float64) string {
-	return fmt.Sprintf("loudnorm=I=%.1f:TP=-1.5:LRA=11:print_format=json", targetLUFS)
+func loudnormMeasureFilter(targetLUFS, truePeak float64) string {
+	return fmt.Sprintf("loudnorm=I=%.1f:TP=%.1f:LRA=11:print_format=json", targetLUFS, truePeak)
 }
 
 func loudnormApplyArgs(input, output string, targetLUFS float64, m loudnormMeasurement, mp3 bool) []string {
-	filter := fmt.Sprintf("loudnorm=I=%.1f:TP=-1.5:LRA=11:measured_I=%s:measured_TP=%s:measured_LRA=%s:measured_thresh=%s:offset=%s:linear=true",
-		targetLUFS, m.InputI, m.InputTP, m.InputLRA, m.InputThresh, m.TargetOffset)
+	return loudnormApplyArgsWithPeak(input, output, targetLUFS, -1.5, m, mp3)
+}
+
+func loudnormApplyArgsWithPeak(input, output string, targetLUFS, truePeak float64, m loudnormMeasurement, mp3 bool) []string {
+	filter := fmt.Sprintf("loudnorm=I=%.1f:TP=%.1f:LRA=11:measured_I=%s:measured_TP=%s:measured_LRA=%s:measured_thresh=%s:offset=%s:linear=true",
+		targetLUFS, truePeak, m.InputI, m.InputTP, m.InputLRA, m.InputThresh, m.TargetOffset)
 	args := []string{"-y", "-hide_banner", "-i", input, "-af", filter, "-ar", "44100", "-ac", "2"}
 	if mp3 {
 		args = append(args, "-c:a", "libmp3lame", "-b:a", "192k")

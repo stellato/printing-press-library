@@ -137,6 +137,7 @@ func newPodcastCmd(flags *rootFlags) *cobra.Command {
 		Short: "Podcast production workflows",
 	}
 	cmd.AddCommand(newPodcastProduceCmd(flags))
+	cmd.AddCommand(newPodcastMasterCmd(flags))
 	return cmd
 }
 
