@@ -86,6 +86,13 @@ These capabilities aren't available in any other tool for this API.
   ```bash
   elevenlabs-pp-cli podcast master --input raw.mp3 --out episode.mp3 --target-lufs -16 --true-peak -1 --agent
   ```
+- **`podcast seo`** - Turn a finished episode into a discovery package with transcript files, SRT/VTT captions, chapters, show notes, ranked title variants, and pull-quotes.
+
+  _Agents can turn one finished audio file or known script into platform-ready metadata and on-domain SEO assets._
+
+  ```bash
+  elevenlabs-pp-cli podcast seo --audio episode.mp3 --title-seed "deep work" --keywords "productivity,attention,focus" --out ./seo --agent
+  ```
 
 ## Command Reference
 
@@ -257,6 +264,7 @@ These capabilities aren't available in any other tool for this API.
 
 - `elevenlabs-pp-cli podcast produce` — Turn an annotated podcast script into a mixed episode
 - `elevenlabs-pp-cli podcast master` — De-noise and loudness-normalize a finished podcast episode
+- `elevenlabs-pp-cli podcast seo` — Create transcript, chapters, and SEO assets for an episode
 
 **dubbing** — Manage dubbing
 

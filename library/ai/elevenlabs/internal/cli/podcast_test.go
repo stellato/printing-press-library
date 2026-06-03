@@ -144,3 +144,26 @@ func TestLoudnormPass(t *testing.T) {
 		t.Fatal("expected loudnorm failure")
 	}
 }
+
+func TestBuildPodcastSEOAssets(t *testing.T) {
+	transcript := "HOST: Attention is the new luxury. GUEST: The product is protecting focus. HOST: That changes how teams work."
+	assets := buildPodcastSEOAssets(transcript, "deep work", []string{"focus", "productivity"})
+	if len(assets.Titles) != 3 {
+		t.Fatalf("titles = %d", len(assets.Titles))
+	}
+	if !strings.Contains(assets.Notes, "focus, productivity") {
+		t.Fatalf("notes missing keywords:\n%s", assets.Notes)
+	}
+	if len(assets.Quotes) == 0 {
+		t.Fatal("expected pull quotes")
+	}
+}
+
+func TestBlocksToSRT(t *testing.T) {
+	srt := blocksToSRT([]string{"HOST: First.", "GUEST: Second."})
+	for _, want := range []string{"1\n00:00:00,000 --> 00:00:30,000", "2\n00:00:30,000 --> 00:01:00,000"} {
+		if !strings.Contains(srt, want) {
+			t.Fatalf("srt missing %q:\n%s", want, srt)
+		}
+	}
+}

@@ -57,6 +57,11 @@
       "name": "Podcast Master",
       "command": "podcast master",
       "description": "De-noise and normalize an episode to broadcast loudness (EBU R128, -16/-14 LUFS, true-peak limited) with a before/after report. Requires local ffmpeg."
+    },
+    {
+      "name": "Podcast SEO Package",
+      "command": "podcast seo",
+      "description": "Turn a finished episode into an SEO/GEO discovery package: transcript, SRT/VTT, Apple-compatible chapters, keyword-targeted show notes, A/B title variants, and pull-quotes, with forced-alignment when a script is known or speech-to-text when only audio is available."
     }
   ]
 }
