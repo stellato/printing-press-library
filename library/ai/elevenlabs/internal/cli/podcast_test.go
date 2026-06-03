@@ -81,6 +81,27 @@ GUEST: Hello.
 	}
 }
 
+func TestApplyPodcastOverridesHonorsExplicitFlags(t *testing.T) {
+	episode := podcastEpisode{Model: "front-model", OutputFormat: "pcm_44100", Loudness: -14, Cast: map[string]string{}, Music: map[string]podcastMusic{}}
+	applyPodcastOverrides(&episode, podcastProduceOptions{Model: "eleven_v3", OutputFormat: "mp3_44100_192", Loudness: -16})
+	if episode.Model != "front-model" || episode.OutputFormat != "pcm_44100" || episode.Loudness != -14 {
+		t.Fatalf("front matter was overwritten: %+v", episode)
+	}
+	applyPodcastOverrides(&episode, podcastProduceOptions{Model: "eleven_v3", ModelSet: true, OutputFormat: "mp3_44100_192", OutputFormatSet: true, Loudness: -16, LoudnessSet: true})
+	if episode.Model != "eleven_v3" || episode.OutputFormat != "mp3_44100_192" || episode.Loudness != -16 {
+		t.Fatalf("explicit overrides not applied: %+v", episode)
+	}
+}
+
+func TestHashPodcastSegmentIncludesVoiceIDs(t *testing.T) {
+	segment := podcastSegment{Text: "hello", Turns: []podcastTurn{{Speaker: "HOST", Text: "hello"}}}
+	a := hashPodcastSegment(segment, map[string]elevenVoice{"HOST": {VoiceID: "voice-a"}}, "model", "mp3")
+	b := hashPodcastSegment(segment, map[string]elevenVoice{"HOST": {VoiceID: "voice-b"}}, "model", "mp3")
+	if a == b {
+		t.Fatal("expected voice assignment to affect resume hash")
+	}
+}
+
 func TestParseLoudnormMeasurement(t *testing.T) {
 	output := `frame=1
 {

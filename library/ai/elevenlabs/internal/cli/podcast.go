@@ -26,8 +26,11 @@ type podcastProduceOptions struct {
 	IntroOverride       string
 	OutroOverride       string
 	Model               string
+	ModelSet            bool
 	OutputFormat        string
+	OutputFormatSet     bool
 	Loudness            float64
+	LoudnessSet         bool
 	WAV                 bool
 	Isolate             bool
 	TranscribeFromAudio bool
@@ -157,6 +160,9 @@ func newPodcastProduceCmd(flags *rootFlags) *cobra.Command {
 		Use:   "produce",
 		Short: "Turn an annotated podcast script into a mixed episode",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			opts.ModelSet = cmd.Flags().Changed("model")
+			opts.OutputFormatSet = cmd.Flags().Changed("output-format")
+			opts.LoudnessSet = cmd.Flags().Changed("loudness")
 			return runPodcastProduce(cmd, flags, opts)
 		},
 	}
@@ -493,13 +499,13 @@ func applyPodcastOverrides(episode *podcastEpisode, opts podcastProduceOptions) 
 	if opts.OutroOverride != "" {
 		episode.Music["outro"] = podcastMusic{Prompt: opts.OutroOverride, Path: localPathIfExists(opts.OutroOverride), Seconds: episode.Music["outro"].Seconds}
 	}
-	if opts.Model != "" {
+	if opts.ModelSet && opts.Model != "" {
 		episode.Model = opts.Model
 	}
-	if opts.OutputFormat != "" {
+	if opts.OutputFormatSet && opts.OutputFormat != "" {
 		episode.OutputFormat = opts.OutputFormat
 	}
-	if opts.Loudness != 0 {
+	if opts.LoudnessSet {
 		episode.Loudness = opts.Loudness
 	}
 }
@@ -572,7 +578,7 @@ func generatePodcastArtifacts(c *client.Client, tools ffmpegTools, flags *rootFl
 		switch segment.Kind {
 		case "voice":
 			path := filepath.Join(segmentsDir, fmt.Sprintf("%02d-voice.%s", i, extensionForOutputFormat(episode.OutputFormat)))
-			hash := hashPodcastSegment(*segment, modelID, episode.OutputFormat)
+			hash := hashPodcastSegment(*segment, voices, modelID, episode.OutputFormat)
 			if opts.Resume && fileExists(path) {
 				segment.Artifact = path
 				segment.Hash = hash
@@ -692,7 +698,7 @@ func ensurePodcastMusic(c *client.Client, flags *rootFlags, opts podcastProduceO
 	}
 	body := map[string]any{
 		"prompt":             music.Prompt,
-		"music_length_ms":    fmt.Sprintf("%d", lengthMS),
+		"music_length_ms":    lengthMS,
 		"model_id":           "music_v1",
 		"force_instrumental": true,
 	}
@@ -720,8 +726,8 @@ func generatePodcastSFX(c *client.Client, segment podcastSegment, outputFormat s
 	}
 	body := map[string]any{
 		"text":             segment.SFXPrompt,
-		"duration_seconds": fmt.Sprintf("%.1f", seconds),
-		"prompt_influence": "0.3",
+		"duration_seconds": seconds,
+		"prompt_influence": 0.3,
 		"loop":             false,
 		"model_id":         "eleven_text_to_sound_v2",
 	}
@@ -921,8 +927,12 @@ func parseSFXCue(value string) (string, float64) {
 	return prompt, seconds
 }
 
-func hashPodcastSegment(segment podcastSegment, modelID, outputFormat string) string {
-	h := sha256.Sum256([]byte(segment.Text + "|" + segment.BedName + "|" + modelID + "|" + outputFormat))
+func hashPodcastSegment(segment podcastSegment, voices map[string]elevenVoice, modelID, outputFormat string) string {
+	voiceParts := make([]string, 0, len(segment.Turns))
+	for _, turn := range segment.Turns {
+		voiceParts = append(voiceParts, turn.Speaker+"="+voices[turn.Speaker].VoiceID)
+	}
+	h := sha256.Sum256([]byte(segment.Text + "|" + segment.BedName + "|" + strings.Join(voiceParts, "|") + "|" + modelID + "|" + outputFormat))
 	return hex.EncodeToString(h[:])
 }
 
