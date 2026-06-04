@@ -46,6 +46,7 @@ func newWeeklyReviewCmd(flags *rootFlags) *cobra.Command {
 			if campaignReport == "" && searchTermReport == "" && keywordReport == "" {
 				return usageErr(fmt.Errorf("at least one of --campaign-report, --search-term-report, or --keyword-report is required"))
 			}
+			targetSource := weeklyTargetSource(targetACOS, grossMargin, cogsPath)
 			if targetACOS <= 0 {
 				if grossMargin > 0 {
 					targetACOS = grossMargin
@@ -104,7 +105,7 @@ func newWeeklyReviewCmd(flags *rootFlags) *cobra.Command {
 			out := map[string]any{
 				"dry_run":            true,
 				"target_acos":        targetACOS,
-				"target_acos_source": weeklyTargetSource(targetACOS, grossMargin, cogsPath),
+				"target_acos_source": targetSource,
 				"campaign_report":    campaignReport,
 				"search_term_report": searchTermReport,
 				"keyword_report":     keywordReport,
@@ -432,12 +433,14 @@ func averageBreakEvenACOS(costs map[string]adsanalytics.ProductCost) float64 {
 }
 
 func weeklyTargetSource(targetACOS, grossMargin float64, cogsPath string) string {
-	switch {
-	case grossMargin > 0:
-		return "gross_margin_pct"
-	case cogsPath != "":
-		return "cogs_file_average_break_even_acos"
-	default:
+	if targetACOS > 0 {
 		return "target_acos"
 	}
+	if grossMargin > 0 {
+		return "gross_margin_pct"
+	}
+	if cogsPath != "" {
+		return "cogs_file_average_break_even_acos"
+	}
+	return "target_acos"
 }

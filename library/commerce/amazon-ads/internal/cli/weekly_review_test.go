@@ -66,6 +66,19 @@ func TestWeeklyReviewCurrencyFlag(t *testing.T) {
 	}
 }
 
+func TestWeeklyTargetSourcePrefersExplicitTargetACOS(t *testing.T) {
+	t.Parallel()
+	if got := weeklyTargetSource(30, 25, ""); got != "target_acos" {
+		t.Fatalf("weeklyTargetSource explicit target with gross margin = %q, want target_acos", got)
+	}
+	if got := weeklyTargetSource(0, 25, ""); got != "gross_margin_pct" {
+		t.Fatalf("weeklyTargetSource gross margin fallback = %q, want gross_margin_pct", got)
+	}
+	if got := weeklyTargetSource(0, 0, "cogs.csv"); got != "cogs_file_average_break_even_acos" {
+		t.Fatalf("weeklyTargetSource COGS fallback = %q, want cogs_file_average_break_even_acos", got)
+	}
+}
+
 func TestWeeklyReviewMutationBatchesDeduplicateEntities(t *testing.T) {
 	t.Parallel()
 	batches := weeklyReviewMutationBatches([]adsanalytics.WeeklyReviewAction{
