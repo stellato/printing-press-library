@@ -128,10 +128,10 @@ func TestMarkdownBodyToDraftJSCodeFence(t *testing.T) {
 }
 
 func TestMarkdownBodyToDraftJSTweetEmbedLines(t *testing.T) {
-	contentState := MarkdownBodyToDraftJS("Before\n\nhttps://x.com/alice/status/2061877533885473181\n\nhttps://twitter.com/bob/status/2062703227972293057?ref=article\n\nAfter https://x.com/alice/status/1")
+	contentState := MarkdownBodyToDraftJS("Before\n\nhttps://x.com/alice/status/2061877533885473181\n\nhttps://twitter.com/bob/status/2062703227972293057?ref=article\n\nAfter https://x.com/alice/status/1\n\nhttps://x.com/alice/status/2061877533885473181/photo/1")
 
-	if len(contentState.Blocks) != 4 {
-		t.Fatalf("expected 4 blocks, got %d", len(contentState.Blocks))
+	if len(contentState.Blocks) != 5 {
+		t.Fatalf("expected 5 blocks, got %d", len(contentState.Blocks))
 	}
 	firstTweet := requireAtomicEntity(t, contentState, 1, 0, "TWEET", "Immutable")
 	if firstTweet.Data["tweet_id"] != "2061877533885473181" {
@@ -146,6 +146,12 @@ func TestMarkdownBodyToDraftJSTweetEmbedLines(t *testing.T) {
 	}
 	if contentState.Blocks[3].Text != "After https://x.com/alice/status/1" {
 		t.Fatalf("unexpected final paragraph text: %q", contentState.Blocks[3].Text)
+	}
+	if contentState.Blocks[4].Type != "unstyled" {
+		t.Fatalf("expected media sub-page tweet URL to remain text, got %q", contentState.Blocks[4].Type)
+	}
+	if contentState.Blocks[4].Text != "https://x.com/alice/status/2061877533885473181/photo/1" {
+		t.Fatalf("unexpected media sub-page paragraph text: %q", contentState.Blocks[4].Text)
 	}
 }
 

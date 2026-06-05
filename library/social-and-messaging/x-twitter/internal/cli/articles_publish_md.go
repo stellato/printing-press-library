@@ -394,7 +394,8 @@ func parseFrontmatter(yamlSrc string, fm *articleFrontmatter) {
 // italic (*...*). Fenced code blocks and markdown tables are emitted as X
 // Articles MARKDOWN entities bound to atomic Draft.js blocks. Image lines are
 // emitted as placeholder MEDIA entities in dry-run output, then rebound to
-// uploaded media IDs before live publish.
+// uploaded media IDs before live publish. Setext headings are intentionally
+// unsupported; use ## for header-two because --- is reserved for dividers.
 func MarkdownBodyToDraftJS(md string) draftContentState {
 	cs := draftContentState{}
 	lines := strings.Split(md, "\n")
@@ -571,7 +572,7 @@ func parseTweetStatusLine(line string) (string, bool) {
 		return "", false
 	}
 	parts := strings.Split(strings.Trim(u.Path, "/"), "/")
-	if len(parts) < 3 || parts[0] == "" || parts[1] != "status" {
+	if len(parts) != 3 || parts[0] == "" || parts[1] != "status" {
 		return "", false
 	}
 	tweetID := parts[2]
