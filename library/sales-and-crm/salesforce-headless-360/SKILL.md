@@ -23,15 +23,15 @@ salesforce-headless-360-pp-cli agent verify acme.json --strict
 salesforce-headless-360-pp-cli agent inject --slack C123456 --bundle acme.json
 
 # Preview then patch one Salesforce record with a signed, audited intent.
-salesforce-headless-360-pp-cli --org prod agent update 001xx000003DGb2AAG \
+salesforce-headless-360-pp-cli agent update 001xx000003DGb2AAG --org prod \
   --field Description="Agent follow-up scheduled" \
   --dry-run --json
-salesforce-headless-360-pp-cli --org prod agent update 001xx000003DGb2AAG \
+salesforce-headless-360-pp-cli agent update 001xx000003DGb2AAG --org prod \
   --field Description="Agent follow-up scheduled" \
   --json
 
 # Retry-safe create-or-update through the SF360 idempotency key.
-salesforce-headless-360-pp-cli --org prod agent upsert \
+salesforce-headless-360-pp-cli agent upsert --org prod \
   --sobject Account \
   --idempotency-key "sf360:account:acme-renewal:2026-04-22" \
   --field Name="Acme Renewal" \
@@ -39,17 +39,17 @@ salesforce-headless-360-pp-cli --org prod agent upsert \
   --json
 
 # Agent-typical workflow verbs.
-salesforce-headless-360-pp-cli --org prod agent log-activity --type call --what 001xx000003DGb2AAG --subject "Renewal call completed" --idempotency-key "call:001xx000003DGb2AAG:2026-04-22"
-salesforce-headless-360-pp-cli --org prod agent advance --opp 006xx000001ABCDE --stage "Proposal/Price Quote"
-salesforce-headless-360-pp-cli --org prod agent close-case --case 500xx000001ABCDE --resolution "Resolved by renewal workflow"
-salesforce-headless-360-pp-cli --org prod agent note --entity 001xx000003DGb2AAG --text "Agent summary posted after strict bundle verification."
+salesforce-headless-360-pp-cli agent log-activity --type call --what 001xx000003DGb2AAG --subject "Renewal call completed" --idempotency-key "call:001xx000003DGb2AAG:2026-04-22" --org prod
+salesforce-headless-360-pp-cli agent advance --opp 006xx000001ABCDE --stage "Proposal/Price Quote" --org prod
+salesforce-headless-360-pp-cli agent close-case --case 500xx000001ABCDE --resolution "Resolved by renewal workflow" --org prod
+salesforce-headless-360-pp-cli agent note --entity 001xx000003DGb2AAG --text "Agent summary posted after strict bundle verification." --org prod
 
 # Multi-agent approval: propose, countersign, execute.
-salesforce-headless-360-pp-cli --org prod agent plan update 001xx000003DGb2AAG \
+salesforce-headless-360-pp-cli agent plan update 001xx000003DGb2AAG --org prod \
   --field Description="Pending approver review" \
   --output /tmp/acme-write-plan.json
-salesforce-headless-360-pp-cli --org prod agent sign-plan /tmp/acme-write-plan.json
-salesforce-headless-360-pp-cli --org prod agent execute-plan /tmp/acme-write-plan.json --require-countersignatures 1
+salesforce-headless-360-pp-cli agent sign-plan /tmp/acme-write-plan.json
+salesforce-headless-360-pp-cli agent execute-plan /tmp/acme-write-plan.json --require-countersignatures 1
 
 # Inspect local write forensics.
 salesforce-headless-360-pp-cli agent write-audit list --status executed

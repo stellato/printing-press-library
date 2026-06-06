@@ -53,11 +53,11 @@ salesforce-headless-360-pp-cli trust register --org prod
 Start every write with `--dry-run`; it validates the payload and shows what would be sent without DML or write-audit emission.
 
 ```bash
-salesforce-headless-360-pp-cli --org prod agent update 001xx000003DGb2AAG \
+salesforce-headless-360-pp-cli agent update 001xx000003DGb2AAG --org prod \
   --field Description="Agent follow-up scheduled" \
   --dry-run --json
 
-salesforce-headless-360-pp-cli --org prod agent update 001xx000003DGb2AAG \
+salesforce-headless-360-pp-cli agent update 001xx000003DGb2AAG --org prod \
   --field Description="Agent follow-up scheduled" \
   --json
 ```
@@ -65,7 +65,7 @@ salesforce-headless-360-pp-cli --org prod agent update 001xx000003DGb2AAG \
 Use `agent upsert` when retries are possible. The `--idempotency-key` is written to `SF360_Idempotency_Key__c`, so the same agent intent can be retried without creating duplicate records.
 
 ```bash
-salesforce-headless-360-pp-cli --org prod agent upsert \
+salesforce-headless-360-pp-cli agent upsert --org prod \
   --sobject Account \
   --idempotency-key "sf360:account:acme-renewal:2026-04-22" \
   --field Name="Acme Renewal" \
@@ -76,20 +76,20 @@ salesforce-headless-360-pp-cli --org prod agent upsert \
 Convenience verbs cover the actions agents usually need during a customer workflow:
 
 ```bash
-salesforce-headless-360-pp-cli --org prod agent log-activity --type call --what 001xx000003DGb2AAG --subject "Renewal call completed" --idempotency-key "call:001xx000003DGb2AAG:2026-04-22"
-salesforce-headless-360-pp-cli --org prod agent advance --opp 006xx000001ABCDE --stage "Proposal/Price Quote"
-salesforce-headless-360-pp-cli --org prod agent close-case --case 500xx000001ABCDE --resolution "Resolved by renewal workflow"
-salesforce-headless-360-pp-cli --org prod agent note --entity 001xx000003DGb2AAG --text "Agent summary posted after strict bundle verification."
+salesforce-headless-360-pp-cli agent log-activity --type call --what 001xx000003DGb2AAG --subject "Renewal call completed" --idempotency-key "call:001xx000003DGb2AAG:2026-04-22" --org prod
+salesforce-headless-360-pp-cli agent advance --opp 006xx000001ABCDE --stage "Proposal/Price Quote" --org prod
+salesforce-headless-360-pp-cli agent close-case --case 500xx000001ABCDE --resolution "Resolved by renewal workflow" --org prod
+salesforce-headless-360-pp-cli agent note --entity 001xx000003DGb2AAG --text "Agent summary posted after strict bundle verification." --org prod
 ```
 
 Plan mode supports multi-agent approval: one agent proposes, another countersigns, and an executor runs the signed plan.
 
 ```bash
-salesforce-headless-360-pp-cli --org prod agent plan update 001xx000003DGb2AAG \
+salesforce-headless-360-pp-cli agent plan update 001xx000003DGb2AAG --org prod \
   --field Description="Pending approver review" \
   --output /tmp/acme-write-plan.json
-salesforce-headless-360-pp-cli --org prod agent sign-plan /tmp/acme-write-plan.json
-salesforce-headless-360-pp-cli --org prod agent execute-plan /tmp/acme-write-plan.json --require-countersignatures 1
+salesforce-headless-360-pp-cli agent sign-plan /tmp/acme-write-plan.json
+salesforce-headless-360-pp-cli agent execute-plan /tmp/acme-write-plan.json --require-countersignatures 1
 ```
 
 Audit forensics are local and inspectable:
