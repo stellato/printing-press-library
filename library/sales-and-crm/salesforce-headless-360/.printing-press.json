@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "generated_at": "2026-04-22T20:00:33.721757Z",
-  "printing_press_version": "1.3.3-0.20260422172513-9dd5632a1a5c+dirty",
+  "printing_press_version": "4.10.0",
   "api_name": "salesforce-headless-360",
   "cli_name": "salesforce-headless-360-pp-cli",
   "spec_format": "internal",
