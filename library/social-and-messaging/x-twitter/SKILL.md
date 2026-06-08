@@ -376,9 +376,10 @@ X auth has three separate lanes. Do not infer one lane from another; run `x-twit
 Setup sequence:
 
 1. Attach the app to a Project in the X developer console.
-2. Copy the app Bearer Token into `X_BEARER_TOKEN` for app-only public reads.
-3. Enable OAuth2 with suitable scopes such as `tweet.read`, `tweet.write`, `users.read`, `offline.access`, and `bookmark.read` (required if you intend to sync or search bookmarks), complete the authorization-code + PKCE flow, and set the resulting user-context token in `X_OAUTH2_USER_TOKEN`.
-4. Separately run `x-twitter-pp-cli auth login --chrome` only when using `articles ...` commands.
+2. Set app permissions to Read and write when you need posting or other mutations.
+3. Copy the app Bearer Token into `X_BEARER_TOKEN` for app-only public reads.
+4. Enable OAuth2 with suitable scopes such as `tweet.read`, `tweet.write`, `users.read`, `offline.access`, and `bookmark.read` (required if you intend to sync or search bookmarks), complete the authorization-code + PKCE flow, and set the resulting user-context token in `X_OAUTH2_USER_TOKEN`.
+5. Separately run `x-twitter-pp-cli auth login --chrome` only when using `articles ...` commands.
 
 When X returns `Unsupported Authentication` with `Application-Only is forbidden`, the command requires OAuth2 user-context auth. Fix `auth_lanes.oauth2_user_context`; cookie auth and app-only bearer auth will not satisfy that endpoint.
 
