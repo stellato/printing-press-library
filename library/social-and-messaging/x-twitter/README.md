@@ -37,7 +37,7 @@ npx -y @mvanhorn/printing-press-library install x-twitter --agent claude-code --
 
 ### Without Node (Go fallback)
 
-If `npx` isn't available (no Node, offline), install the CLI directly via Go (requires Go 1.26.3 or newer):
+If `npx` isn't available (no Node, offline), install the CLI directly via Go (requires Go 1.26.4 or newer):
 
 ```bash
 go install github.com/mvanhorn/printing-press-library/library/social-and-messaging/x-twitter/cmd/x-twitter-pp-cli@latest
@@ -125,7 +125,21 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 
 ## Authentication
 
-X auth is layered; the configured credential decides what works, and the CLI prefers X_OAUTH2_USER_TOKEN when set (reads + writes) over X_BEARER_TOKEN (reads only). Run doctor to see what is configured and what it unlocks. Credentials: X_BEARER_TOKEN (app-only Bearer) for public reads (tweet/user lookup, recent search, lists, spaces); X_OAUTH2_USER_TOKEN (OAuth 2.0 user-context) for v2 writes (post, like, repost, bookmark, follow, DM) and personal reads (me, mentions, home timeline, bookmarks), obtained from an OAuth2 authorization-code + PKCE flow and set/imported explicitly; logged-in x.com browser cookies for X Articles (articles-publish-md, articles ...), captured via 'auth login --chrome' (X Articles has no v2 API). `auth login --chrome` is cookie-only and does not create X_OAUTH2_USER_TOKEN. Setup in the X developer console (console.x.com) - a person can do this or an agent with console access can automate it; none of it is manual-only: (1) attach the app to a Project (any environment, incl. Development) - this unlocks v2 API access, standalone-app tokens are rejected; (2) set app permissions to Read and write (needed for posting); (3) copy the app Bearer Token into X_BEARER_TOKEN for reads; (4) enable OAuth 2.0 (Native/public app, callback URL, scopes tweet.read tweet.write users.read offline.access), complete the authorization-code + PKCE flow, set the resulting opaque user token in X_OAUTH2_USER_TOKEN for writes; (5) separately run 'auth login --chrome' to capture x.com cookies for Articles (needs pycookiecheat or press-auth; manual DevTools fallback). A Development project does not limit the account - capability is set by app permissions and the account API tier. As of Feb 2026 X bills reads/writes per-use and restricts programmatic replies/quotes/@mentions; self-reply threads (thread compose) still work.
+X auth has three separate lanes. Run `x-twitter-pp-cli doctor --json` and inspect `auth_lanes` before choosing a command; do not assume one credential can stand in for another.
+
+- `auth_lanes.app_only_api`: `X_BEARER_TOKEN`, the app-only bearer token from the X developer console. Use this for public reads such as post/user lookup, recent search, lists, and spaces.
+- `auth_lanes.oauth2_user_context`: `X_OAUTH2_USER_TOKEN` or a stored OAuth2 access token. Required for `/2/users/me`, writes, bookmarks, personal reads, DMs, follows, likes, reposts, and user-context analytics. If this lane is missing or invalid, do not retry with `X_BEARER_TOKEN`; get a real OAuth2 authorization-code + PKCE user token and set/import it explicitly.
+- `auth_lanes.x_articles_cookie`: logged-in x.com browser cookies captured by `x-twitter-pp-cli auth login --chrome`. This lane is only for X Articles / x.com browser-session endpoints. It does not create `X_OAUTH2_USER_TOKEN` and does not authenticate v2 API user-context commands.
+
+Setup sequence:
+
+1. Attach the app to a Project in the X developer console (`console.x.com`). Any environment, including Development, unlocks v2 API access; standalone-app tokens are rejected.
+2. Set app permissions to Read and write when you need posting or other mutations.
+3. Copy the app Bearer Token into `X_BEARER_TOKEN` for app-only public reads.
+4. Enable OAuth2 with suitable scopes such as `tweet.read`, `tweet.write`, `users.read`, `offline.access`, and `bookmark.read` (required if you intend to sync or search bookmarks), complete the authorization-code + PKCE flow, and set the resulting user-context token in `X_OAUTH2_USER_TOKEN`.
+5. Separately run `x-twitter-pp-cli auth login --chrome` only when using X Articles commands such as `articles-publish-md` or `articles ...` (needs `pycookiecheat` or `press-auth`; manual DevTools fallback is available).
+
+A Development project does not limit the account; capability is set by app permissions and the account API tier. As of Feb 2026 X bills reads/writes per-use and restricts programmatic replies/quotes/@mentions; self-reply threads (`thread compose`) still work.
 
 ## Quick Start
 
@@ -236,6 +250,18 @@ These capabilities aren't available in any other tool for this API.
   ```bash
   x-twitter-pp-cli thread show 1750000000000000000 --agent
   ```
+- **`users bookmarks find`** — Search your synced bookmarks by keyword and/or author, offline. X has no bookmark search and its API exposes no bookmark timestamp, so bookmarks pile up unread; this rebuilds the missing retrieval layer from the local store. Read-only and free to re-run once synced — the X read credit is spent once at sync time, not per query.
+
+  _The "I bookmarked something about this and can't find it" rescue. Sync bookmarks once, then let an agent retrieve and act on them (summarize, draft a thread, cluster) — the offline store is the agent's working set, not a per-query API spend._
+
+  ```bash
+  # one-time populate (personal read — needs X_OAUTH2_USER_TOKEN); add author field + users for --from
+  x-twitter-pp-cli sync --resources bookmarks --param tweet.fields=author_id,created_at
+  x-twitter-pp-cli sync --resources users
+
+  x-twitter-pp-cli users bookmarks find "rust async" --agent
+  x-twitter-pp-cli users bookmarks find "llm" --from @karpathy --limit 20 --agent
+  ```
 
 ### Authoring workflows
 - **`thread compose`** — Split a markdown file into a numbered, 280-char-packed self-reply thread; prints by default and only posts with --post.
@@ -311,7 +337,6 @@ Manage activity
 - **`x-twitter-pp-cli activity delete-subscription`** - Deletes a subscription for an X activity event
 - **`x-twitter-pp-cli activity delete-subscriptions-by-ids`** - Deletes multiple subscriptions for X activity events by their IDs
 - **`x-twitter-pp-cli activity get-subscriptions`** - Get a list of active subscriptions for XAA
-- **`x-twitter-pp-cli activity stream`** - Stream of X Activities
 - **`x-twitter-pp-cli activity update-subscription`** - Updates a subscription for an X activity event
 
 ### chat
@@ -417,14 +442,6 @@ Manage insights
 - **`x-twitter-pp-cli insights get-historical`** - Retrieves historical engagement metrics for specified Posts within a defined time range.
 - **`x-twitter-pp-cli insights get-insights28-hr`** - Retrieves engagement metrics for specified Posts over the last 28 hours.
 
-### likes
-
-Manage likes
-
-- **`x-twitter-pp-cli likes stream-compliance`** - Streams all compliance data related to Likes for Users.
-- **`x-twitter-pp-cli likes stream-firehose`** - Streams all public Likes in real-time.
-- **`x-twitter-pp-cli likes stream-sample10`** - Streams a 10% sample of public Likes in real-time.
-
 ### lists
 
 Endpoints related to retrieving, managing Lists
@@ -505,16 +522,6 @@ Endpoints related to retrieving, searching, and modifying Tweets
 - **`x-twitter-pp-cli tweets get-webhooks-stream-links`** - Get a list of webhook links associated with a filtered stream ruleset.
 - **`x-twitter-pp-cli tweets search-posts-all`** - Retrieves Posts from the full archive matching a search query.
 - **`x-twitter-pp-cli tweets search-posts-recent`** - Retrieves Posts from the last 7 days matching a search query.
-- **`x-twitter-pp-cli tweets stream-labels-compliance`** - Streams all labeling events applied to Posts.
-- **`x-twitter-pp-cli tweets stream-posts`** - Streams Posts in real-time matching the active rule set.
-- **`x-twitter-pp-cli tweets stream-posts-compliance`** - Streams all compliance data related to Posts.
-- **`x-twitter-pp-cli tweets stream-posts-firehose`** - Streams all public Posts in real-time.
-- **`x-twitter-pp-cli tweets stream-posts-firehose-en`** - Streams all public English-language Posts in real-time.
-- **`x-twitter-pp-cli tweets stream-posts-firehose-ja`** - Streams all public Japanese-language Posts in real-time.
-- **`x-twitter-pp-cli tweets stream-posts-firehose-ko`** - Streams all public Korean-language Posts in real-time.
-- **`x-twitter-pp-cli tweets stream-posts-firehose-pt`** - Streams all public Portuguese-language Posts in real-time.
-- **`x-twitter-pp-cli tweets stream-posts-sample`** - Streams a 1% sample of public Posts in real-time.
-- **`x-twitter-pp-cli tweets stream-posts-sample10`** - Streams a 10% sample of public Posts in real-time.
 - **`x-twitter-pp-cli tweets update-rules`** - Adds or deletes rules from the active rule set for the filtered stream.
 
 ### usage
@@ -535,8 +542,10 @@ Endpoints related to retrieving, managing relationships of Users
 - **`x-twitter-pp-cli users get-public-keys`** - Returns the public keys and Juicebox configuration for the specified users.
 - **`x-twitter-pp-cli users get-reposts-of-me`** - Retrieves a list of Posts that repost content from the authenticated user.
 - **`x-twitter-pp-cli users get-trends-personalized-trends`** - Retrieves personalized trending topics for the authenticated user.
+- **`x-twitter-pp-cli users bookmarks find [query]`** - Searches your locally synced bookmarks by keyword and/or author without another API read.
+- **`x-twitter-pp-cli users likes post <user_id> --tweet-id <tweet_id>`** - Likes a post on behalf of the authenticated user.
+- **`x-twitter-pp-cli users likes unlike-post <user_id> <tweet_id>`** - Unlikes a post on behalf of the authenticated user.
 - **`x-twitter-pp-cli users search`** - Retrieves a list of Users matching a search query.
-- **`x-twitter-pp-cli users stream-compliance`** - Streams all compliance data related to Users.
 
 ### webhooks
 
