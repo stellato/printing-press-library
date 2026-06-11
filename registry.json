@@ -9341,6 +9341,73 @@
       }
     },
     {
+      "name": "sendfox",
+      "category": "marketing",
+      "api": "SendFox",
+      "description": "SendFox email marketing API for authenticated user details, contact lists, contacts, unsubscribe operations",
+      "search_terms": [
+        "sendfox",
+        "sendfox-pp-cli",
+        "Operate SendFox contacts, lists, campaigns, audience hygiene, CSV reconciliation, launch checklists, signup-form handoffs, and webhook setup packets from the terminal.",
+        "Capabilities Matrix",
+        "capabilities",
+        "Machine-readable support matrix that tells agents which SendFox resources can be listed, created, or only handled in the dashboard.",
+        "Account Snapshot",
+        "workflow account-snapshot",
+        "One read-only operating snapshot across /me, lists, contacts, and campaigns.",
+        "Audience Map",
+        "workflow audience-map",
+        "Map contacts to lists and surface contacts without list memberships for segmentation cleanup.",
+        "Hygiene Report",
+        "workflow hygiene-report",
+        "Find duplicate emails, invalid emails, status mix, and list-membership gaps from live contacts.",
+        "Launch Plan",
+        "workflow launch-plan",
+        "Generate a safe SendFox list-launch checklist and exact next CLI/dashboard steps without faking campaign write endpoints.",
+        "Campaign Digest",
+        "workflow campaign-digest",
+        "Summarize campaign count, status mix, and recent campaigns.",
+        "Contacts Audit CSV",
+        "contacts audit-csv",
+        "Validate subscriber CSVs for invalid and duplicate emails before any mutation.",
+        "Contacts Reconcile CSV",
+        "contacts reconcile-csv",
+        "Compare a CSV against live contacts and emit create/skip actions before bulk import.",
+        "Contacts Onboard",
+        "Create a contact and attach list memberships in one automation-aware command with dry-run call preview.",
+        "Contacts Import CSV",
+        "contacts import-csv",
+        "Bulk-create contacts from CSV after a required dry-run/--yes safety gate.",
+        "Forms Generate",
+        "Generate a self-contained signup form handoff with server-side SendFox proxy guidance.",
+        "Webhooks Handoff",
+        "Generate dashboard setup and handler-contract packets for SendFox webhook receivers."
+      ],
+      "path": "library/marketing/sendfox",
+      "printer": "cathrynlavery",
+      "printer_name": "Cathryn Lavery",
+      "creator": {
+        "handle": "cathrynlavery",
+        "name": "Cathryn Lavery"
+      },
+      "mcp": {
+        "binary": "sendfox-pp-mcp",
+        "transports": [
+          "stdio",
+          "http"
+        ],
+        "tool_count": 11,
+        "public_tool_count": 0,
+        "auth_type": "bearer_token",
+        "env_vars": [
+          "SENDFOX_API_TOKEN",
+          "SENDFOX_BEARER_AUTH"
+        ],
+        "mcp_ready": "full",
+        "spec_format": "openapi3"
+      }
+    },
+    {
       "name": "sendgrid",
       "category": "productivity",
       "api": "Twilio Sendgrid",
@@ -12191,6 +12258,10 @@
         {
           "handle": "tmchow",
           "name": "Trevin Chow"
+        },
+        {
+          "handle": "mvanhorn",
+          "name": "Matt Van Horn"
         }
       ],
       "mcp": {
