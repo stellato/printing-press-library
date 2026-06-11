@@ -1213,6 +1213,36 @@
       }
     },
     {
+      "name": "azure-cost-admin",
+      "category": "cloud",
+      "api": "Azure Cost Admin",
+      "description": "Read-only Azure FinOps CLI for actual spend summaries, service and resource-group cost breakdowns, tag hygiene, simple anomaly checks, and retail price lookup support.",
+      "search_terms": [
+        "azure-cost-admin",
+        "Azure Cost Admin",
+        "azure-cost-admin-pp-cli",
+        "Read-only Azure FinOps CLI for actual spend summaries, service and resource-group cost breakdowns, tag hygiene, simple anomaly checks, and retail price lookup support.",
+        "Actual spend summary",
+        "spend summary",
+        "Queries Azure Cost Management for actual billed spend over a selected timeframe.",
+        "Spend ownership breakdowns",
+        "spend by-service",
+        "Groups actual Azure spend by service, with sibling commands for resource groups and tag keys.",
+        "Tag hygiene check",
+        "tags untagged",
+        "Uses Azure Resource Graph to find resources missing a requested owner, environment, or cost-center tag.",
+        "Explainable cost anomaly scan",
+        "anomalies",
+        "Compares recent service spend against a prior window and reports large changes without modifying Azure.",
+        "Retail price estimate helper",
+        "price search",
+        "Searches public Azure Retail Prices separately from actual billed spend so estimates do not get confused with invoice data."
+      ],
+      "path": "library/cloud/azure-cost-admin",
+      "printer": "sdhilip200",
+      "printer_name": "Dhilip Subramanian"
+    },
+    {
       "name": "azure-functions-admin",
       "category": "cloud",
       "api": "Azure Functions",
@@ -2567,6 +2597,59 @@
         "env_vars": [
           "CUSTOMERIO_TOKEN"
         ],
+        "mcp_ready": "full",
+        "spec_format": "internal"
+      }
+    },
+    {
+      "name": "daraz",
+      "category": "commerce",
+      "api": "Daraz.pk",
+      "description": "Every Daraz product search, plus a local price database, real-deal ranking, and drop alerts no Daraz scraper has.",
+      "search_terms": [
+        "daraz",
+        "Daraz.pk",
+        "daraz-pp-cli",
+        "Every Daraz product search, plus a local price database, real-deal ranking, and drop alerts no Daraz scraper has.",
+        "Price history",
+        "price-history",
+        "See a product's recorded price trend and its lowest-ever price from your local store.",
+        "Price watch",
+        "watch",
+        "Record current prices for every item matching a search into the local store so price history builds over time.",
+        "Saved-search change alerts",
+        "since",
+        "Diff a saved search against its last local snapshot to show new listings and price moves since you last checked.",
+        "Real-deal ranking",
+        "deals",
+        "Rank a search by a composite of discount, rating, and units sold to surface genuinely good deals.",
+        "Fake-discount / value detector",
+        "value",
+        "Flag inflated original-price discounts by comparing each item's claimed original price to the local median for that query.",
+        "Cross-seller compare",
+        "compare",
+        "Find the same item across sellers and show the cheapest and best-rated side by side.",
+        "Seller scorecard",
+        "seller stats",
+        "Aggregate a seller's catalog from the local store: average rating, price range, listing count, discount pattern."
+      ],
+      "path": "library/commerce/daraz",
+      "printer": "qazmataz",
+      "printer_name": "Hamza Qazi",
+      "creator": {
+        "handle": "qazmataz",
+        "name": "Hamza Qazi"
+      },
+      "mcp": {
+        "binary": "daraz-pp-mcp",
+        "transports": [
+          "stdio",
+          "http"
+        ],
+        "tool_count": 2,
+        "public_tool_count": 2,
+        "auth_type": "none",
+        "env_vars": [],
         "mcp_ready": "full",
         "spec_format": "internal"
       }
@@ -4622,6 +4705,12 @@
         "handle": "cathrynlavery",
         "name": "Cathryn Lavery"
       },
+      "contributors": [
+        {
+          "handle": "bobeglz",
+          "name": "bobe"
+        }
+      ],
       "mcp": {
         "binary": "google-ads-pp-mcp",
         "transports": [
@@ -5422,6 +5511,44 @@
           "name": "Omar Shahine"
         }
       ]
+    },
+    {
+      "name": "instagram",
+      "category": "social-and-messaging",
+      "api": "instagram",
+      "description": "Every Instagram Business metric across all your brand accounts",
+      "search_terms": [
+        "instagram",
+        "instagram-pp-cli",
+        "Cross-account engagement compare",
+        "compare",
+        "Rank all your brand accounts side by side by reach, interactions, and engagement rate over a window.",
+        "Follower-growth week-over-week",
+        "growth",
+        "Track follower-count growth over time per brand, week over week.",
+        "Best-time-to-post",
+        "best-time",
+        "Surface the weekday/hour slots where your posts historically earn the most engagement.",
+        "Top-posts ranking",
+        "top-posts",
+        "Rank individual posts across your brands by reach, interactions, saves, or shares over a window.",
+        "Format performance breakdown",
+        "formats",
+        "Compare Reels vs Feed vs Story vs Carousel by reach, engagement, and Reels watch-time.",
+        "Competitor delta over time",
+        "rivals",
+        "Track rival public accounts' follower and engagement growth across syncs, benchmarked against your brands.",
+        "Hashtag-performance ranking",
+        "hashtag-perf",
+        "Rank the hashtags you track by the reach and engagement of their top media."
+      ],
+      "path": "library/social-and-messaging/instagram",
+      "printer": "alkhamis-80",
+      "printer_name": "Mohammed Al Khamis",
+      "creator": {
+        "handle": "alkhamis-80",
+        "name": "Mohammed Al Khamis"
+      }
     },
     {
       "name": "intercom",
@@ -8682,6 +8809,49 @@
       }
     },
     {
+      "name": "rechtspraak",
+      "category": "other",
+      "api": "rechtspraak",
+      "description": "The first CLI for Dutch court decisions with rich local narrowing for long-tail legal keywords, an appeal-chain walker",
+      "search_terms": [
+        "rechtspraak",
+        "rechtspraak-pp-cli",
+        "Appeal-chain walker",
+        "chain",
+        "Walk the cassation, conclusie, and eerdere-aanleg graph for a Dutch court decision in both directions and print the full chain as a tree or JSON.",
+        "Vindplaatsen extractor",
+        "citations",
+        "Extract the citation list (vindplaatsen) for a decision and emit as BibTeX, CSV, or JSON ready for legal-brief footnotes.",
+        "Dossier by zaaknummer",
+        "dossier",
+        "List every decision sharing a case number across instances, sorted chronologically.",
+        "Watch / incremental new-decision poll",
+        "watch",
+        "Poll for new decisions matching a filter, dedupe against the local SQLite, and emit only the new ECLIs — cron-friendly with --quiet.",
+        "Conclusie pairing",
+        "conclusie",
+        "Given a Hoge Raad decision ECLI, return the matching A-G conclusie (or reverse).",
+        "Bulk archive ingest",
+        "sync archive",
+        "Download the official weekly full-corpus archive and bulk-insert to the local SQLite — orders of magnitude faster than paging the Atom feed for backfills.",
+        "Court-code dictionary",
+        "code",
+        "Bidirectional offline lookup against the Instanties controlled vocabulary — court code to full name and PSI URI, or fuzzy name to code.",
+        "MCP server mode",
+        "mcp serve",
+        "Expose every rechtspraak command as an MCP tool — the first MCP server for Dutch case law.",
+        "ECLI parse/validate",
+        "ecli parse",
+        "Pure-local regex parse of an ECLI into country, court, year, and sequence — with validation — and `ecli url` for the deeplink.",
+        "Narrowing pipe",
+        "narrow",
+        "Read an ECLI list from stdin (or piped from search/watch/sync), fetch each decision's content from the live API (paced via the shared rate limiter), apply local include/exclude/phrase/regex filters against title+summary+body, and emit the narrowed list — the defining workflow for keyword-overlap-heavy Dutch legal research. Bounded by --max-pages on upstream input scope; one HTTP call per ECLI."
+      ],
+      "path": "library/other/rechtspraak",
+      "printer": "markvandeven",
+      "printer_name": "markvandeven"
+    },
+    {
       "name": "recipe-goat",
       "category": "food-and-dining",
       "api": "Recipe GOAT",
@@ -9371,7 +9541,10 @@
         "Find issuers that filed an NT 10-K, NT 10-Q, or NT 20-F in the window — the SEC's 'I'm going to miss my reporting deadline' notification.",
         "13F holdings delta",
         "holdings delta",
-        "Diff an institutional investor's 13F holdings across two consecutive quarters. Categorize each issuer as ADD / EXIT / INCREASE / DECREASE with share-count delta."
+        "Diff an institutional investor's 13F holdings across two consecutive quarters. Categorize each issuer as ADD / EXIT / INCREASE / DECREASE with share-count delta.",
+        "Beneficial-ownership section extraction",
+        "ownership",
+        "Resolve a ticker, name, or CIK, find the latest DEF 14A proxy, fetch the document, and extract the \"Security Ownership of Certain Beneficial Owners\" section as readable text."
       ],
       "path": "library/developer-tools/sec-edgar",
       "printer": "ChrisDrit",
@@ -9999,6 +10172,60 @@
         ],
         "mcp_ready": "full",
         "spec_format": "internal"
+      }
+    },
+    {
+      "name": "shopping",
+      "category": "commerce",
+      "api": "Shopping",
+      "description": "Every LemmeBuyIt retail endpoint, plus a local store that compares one UPC across 70+ retailers",
+      "search_terms": [
+        "shopping",
+        "shopping-pp-cli",
+        "Every LemmeBuyIt retail endpoint, plus a local store that compares one UPC across 70+ retailers, ranks weekly price drops, and computes Amazon FBA arbitrage margin — compound queries the per-retailer API can't answer.",
+        "Local retail index sync",
+        "index",
+        "Pull products (and optional price history) from one or more retailers into a fast local SQLite store so every other query runs instantly and offline.",
+        "Cross-retailer identifier compare",
+        "compare",
+        "See which synced retailer sells the exact same item (by UPC/EAN/GTIN/ASIN) cheapest right now, ranked, with the savings spread.",
+        "Compound deal finder",
+        "deals",
+        "Surface deals that clear several bars at once — deep discount, under a price ceiling, well-reviewed, in stock — across all tracked retailers in one ranked list.",
+        "FBA arbitrage margin",
+        "arbitrage",
+        "Rank synced products by what you would net reselling them on Amazon after referral and FBA fees, filtered by ROI and buy price.",
+        "Weekly price-drop ranking",
+        "price-drops",
+        "Rank the products that fell the most over the last week (or N weeks) across everything synced, by both dollar and percent drop.",
+        "Retailer & category discount leaderboard",
+        "leaderboard",
+        "Show which retailers and categories are consistently the deepest-discount buckets in your synced data, by average discount, on-sale count, or average price.",
+        "Price watch tracker",
+        "watch status",
+        "Pin items you care about and, after each index refresh, see which ones moved, by how much, and which hit your target price."
+      ],
+      "path": "library/commerce/shopping",
+      "printer": "NicholasSpisak",
+      "printer_name": "NicholasSpisak",
+      "creator": {
+        "handle": "NicholasSpisak",
+        "name": "NicholasSpisak"
+      },
+      "mcp": {
+        "binary": "shopping-pp-mcp",
+        "transports": [
+          "stdio",
+          "http"
+        ],
+        "tool_count": 9,
+        "public_tool_count": 0,
+        "auth_type": "api_key",
+        "env_vars": [
+          "SHOPPING_API_KEY"
+        ],
+        "mcp_ready": "full",
+        "spec_format": "openapi3"
       }
     },
     {
