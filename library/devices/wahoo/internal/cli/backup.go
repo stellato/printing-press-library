@@ -14,9 +14,9 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/spf13/cobra"
 	"github.com/mvanhorn/printing-press-library/library/devices/wahoo/internal/cliutil"
 	"github.com/mvanhorn/printing-press-library/library/devices/wahoo/internal/store"
-	"github.com/spf13/cobra"
 )
 
 // pp:data-source local
@@ -117,7 +117,7 @@ func newNovelBackupCmd(flags *rootFlags) *cobra.Command {
 
 			view := backupView{OutDir: out, Failures: make([]backupFailure, 0)}
 			for _, it := range items {
-				if haveCutoff && it.hasStarts && it.starts.Before(cutoff) {
+				if haveCutoff && (!it.hasStarts || it.starts.Before(cutoff)) {
 					continue
 				}
 				recPath := filepath.Join(out, it.id+".json")

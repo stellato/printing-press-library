@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/mvanhorn/printing-press-library/library/devices/wahoo/internal/store"
 	"github.com/spf13/cobra"
+	"github.com/mvanhorn/printing-press-library/library/devices/wahoo/internal/store"
 )
 
 // pp:data-source local
@@ -97,7 +97,10 @@ func computeDigest(ws []parsedWorkout, ftp float64, days int, now time.Time) dig
 	var powerSum float64
 	var powerN int
 	for _, w := range ws {
-		if w.HasStarts && w.Starts.Before(cutoff) {
+		// Skip undated workouts (can't be placed in the window) and dated
+		// workouts before the cutoff. Without the !HasStarts guard, dateless
+		// rides would be counted in every --days window.
+		if !w.HasStarts || w.Starts.Before(cutoff) {
 			continue
 		}
 		view.Workouts++

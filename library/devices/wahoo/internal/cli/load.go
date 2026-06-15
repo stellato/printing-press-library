@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/mvanhorn/printing-press-library/library/devices/wahoo/internal/store"
 	"github.com/spf13/cobra"
+	"github.com/mvanhorn/printing-press-library/library/devices/wahoo/internal/store"
 )
 
 // pp:data-source local
@@ -34,9 +34,8 @@ func newNovelLoadCmd(flags *rootFlags) *cobra.Command {
 		Long: "Compute the Fitness (CTL, 42-day), Fatigue (ATL, 7-day), and Form (TSB = CTL-ATL)\n" +
 			"training-load series from your synced rides — the Performance Management Chart\n" +
 			"TrainingPeaks charges for, computed locally from the workout mirror.\n\n" +
-			"Per-ride load is estimated from average power and your FTP when available,\n" +
-			"falling back to mechanical work then ride duration. The Wahoo API exposes only\n" +
-			"AVERAGE power, so hard interval rides read lower than a normalized-power TSS.\n" +
+			"Per-ride load uses Wahoo's recorded TSS when present, falling back to a\n" +
+			"power-vs-FTP estimate (normalized power preferred) then ride duration.\n" +
 			"For all-time records use 'bests'; for a fixed recent total use 'digest'.",
 		Example:     "  wahoo-pp-cli load --days 90 --agent",
 		Annotations: map[string]string{"mcp:read-only": "true"},

@@ -14,6 +14,7 @@ func TestComputeDigest(t *testing.T) {
 		mkWorkout("2026-01-09", 3600, 200, 500, 30000, 300), // in window
 		mkWorkout("2026-01-08", 3600, 0, 0, 20000, 0),       // in window, no power
 		mkWorkout("2025-12-01", 3600, 250, 800, 50000, 600), // out of window
+		mkWorkout("", 3600, 150, 0, 25000, 0),               // dateless — must NOT count in a window
 	}
 	ws[1].HasSummary = false // simulate an upload that never got a summary
 

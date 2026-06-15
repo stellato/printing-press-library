@@ -20,9 +20,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/spf13/cobra"
 	"github.com/mvanhorn/printing-press-library/library/devices/wahoo/internal/cliutil"
 	"github.com/mvanhorn/printing-press-library/library/devices/wahoo/internal/config"
-	"github.com/spf13/cobra"
 )
 
 func newAuthCmd(flags *rootFlags) *cobra.Command {
@@ -215,8 +215,12 @@ func runOAuthLogin(cmd *cobra.Command, flags *rootFlags, clientID, clientSecret 
 		codeCh <- code
 	})
 
-	server := &http.Server{Handler: mux}
+	server := &http.Server{Handler: mux, ReadHeaderTimeout: 10 * time.Second}
 	go server.Serve(listener)
+	// Tear down the callback server on every return path (success, auth error,
+	// or the 2-minute timeout) so a slow/never-completing connection cannot leak
+	// the listener goroutine.
+	defer server.Shutdown(context.Background())
 
 	var code string
 	select {

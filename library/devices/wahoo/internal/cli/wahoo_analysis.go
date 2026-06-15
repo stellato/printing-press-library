@@ -15,8 +15,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mvanhorn/printing-press-library/library/devices/wahoo/internal/store"
 	"github.com/spf13/cobra"
+	"github.com/mvanhorn/printing-press-library/library/devices/wahoo/internal/store"
 )
 
 // parseLooseFloat coerces a JSON value that may be a number, a numeric string,
@@ -219,15 +219,13 @@ func loadWorkouts(db *store.Store) ([]parsedWorkout, error) {
 	return out, rows.Err()
 }
 
-// estimateRideLoad returns an estimated training-stress score for one ride.
-//
-// With average power and a known FTP it uses an average-power approximation of
-// TSS: IF = avgPower/FTP, load = durationHours * IF^2 * 100. Because the Wahoo
-// API exposes only AVERAGE power (not normalized power), this understates rides
-// with surges; the load command surfaces that caveat. Without power it falls
-// back to total mechanical work (kJ), then to a duration-only proxy at a
-// nominal moderate intensity so HR-only and untracked rides still register.
-// Returns 0 when there is no usable duration signal.
+// estimateRideLoad returns a per-ride training-stress score. It prefers the
+// real per-ride TSS the Wahoo head unit recorded (power_bike_tss_last), present
+// on most rides including HR-derived TSS. When TSS is absent it falls back to a
+// power-vs-FTP approximation (normalized power when available, else average
+// power: IF = power/FTP, load = durationHours * IF^2 * 100), and finally to a
+// duration-only proxy at a nominal moderate intensity. Returns 0 when there is
+// no usable signal.
 func estimateRideLoad(w parsedWorkout, ftp float64) float64 {
 	// Prefer the real per-ride TSS the Wahoo head unit recorded
 	// (power_bike_tss_last) — present on most rides, including HR-derived TSS.
