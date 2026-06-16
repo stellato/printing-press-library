@@ -1,0 +1,11 @@
+{
+  "schema_version": 2,
+  "id": "google-ad-manager-review-round3-quality",
+  "applied_at": "2026-06-17",
+  "base_run_id": "20260616-124304-8944dbb7",
+  "base_printing_press_version": "4.24.0",
+  "summary": "lineitem pace flags truncation (truncated + truncation_note fields and a stderr warning) when an order has more line items than --limit, since it fetches a single page; since counts 'scanned' after the network-prefix filter so multi-network mirror rows do not inflate it; gamCacheItems documents its network-unqualified key as a known, correctness-safe limitation.",
+  "reason": "Non-critical quality items raised in library review round 3 (PR #1243): the schedule-pace ranking could silently omit lower-ranked line items, the scanned count over-reported for multi-network mirrors, and the write-side cache-key collision across networks was undocumented (left as-is because re-keying would change the id surfaced by 'since').",
+  "files": ["internal/cli/lineitem_pace.go", "internal/cli/since.go", "internal/cli/gam_helpers.go"],
+  "validated_outcome": "go build + full cli test suite pass in both trees; gofmt clean; lineitem pace emits truncated=true with a note when nextPageToken is present or the page fills."
+}
