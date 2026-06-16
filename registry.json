@@ -9586,7 +9586,10 @@
         "Estimates per-domain time-on-site from visit-time gaps (Safari stores no native dwell).",
         "Navigation Graph",
         "graph",
-        "Builds a page-node / referrer-edge navigation graph (JSON or Graphviz dot)."
+        "Builds a page-node / referrer-edge navigation graph (JSON or Graphviz dot).",
+        "iCloud Tabs Reader",
+        "icloud-tabs",
+        "Deterministic read of synced iCloud tabs open on the user's other Apple devices from CloudTabs.db, with per-device counts (--summary), device-name/pinned filters, no-silent-cap, and an opt-in Safari-activate --refresh for freshness."
       ],
       "path": "library/productivity/safari-history",
       "printer": "vinnyp",
@@ -9601,8 +9604,8 @@
           "stdio",
           "http"
         ],
-        "tool_count": 19,
-        "public_tool_count": 19,
+        "tool_count": 20,
+        "public_tool_count": 20,
         "auth_type": "none",
         "env_vars": [],
         "mcp_ready": "full",
