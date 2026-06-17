@@ -1382,6 +1382,70 @@
       "printer_name": "Dhilip Subramanian"
     },
     {
+      "name": "azure-devops",
+      "category": "developer-tools",
+      "api": "azure-devops",
+      "description": "The fastest Azure DevOps CLI — offline-first, agent-native",
+      "search_terms": [
+        "azure-devops",
+        "azure-devops-pp-cli",
+        "Daily Standup Digest",
+        "standup",
+        "See your PRs awaiting review, in-progress work items, and newly failed builds in one command — ready before the standup meeting.",
+        "PR Review Readiness Queue",
+        "pr review-queue",
+        "See only the PRs where you are a required reviewer, the build is passing, and no other required reviewer has voted yet — ordered by readiness.",
+        "Sprint Velocity Trend",
+        "velocity",
+        "See sprint-over-sprint velocity with trend line for the current team — points completed vs committed, across the last N sprints.",
+        "Sprint Scope Creep Detector",
+        "work sprint-creep",
+        "See which work items were added to the current sprint after it started, with total story points of scope added mid-sprint.",
+        "Sprint Rollover Counter",
+        "work rollover",
+        "Find work items that have been moved to a new sprint more than once — the chronic blockers that keep slipping through sprint planning.",
+        "Cross-Pipeline Pending Approvals",
+        "release gate-queue",
+        "See all release gates and YAML pipeline stages currently waiting for your approval across every pipeline, with how long each has been waiting.",
+        "Work Item Revision Diff",
+        "work diff",
+        "Show exactly which fields changed between two revisions of a work item — a git-style diff for specification and acceptance criteria.",
+        "Pipeline Flakiness Score",
+        "pipeline flaky",
+        "Identify build stages with the highest intermittent failure rate over the last N runs — the stages that fail and then pass without code changes.",
+        "Work Item Cycle Time",
+        "wit cycle-time",
+        "Measure average time from Active to Done per work item type over a date range — the team's true delivery throughput.",
+        "Commit-to-Build Traceability",
+        "git commit-builds",
+        "Given a commit SHA, see every build and pipeline run that included that commit and whether it passed or failed.",
+        "Cross-Repo Branch Health",
+        "git branch-health",
+        "See a health dashboard for every repo in the project: default branch build status, last commit age, and open PR count — in one table.",
+        "Area Path Work Item Load",
+        "work area-load",
+        "See open work item counts and total story points grouped by area path — to spot overloaded teams or abandoned backlogs.",
+        "PR Aging Report",
+        "pr aging",
+        "Find pull requests with no reviewer activity for N or more days, grouped by author — to surface forgotten PRs before they go stale.",
+        "Branch Stale Cleanup Plan",
+        "branches stale",
+        "List branches that are safe to delete: already merged into default, no open PRs, and no commits in the last N days.",
+        "Build Cost Trend",
+        "builds cost",
+        "See agent minutes consumed per pipeline per week over the last N weeks — to find pipelines that are growing in CI cost."
+      ],
+      "path": "library/developer-tools/azure-devops",
+      "printer": "davbebawy",
+      "printer_name": "David Bebawy",
+      "contributors": [
+        {
+          "handle": "davbebawy",
+          "name": "David Bebawy"
+        }
+      ]
+    },
+    {
       "name": "azure-functions-admin",
       "category": "cloud",
       "api": "Azure Functions",
@@ -4893,6 +4957,64 @@
         "auth_type": "api_key",
         "env_vars": [
           "GOODREADS_GOODREADS_COOKIE_SESSION"
+        ],
+        "mcp_ready": "full",
+        "spec_format": "openapi3"
+      }
+    },
+    {
+      "name": "google-ad-manager",
+      "category": "marketing",
+      "api": "Google Ad Manager",
+      "description": "The only REST-native Google Ad Manager CLI: report, search, and manage publisher inventory from the terminal, backed by a local mirror the web console can't match.",
+      "search_terms": [
+        "google-ad-manager",
+        "Google Ad Manager",
+        "google-ad-manager-pp-cli",
+        "The only REST-native Google Ad Manager CLI: report, search, and manage publisher inventory from the terminal, backed by a local mirror the web console can't match.",
+        "One-Shot Async Report",
+        "report run",
+        "Create, run, poll, and fetch every row of a GAM report in a single blocking command instead of the four-step UI slog.",
+        "Saved Report Rerun",
+        "report rerun",
+        "Re-execute an existing saved report definition by ID and stream fresh rows, so the morning revenue pull is one short command.",
+        "Daily Report Diff",
+        "report watch",
+        "Re-run a saved report and diff it against the last cached run to surface what moved in revenue, impressions, or eCPM since yesterday.",
+        "Order Expansion Graph",
+        "order graph",
+        "Expand one order into its line items (goal, type, flight dates) in one structured object.",
+        "Ad-Unit Tree View",
+        "adunits tree",
+        "Render the full hierarchical ad-unit tree (or any subtree) from cache, with status and depth, in one offline call.",
+        "Inventory Orphan Audit",
+        "inventory orphans",
+        "Tree-walk the ad-unit hierarchy to flag active units with no placement coverage.",
+        "Local Resync Diff",
+        "since",
+        "Show which mirrored entities were added or changed (by updateTime) since a cutoff — a changelog the platform does not keep.",
+        "Line-Item Pacing Join",
+        "lineitem pace",
+        "Join read-only line-item goals against a delivery report to show each line item's pace versus goal, ranked by risk."
+      ],
+      "path": "library/marketing/google-ad-manager",
+      "printer": "stellato",
+      "printer_name": "Greg Stellato",
+      "creator": {
+        "handle": "stellato",
+        "name": "Greg Stellato"
+      },
+      "mcp": {
+        "binary": "google-ad-manager-pp-mcp",
+        "transports": [
+          "stdio",
+          "http"
+        ],
+        "tool_count": 111,
+        "public_tool_count": 0,
+        "auth_type": "bearer_token",
+        "env_vars": [
+          "GOOGLE_AD_MANAGER_ACCESS_TOKEN"
         ],
         "mcp_ready": "full",
         "spec_format": "openapi3"
@@ -12885,6 +13007,45 @@
         ],
         "mcp_ready": "full",
         "spec_format": "openapi3"
+      }
+    },
+    {
+      "name": "vercel-admin",
+      "category": "cloud",
+      "api": "Vercel",
+      "description": "Agent-ready Vercel admin CLI for deployments, projects, domains, environment variables, teams, logs, and operator briefs.",
+      "search_terms": [
+        "vercel-admin",
+        "Vercel",
+        "vercel-admin-pp-cli",
+        "Agent-ready Vercel admin CLI for deployments, projects, domains, environment variables, teams, logs, and operator briefs.",
+        "Recent deployment brief",
+        "ops recent-deployments",
+        "Summarize recent Vercel deployments by project, target, and state from the live deployments API.",
+        "Deployment failure brief",
+        "ops failure-brief",
+        "Join deployment metadata, events, check runs, and runtime logs into one incident-triage payload."
+      ],
+      "path": "library/cloud/vercel-admin",
+      "printer": "hnshah",
+      "printer_name": "hnshah",
+      "creator": {
+        "handle": "hnshah",
+        "name": "hnshah"
+      },
+      "mcp": {
+        "binary": "vercel-admin-pp-mcp",
+        "transports": [
+          "stdio",
+          "http"
+        ],
+        "tool_count": 316,
+        "public_tool_count": 3,
+        "auth_type": "bearer_token",
+        "env_vars": [
+          "VERCEL_ADMIN_TOKEN"
+        ],
+        "mcp_ready": "full"
       }
     },
     {
