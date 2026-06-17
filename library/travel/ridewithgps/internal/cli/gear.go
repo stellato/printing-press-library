@@ -16,9 +16,9 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/spf13/cobra"
 	"github.com/mvanhorn/printing-press-library/library/travel/ridewithgps/internal/cliutil"
 	"github.com/mvanhorn/printing-press-library/library/travel/ridewithgps/internal/store"
-	"github.com/spf13/cobra"
 )
 
 type gearTotal struct {
@@ -118,8 +118,12 @@ replacement interval). Run 'ridewithgps-pp-cli sync --resources trips' first.`,
 					trips = append(trips, tripRow{id: id.String, distM: dist.Float64})
 				}
 			}
+			rowsErr := rows.Err()
 			_ = rows.Close()
 			_ = db.Close()
+			if rowsErr != nil {
+				return fmt.Errorf("reading trips: %w", rowsErr)
+			}
 
 			view := gearView{ScannedTrips: len(trips), DueThresholdKM: dueKM, Gear: make([]gearTotal, 0), FetchFailures: make([]gearFetchFailure, 0)}
 			if len(trips) == 0 {
