@@ -10437,6 +10437,51 @@
       }
     },
     {
+      "name": "shelters",
+      "category": "other",
+      "api": "Shelters",
+      "description": "Credible, real-time disaster shelter information for AI agents and people",
+      "search_terms": [
+        "shelters",
+        "shelters-pp-cli",
+        "Credible, real-time disaster shelter information for AI agents and people",
+        "Closest open shelter, including pet-friendly",
+        "near",
+        "Ranks open shelters by straight-line distance from a lat,lon, ZIP, or street address; geocodes shelters that are missing coordinates and reports any it cannot locate rather than dropping them.",
+        "Honest capacity, never a fabricated denominator",
+        "capacity",
+        "Computes utilization only where both a population and a capacity are reported, labeling the denominator (evacuation vs post-impact), and surfaces shelters reported FULL without asserting it as ground truth.",
+        "One-call situational briefing",
+        "brief",
+        "One command returns the open count, a breakdown by state, pet-friendly and accessible counts, and the capacity picture, with an optional human briefing.",
+        "Filtered open-shelter listing",
+        "Open shelters flattened from the feed and filterable by state, pets, ADA, wheelchair, managing org, and status.",
+        "Flattened shelter detail by stable id",
+        "shelter",
+        "Full detail for one shelter joined on the stable shelter_id rather than the churning objectid, with unreported fields as explicit null."
+      ],
+      "path": "library/other/shelters",
+      "printer": "abe238",
+      "printer_name": "Abe Diaz (@abe238)",
+      "creator": {
+        "handle": "abe238",
+        "name": "Abe Diaz (@abe238)"
+      },
+      "mcp": {
+        "binary": "shelters-pp-mcp",
+        "transports": [
+          "stdio",
+          "http"
+        ],
+        "tool_count": 1,
+        "public_tool_count": 1,
+        "auth_type": "none",
+        "env_vars": [],
+        "mcp_ready": "full",
+        "spec_format": "internal"
+      }
+    },
+    {
       "name": "shipsgo",
       "category": "commerce",
       "api": "ShipsGo",
