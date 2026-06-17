@@ -1,0 +1,188 @@
+{
+  "api_name": "equativ-maestro",
+  "novelty_score": 0,
+  "alternatives": [],
+  "gaps": [],
+  "patterns": [],
+  "recommendation": "proceed",
+  "researched_at": "2026-06-17T20:44:59Z",
+  "novel_features": [
+    {
+      "name": "Pacing drift sweep",
+      "command": "deals drift",
+      "description": "See which PMP deals drifted off pace since your last sync \u2014 one ranked view across your whole deal book.",
+      "rationale": "Diffs each deal's latest delivery/pacing snapshot against the prior snapshot in the local store; the web UI and official MCP server keep no history.",
+      "example": "equativ-maestro-pp-cli deals drift --threshold 10 --agent",
+      "why_it_matters": "Reach for this to answer 'what changed since last week' across many deals at once instead of opening each deal's reporting tab.",
+      "group": "Local state that compounds"
+    },
+    {
+      "name": "Forecast permutation sweep",
+      "command": "forecast sweep",
+      "description": "Run an avails forecast across a whole targeting matrix (geo x device x audience) in one command and get the grid.",
+      "rationale": "Expands the matrix to the cartesian set and calls inventoryInsights once per cell with a cached token and throttle, persisting every result; the SPA returns one forecast per click.",
+      "example": "equativ-maestro-pp-cli forecast sweep --geo 250,276 --agent",
+      "why_it_matters": "Reach for this when planning supply: see where avails actually exist across the whole targeting surface, not one cell at a time.",
+      "group": "Orchestration the web UI can't do"
+    },
+    {
+      "name": "Cross-entity reconciliation",
+      "command": "reconcile",
+      "description": "Find structural problems across your book: deals with no line item, line items with zero delivery, budgets that don't match delivered spend.",
+      "rationale": "Four-way local join across synced deals, campaigns, line items, and latest report rows; no single API endpoint spans them.",
+      "example": "equativ-maestro-pp-cli reconcile --spend --agent",
+      "why_it_matters": "Reach for this before a client review to catch orphans and budget mismatches the separate web screens never surface together.",
+      "group": "Local state that compounds"
+    },
+    {
+      "name": "Bulk deal writer with quota guard",
+      "command": "deals apply",
+      "description": "Stage a batch of deal creates/updates from a file, validate locally, dry-run by default, and commit within the daily rate caps.",
+      "rationale": "Validates each row against synced reference tables and counts writes against the documented 15-create / 500-update daily caps, stopping cleanly before the cap.",
+      "example": "equativ-maestro-pp-cli deals apply deals.json",
+      "why_it_matters": "Reach for this for bulk activation or teardown so a rate-limit doesn't leave a half-applied batch mid-flight.",
+      "group": "Orchestration the web UI can't do"
+    },
+    {
+      "name": "Bid-funnel win-rate ranking",
+      "command": "deals funnel-rank",
+      "description": "Rank every deal by its bid-funnel win rate (eligible to bid to win) so the worst performers surface first.",
+      "rationale": "Loops the locally-stored deal set and ranks by computed win-rate; the single-deal funnel is one API call, but ranking needs the local deal set.",
+      "example": "equativ-maestro-pp-cli deals funnel-rank --csv",
+      "why_it_matters": "Reach for this to triage which deals to troubleshoot first instead of opening funnels one by one.",
+      "group": "Local state that compounds"
+    }
+  ],
+  "novel_features_built": [
+    {
+      "name": "Pacing drift sweep",
+      "command": "deals drift",
+      "description": "See which PMP deals drifted off pace since your last sync \u2014 one ranked view across your whole deal book.",
+      "rationale": "Diffs each deal's latest delivery/pacing snapshot against the prior snapshot in the local store; the web UI and official MCP server keep no history.",
+      "example": "equativ-maestro-pp-cli deals drift --threshold 10 --agent",
+      "why_it_matters": "Reach for this to answer 'what changed since last week' across many deals at once instead of opening each deal's reporting tab.",
+      "group": "Local state that compounds"
+    },
+    {
+      "name": "Forecast permutation sweep",
+      "command": "forecast sweep",
+      "description": "Run an avails forecast across a whole targeting matrix (geo x format x audience) in one command and get the grid.",
+      "rationale": "Expands the matrix to the cartesian set and calls inventoryInsights once per cell with a cached token and throttle, persisting every result; the SPA returns one forecast per click.",
+      "example": "equativ-maestro-pp-cli forecast sweep --geo US,FR,DE --format display,video --agent",
+      "why_it_matters": "Reach for this when planning supply: see where avails actually exist across the whole targeting surface, not one cell at a time.",
+      "group": "Orchestration the web UI can't do"
+    },
+    {
+      "name": "Cross-entity reconciliation",
+      "command": "reconcile",
+      "description": "Find structural problems across your book: deals with no line item, line items with zero delivery, budgets that don't match delivered spend.",
+      "rationale": "Four-way local join across synced deals, campaigns, line items, and latest report rows; no single API endpoint spans them.",
+      "example": "equativ-maestro-pp-cli reconcile --spend --agent",
+      "why_it_matters": "Reach for this before a client review to catch orphans and budget mismatches the separate web screens never surface together.",
+      "group": "Local state that compounds"
+    },
+    {
+      "name": "Bulk deal writer with quota guard",
+      "command": "deals apply",
+      "description": "Stage a batch of deal creates/updates from a file, validate locally, dry-run by default, and commit within the daily rate caps.",
+      "rationale": "Validates each row against synced reference tables and counts writes against the documented 15-create / 500-update daily caps, stopping cleanly before the cap.",
+      "example": "equativ-maestro-pp-cli deals apply deals.json",
+      "why_it_matters": "Reach for this for bulk activation or teardown so a rate-limit doesn't leave a half-applied batch mid-flight.",
+      "group": "Orchestration the web UI can't do"
+    },
+    {
+      "name": "Bid-funnel win-rate ranking",
+      "command": "deals funnel-rank",
+      "description": "Rank every deal by its bid-funnel win rate (eligible to bid to win) so the worst performers surface first.",
+      "rationale": "Loops the locally-stored deal set and ranks by computed win-rate; the single-deal funnel is one API call, but ranking needs the local deal set.",
+      "example": "equativ-maestro-pp-cli deals funnel-rank --csv",
+      "why_it_matters": "Reach for this to triage which deals to troubleshoot first instead of opening funnels one by one.",
+      "group": "Local state that compounds"
+    }
+  ],
+  "auth": {},
+  "narrative": {
+    "display_name": "Maestro by Equativ",
+    "headline": "Every Maestro deal, avails forecast, and report \u2014 scriptable, with a local database and offline analytics the web UI and official MCP server can't match.",
+    "value_prop": "A command-line interface for Equativ's Maestro curation platform. It mirrors the full deal, media-planning, reporting, and activation surface, then adds what a stateless API mirror can't: a local SQLite store with sync and full-text search, pacing-drift detection (deals drift), avails permutation sweeps (forecast sweep), cross-entity reconciliation (reconcile), and quota-aware bulk deal writes (deals apply).",
+    "auth_narrative": "Maestro uses OAuth2 client-credentials. Create an API User in Maestro to get a client_id and client_secret, set EQUATIV_CLIENT_ID and EQUATIV_CLIENT_SECRET, then run 'equativ-maestro-pp-cli auth login'. The CLI exchanges them at login.eqtv.io for a short-lived Bearer token and caches it, refreshing automatically before expiry. Set EQUATIV_MAESTRO_BASE_URL to override the API host (default buyerconnectapis.smartadserver.com).",
+    "quickstart": [
+      {
+        "command": "equativ-maestro-pp-cli doctor --dry-run",
+        "comment": "Check config and reachability before anything else (works without credentials)."
+      },
+      {
+        "command": "equativ-maestro-pp-cli sync --resources deals",
+        "comment": "Pull your deals into the local store so search and analytics work offline."
+      },
+      {
+        "command": "equativ-maestro-pp-cli search \"display\" --type deals",
+        "comment": "Full-text search your synced deals."
+      },
+      {
+        "command": "equativ-maestro-pp-cli deals drift --threshold 10",
+        "comment": "See which deals drifted off pace since the last sync."
+      }
+    ],
+    "troubleshoots": [
+      {
+        "symptom": "401 Unauthorized on every call",
+        "fix": "Run 'equativ-maestro-pp-cli auth login' to mint a fresh token; the Bearer token is short-lived (per the server's expires_in) and the CLI auto-refreshes it before expiry."
+      },
+      {
+        "symptom": "429 / 'deal creations limit reached'",
+        "fix": "The API caps deal creations at 15/day and updates at 500/day. Use 'deals apply' which counts against the cap and stops before breaching it."
+      },
+      {
+        "symptom": "Some reference or activation commands 404",
+        "fix": "Set EQUATIV_MAESTRO_BASE_URL=https://demand-api.eqtv.io if your API User is provisioned on the documented Demand API host instead of the default live host."
+      },
+      {
+        "symptom": "deals drift returns nothing",
+        "fix": "drift needs at least two syncs to compare. Run 'sync --resources deals' now and again later, then re-run drift."
+      }
+    ],
+    "when_to_use": "Use this CLI to script Equativ Maestro: bulk deal operations, avails forecasting across many targeting permutations, pulling delivery/pacing reports for offline analysis, and reconciling a curation book. It shines for agency traders, media planners, and ad-ops who live in spreadsheets and want the Maestro surface as composable commands with a local database.",
+    "anti_triggers": [
+      "Do not use this CLI for ad creative rendering or the mobile Display SDK \u2014 that is a separate Equativ product.",
+      "Do not use it for publisher/supply-side monetization (the EMP supply API) \u2014 this is the demand/buyer side only.",
+      "Do not use it as a real-time bidder; it manages deals/campaigns/reports, it does not bid."
+    ],
+    "recipes": [
+      {
+        "title": "Agent-friendly deal list, narrowed fields",
+        "command": "equativ-maestro-pp-cli deals list --agent --select dealId,name,price,isActive,isCTV",
+        "explanation": "Return only the fields an agent needs from the deal list instead of the full 43-field object."
+      },
+      {
+        "title": "Forecast avails across a targeting grid",
+        "command": "equativ-maestro-pp-cli forecast sweep --geo 250,276 --device 2 --agent --select cells.geo,cells.device,cells.avails,cells.auctions",
+        "explanation": "Runs the geo x device matrix of inventoryInsights forecasts (numeric IDs from `countries`/reference data) and returns avails + auctions per cell."
+      },
+      {
+        "title": "Weekly pacing-drift triage",
+        "command": "equativ-maestro-pp-cli deals drift --threshold 10 --csv",
+        "explanation": "Rank deals whose pacing moved more than 10% since the last sync and pipe the CSV into your spreadsheet."
+      },
+      {
+        "title": "Pre-review reconciliation",
+        "command": "equativ-maestro-pp-cli reconcile --spend --agent",
+        "explanation": "Surface orphaned deals/line items and budget-vs-spend mismatches across the synced book before a client review."
+      },
+      {
+        "title": "Dry-run a bulk deal batch",
+        "command": "equativ-maestro-pp-cli deals apply new-deals.json",
+        "explanation": "Validate and preview every create/update locally; nothing is written until you add --commit."
+      }
+    ],
+    "trigger_phrases": [
+      "list my Maestro deals",
+      "forecast avails for this targeting",
+      "which Maestro deals are off pace",
+      "reconcile my curation book",
+      "create a Maestro PMP deal",
+      "use equativ-maestro",
+      "run equativ-maestro"
+    ]
+  }
+}

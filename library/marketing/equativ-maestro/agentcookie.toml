@@ -1,0 +1,17 @@
+# agentcookie.toml: secrets-bus adoption manifest v2
+# See docs/spec-agentcookie-secrets-bus-v2-adoption.md
+schema_version = 2
+name = "equativ-maestro-pp-cli"
+display_name = "Maestro by Equativ"
+description = "Every Maestro deal, avails forecast, and report — scriptable, with a local database and offline analytics the web UI and official MCP server can't match."
+project_kind = "cli"
+
+[secrets.file]
+path = "~/.config/equativ-maestro-pp-cli/config.toml"
+
+[sync]
+default = false
+
+[sync.keys]
+EQUATIV_CLIENT_ID = true
+EQUATIV_CLIENT_SECRET = true

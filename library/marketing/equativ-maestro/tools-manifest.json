@@ -1,0 +1,6155 @@
+{
+  "api_name": "equativ-maestro",
+  "base_url": "https://buyerconnectapis.smartadserver.com",
+  "description": "Every Maestro deal, avails forecast, and report — scriptable, with a local database and offline analytics the web UI and official MCP server can't match.",
+  "mcp_ready": "full",
+  "http_transport": "standard",
+  "mcp": {
+    "endpoint_tools": "hidden",
+    "orchestration": "code"
+  },
+  "auth": {
+    "type": "bearer_token",
+    "header": "Authorization",
+    "env_vars": [
+      "EQUATIV_CLIENT_ID",
+      "EQUATIV_CLIENT_SECRET"
+    ],
+    "env_var_specs": [
+      {
+        "name": "EQUATIV_CLIENT_ID",
+        "kind": "per_call",
+        "required": true,
+        "sensitive": true,
+        "inferred": true
+      },
+      {
+        "name": "EQUATIV_CLIENT_SECRET",
+        "kind": "per_call",
+        "required": true,
+        "sensitive": true,
+        "inferred": true
+      }
+    ],
+    "key_url": "https://help.equativ.com/get-started-with-user-administration/create-and-manage-api-users"
+  },
+  "required_headers": [],
+  "tools": [
+    {
+      "name": "async-report_create",
+      "description": "Create a new async report. Required: dimensions, endDate, filters, metrics, name, startDate, timezone. Optional: currency, dateFormat, emptyDimensionValues (plus 6 more).",
+      "method": "POST",
+      "path": "/async-report",
+      "params": [
+        {
+          "name": "currency",
+          "type": "string",
+          "location": "body",
+          "description": "Currency"
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "location": "body",
+          "description": "Format to be used for date fields *Ex: yyyy-MM-dd'T'HH:mm:ss will output 2019-05-20T12:08:56"
+        },
+        {
+          "name": "dimensions",
+          "type": "array",
+          "location": "body",
+          "description": "List of dimensions to include in the report List of all dimensions on **/dimensions**...",
+          "required": true
+        },
+        {
+          "name": "emptyDimensionValues",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Empty dimension values"
+        },
+        {
+          "name": "endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date",
+          "required": true
+        },
+        {
+          "name": "fileFormat",
+          "type": "string",
+          "location": "body",
+          "description": "File format"
+        },
+        {
+          "name": "filters",
+          "type": "array",
+          "location": "body",
+          "description": "The filters of the report The requested report must fulfill all the conditions here (AND...",
+          "required": true
+        },
+        {
+          "name": "includeFreshData",
+          "type": "bool",
+          "location": "body",
+          "description": "Include fresh data"
+        },
+        {
+          "name": "metrics",
+          "type": "array",
+          "location": "body",
+          "description": "List of metrics to include in the report List of all metrics on **/metrics** endpoint *Ex:...",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "location": "body",
+          "description": "Name",
+          "required": true
+        },
+        {
+          "name": "post-processing-configuration-email-configurations",
+          "wire_name": "postProcessingConfiguration.emailConfigurations",
+          "type": "array",
+          "location": "body",
+          "description": "Email configurations"
+        },
+        {
+          "name": "scheduling-cron-expression",
+          "wire_name": "scheduling.cronExpression",
+          "type": "string",
+          "location": "body",
+          "description": "The cron expression defining the scheduling of the report. This expression will be interpreted in the provided InsightsApi.AsyncReporting.Report.Model.BaseAsyncReportPersistenceRequest.Timezone",
+          "required": true
+        },
+        {
+          "name": "scheduling-end-date",
+          "wire_name": "scheduling.endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date of the report scheduling, in ISO 8601 format. The report won't run after this date"
+        },
+        {
+          "name": "scheduling-start-date",
+          "wire_name": "scheduling.startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date of the report scheduling, in ISO 8601 format. The report won't run before this date"
+        },
+        {
+          "name": "simulate",
+          "type": "bool",
+          "location": "body",
+          "description": "Simulate"
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date",
+          "required": true
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "body",
+          "description": "The timezone, Iana format",
+          "required": true
+        },
+        {
+          "name": "useCaseId",
+          "type": "string",
+          "location": "body",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "async-report_delete",
+      "description": "Deletes an async report. Required: id. Destructive.",
+      "method": "DELETE",
+      "path": "/async-report/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "The id of the report",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "async-report_get",
+      "description": "Get a single async report by id. Required: id. Returns the AsyncReportDto.",
+      "method": "GET",
+      "path": "/async-report/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "The UUID of the report to get",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "async-report_list",
+      "description": "Get all async reports, with the ability to filter by id. Optional: UseCaseId, Name, Type (plus 3 more). Returns array of AsyncReportDto.",
+      "method": "GET",
+      "path": "/async-report",
+      "params": [
+        {
+          "name": "UseCaseId",
+          "type": "string",
+          "location": "query",
+          "description": "Filter on useCase Id"
+        },
+        {
+          "name": "Name",
+          "type": "string",
+          "location": "query",
+          "description": "Filter on report name"
+        },
+        {
+          "name": "Type",
+          "type": "string",
+          "location": "query",
+          "description": "Filter on report type"
+        },
+        {
+          "name": "Ids",
+          "type": "array",
+          "location": "query",
+          "description": "Filter on report id"
+        },
+        {
+          "name": "Limit",
+          "type": "int",
+          "location": "query",
+          "description": "Limit"
+        },
+        {
+          "name": "Offset",
+          "type": "int",
+          "location": "query",
+          "description": "Offset"
+        }
+      ]
+    },
+    {
+      "name": "async-report_update",
+      "description": "Updates an async report. Required: dimensions, endDate, filters, id, metrics, name, startDate, timezone. Optional: currency, dateFormat, emptyDimensionValues (plus 5 more).",
+      "method": "PUT",
+      "path": "/async-report",
+      "params": [
+        {
+          "name": "currency",
+          "type": "string",
+          "location": "body",
+          "description": "Currency"
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "location": "body",
+          "description": "Format to be used for date fields *Ex: yyyy-MM-dd'T'HH:mm:ss will output 2019-05-20T12:08:56"
+        },
+        {
+          "name": "dimensions",
+          "type": "array",
+          "location": "body",
+          "description": "List of dimensions to include in the report List of all dimensions on **/dimensions**...",
+          "required": true
+        },
+        {
+          "name": "emptyDimensionValues",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Empty dimension values"
+        },
+        {
+          "name": "endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date",
+          "required": true
+        },
+        {
+          "name": "fileFormat",
+          "type": "string",
+          "location": "body",
+          "description": "File format"
+        },
+        {
+          "name": "filters",
+          "type": "array",
+          "location": "body",
+          "description": "The filters of the report The requested report must fulfill all the conditions here (AND...",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "location": "body",
+          "description": "Id",
+          "required": true
+        },
+        {
+          "name": "includeFreshData",
+          "type": "bool",
+          "location": "body",
+          "description": "Include fresh data"
+        },
+        {
+          "name": "metrics",
+          "type": "array",
+          "location": "body",
+          "description": "List of metrics to include in the report List of all metrics on **/metrics** endpoint *Ex:...",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "location": "body",
+          "description": "Name",
+          "required": true
+        },
+        {
+          "name": "post-processing-configuration-email-configurations",
+          "wire_name": "postProcessingConfiguration.emailConfigurations",
+          "type": "array",
+          "location": "body",
+          "description": "Email configurations"
+        },
+        {
+          "name": "scheduling-cron-expression",
+          "wire_name": "scheduling.cronExpression",
+          "type": "string",
+          "location": "body",
+          "description": "The cron expression defining the scheduling of the report. This expression will be interpreted in the provided InsightsApi.AsyncReporting.Report.Model.BaseAsyncReportPersistenceRequest.Timezone",
+          "required": true
+        },
+        {
+          "name": "scheduling-end-date",
+          "wire_name": "scheduling.endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date of the report scheduling, in ISO 8601 format. The report won't run after this date"
+        },
+        {
+          "name": "scheduling-start-date",
+          "wire_name": "scheduling.startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date of the report scheduling, in ISO 8601 format. The report won't run before this date"
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date",
+          "required": true
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "body",
+          "description": "The timezone, Iana format",
+          "required": true
+        },
+        {
+          "name": "useCaseId",
+          "type": "string",
+          "location": "body",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "async-report_executions_get",
+      "description": "Returns the list of executions by report id. Required: id.",
+      "method": "GET",
+      "path": "/async-report/{id}/executions",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "report id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "async-report_preview_get",
+      "description": "Use `/report-async` endpoint to get reports ids. Required: id. Optional: offset (default: 0), limit (default: 100). Returns the CloudReportPreview.",
+      "method": "GET",
+      "path": "/async-report/{id}/preview",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Report id",
+          "required": true
+        },
+        {
+          "name": "offset",
+          "type": "int",
+          "location": "query",
+          "description": "The starting point (for pagination)"
+        },
+        {
+          "name": "limit",
+          "type": "int",
+          "location": "query",
+          "description": "The number of results returned (for pagination)"
+        }
+      ]
+    },
+    {
+      "name": "async-report-gcp_create",
+      "description": "Create a new async report. Required: dimensions, endDate, filters, metrics, name, startDate, timezone. Optional: currency, dateFormat, emptyDimensionValues (plus 6 more).",
+      "method": "POST",
+      "path": "/async-report-gcp",
+      "params": [
+        {
+          "name": "currency",
+          "type": "string",
+          "location": "body",
+          "description": "Currency"
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "location": "body",
+          "description": "Format to be used for date fields *Ex: yyyy-MM-dd'T'HH:mm:ss will output 2019-05-20T12:08:56"
+        },
+        {
+          "name": "dimensions",
+          "type": "array",
+          "location": "body",
+          "description": "List of dimensions to include in the report List of all dimensions on **/dimensions**...",
+          "required": true
+        },
+        {
+          "name": "emptyDimensionValues",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Empty dimension values"
+        },
+        {
+          "name": "endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date",
+          "required": true
+        },
+        {
+          "name": "fileFormat",
+          "type": "string",
+          "location": "body",
+          "description": "File format"
+        },
+        {
+          "name": "filters",
+          "type": "array",
+          "location": "body",
+          "description": "The filters of the report The requested report must fulfill all the conditions here (AND...",
+          "required": true
+        },
+        {
+          "name": "includeFreshData",
+          "type": "bool",
+          "location": "body",
+          "description": "Include fresh data"
+        },
+        {
+          "name": "metrics",
+          "type": "array",
+          "location": "body",
+          "description": "List of metrics to include in the report List of all metrics on **/metrics** endpoint *Ex:...",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "location": "body",
+          "description": "Name",
+          "required": true
+        },
+        {
+          "name": "post-processing-configuration-email-configurations",
+          "wire_name": "postProcessingConfiguration.emailConfigurations",
+          "type": "array",
+          "location": "body",
+          "description": "Email configurations"
+        },
+        {
+          "name": "scheduling-cron-expression",
+          "wire_name": "scheduling.cronExpression",
+          "type": "string",
+          "location": "body",
+          "description": "The cron expression defining the scheduling of the report. This expression will be interpreted in the provided InsightsApi.AsyncReporting.Report.Model.BaseAsyncReportPersistenceRequest.Timezone",
+          "required": true
+        },
+        {
+          "name": "scheduling-end-date",
+          "wire_name": "scheduling.endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date of the report scheduling, in ISO 8601 format. The report won't run after this date"
+        },
+        {
+          "name": "scheduling-start-date",
+          "wire_name": "scheduling.startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date of the report scheduling, in ISO 8601 format. The report won't run before this date"
+        },
+        {
+          "name": "simulate",
+          "type": "bool",
+          "location": "body",
+          "description": "Simulate"
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date",
+          "required": true
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "body",
+          "description": "The timezone, Iana format",
+          "required": true
+        },
+        {
+          "name": "useCaseId",
+          "type": "string",
+          "location": "body",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "async-report-gcp_get",
+      "description": "Get a single async report by id. Required: id. Returns the AsyncReportDto.",
+      "method": "GET",
+      "path": "/async-report-gcp/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "The UUID of the report to get",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "async-report-gcp_update",
+      "description": "Updates an async report. Required: dimensions, endDate, filters, id, metrics, name, startDate, timezone. Optional: currency, dateFormat, emptyDimensionValues (plus 5 more).",
+      "method": "PUT",
+      "path": "/async-report-gcp",
+      "params": [
+        {
+          "name": "currency",
+          "type": "string",
+          "location": "body",
+          "description": "Currency"
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "location": "body",
+          "description": "Format to be used for date fields *Ex: yyyy-MM-dd'T'HH:mm:ss will output 2019-05-20T12:08:56"
+        },
+        {
+          "name": "dimensions",
+          "type": "array",
+          "location": "body",
+          "description": "List of dimensions to include in the report List of all dimensions on **/dimensions**...",
+          "required": true
+        },
+        {
+          "name": "emptyDimensionValues",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Empty dimension values"
+        },
+        {
+          "name": "endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date",
+          "required": true
+        },
+        {
+          "name": "fileFormat",
+          "type": "string",
+          "location": "body",
+          "description": "File format"
+        },
+        {
+          "name": "filters",
+          "type": "array",
+          "location": "body",
+          "description": "The filters of the report The requested report must fulfill all the conditions here (AND...",
+          "required": true
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "location": "body",
+          "description": "Id",
+          "required": true
+        },
+        {
+          "name": "includeFreshData",
+          "type": "bool",
+          "location": "body",
+          "description": "Include fresh data"
+        },
+        {
+          "name": "metrics",
+          "type": "array",
+          "location": "body",
+          "description": "List of metrics to include in the report List of all metrics on **/metrics** endpoint *Ex:...",
+          "required": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "location": "body",
+          "description": "Name",
+          "required": true
+        },
+        {
+          "name": "post-processing-configuration-email-configurations",
+          "wire_name": "postProcessingConfiguration.emailConfigurations",
+          "type": "array",
+          "location": "body",
+          "description": "Email configurations"
+        },
+        {
+          "name": "scheduling-cron-expression",
+          "wire_name": "scheduling.cronExpression",
+          "type": "string",
+          "location": "body",
+          "description": "The cron expression defining the scheduling of the report. This expression will be interpreted in the provided InsightsApi.AsyncReporting.Report.Model.BaseAsyncReportPersistenceRequest.Timezone",
+          "required": true
+        },
+        {
+          "name": "scheduling-end-date",
+          "wire_name": "scheduling.endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date of the report scheduling, in ISO 8601 format. The report won't run after this date"
+        },
+        {
+          "name": "scheduling-start-date",
+          "wire_name": "scheduling.startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date of the report scheduling, in ISO 8601 format. The report won't run before this date"
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date",
+          "required": true
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "body",
+          "description": "The timezone, Iana format",
+          "required": true
+        },
+        {
+          "name": "useCaseId",
+          "type": "string",
+          "location": "body",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "async-report-gcp_preview_get",
+      "description": "Use `/report-async` endpoint to get reports ids. Required: id. Optional: offset (default: 0), limit (default: 100). Returns the CloudReportPreview.",
+      "method": "GET",
+      "path": "/async-report-gcp/{id}/preview",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Report id",
+          "required": true
+        },
+        {
+          "name": "offset",
+          "type": "int",
+          "location": "query",
+          "description": "The starting point (for pagination)"
+        },
+        {
+          "name": "limit",
+          "type": "int",
+          "location": "query",
+          "description": "The number of results returned (for pagination)"
+        }
+      ]
+    },
+    {
+      "name": "businessunits_get",
+      "description": "Returns the RTB+ business unit with the given id. Required: id.",
+      "method": "GET",
+      "path": "/businessunits/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "int",
+          "location": "path",
+          "description": "Id of the business unit to return.",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "businessunits_get-all",
+      "description": "Returns all the RTB+ business units. Optional: Ids, Name, Offset (plus 1 more).",
+      "method": "GET",
+      "path": "/businessunits",
+      "params": [
+        {
+          "name": "Ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids to filter on."
+        },
+        {
+          "name": "Name",
+          "type": "string",
+          "location": "query",
+          "description": "Filter on business unit name (partial match)."
+        },
+        {
+          "name": "Offset",
+          "type": "int",
+          "location": "query",
+          "description": "Offset"
+        },
+        {
+          "name": "Limit",
+          "type": "int",
+          "location": "query",
+          "description": "Limit"
+        }
+      ]
+    },
+    {
+      "name": "cities_get",
+      "description": "Returns the city with the given id. Required: id.",
+      "method": "GET",
+      "path": "/cities/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "int",
+          "location": "path",
+          "description": "Id of the city to return.",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "cities_get-all",
+      "description": "Returns all the cities. Optional: CountryIds, RegionIds, StateIds (plus 6 more).",
+      "method": "GET",
+      "path": "/cities",
+      "params": [
+        {
+          "name": "CountryIds",
+          "type": "array",
+          "location": "query",
+          "description": "Country Ids to filter on."
+        },
+        {
+          "name": "RegionIds",
+          "type": "array",
+          "location": "query",
+          "description": "Region Ids to filter on."
+        },
+        {
+          "name": "StateIds",
+          "type": "array",
+          "location": "query",
+          "description": "State Ids to filter on."
+        },
+        {
+          "name": "Ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids to filter on."
+        },
+        {
+          "name": "Name",
+          "type": "string",
+          "location": "query",
+          "description": "Name to filter on (exact match)."
+        },
+        {
+          "name": "IsArchived",
+          "type": "string",
+          "location": "query",
+          "description": "Filter by archived status."
+        },
+        {
+          "name": "ExtendedSearch",
+          "type": "string",
+          "location": "query",
+          "description": "Extended search term"
+        },
+        {
+          "name": "Offset",
+          "type": "int",
+          "location": "query",
+          "description": "Offset"
+        },
+        {
+          "name": "Limit",
+          "type": "int",
+          "location": "query",
+          "description": "Limit"
+        }
+      ]
+    },
+    {
+      "name": "countries_get",
+      "description": "Returns the country with the given id. Required: id.",
+      "method": "GET",
+      "path": "/countries/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "int",
+          "location": "path",
+          "description": "Id of the country to return.",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "countries_get-all",
+      "description": "Returns all the countries. Optional: CountryIso3166List, Ids, Name (plus 4 more).",
+      "method": "GET",
+      "path": "/countries",
+      "params": [
+        {
+          "name": "CountryIso3166List",
+          "type": "array",
+          "location": "query",
+          "description": "List of ISO 3166 country codes to filter on."
+        },
+        {
+          "name": "Ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids to filter on."
+        },
+        {
+          "name": "Name",
+          "type": "string",
+          "location": "query",
+          "description": "Name to filter on (exact match)."
+        },
+        {
+          "name": "IsArchived",
+          "type": "string",
+          "location": "query",
+          "description": "Filter by archived status."
+        },
+        {
+          "name": "ExtendedSearch",
+          "type": "string",
+          "location": "query",
+          "description": "Extended search term"
+        },
+        {
+          "name": "Offset",
+          "type": "int",
+          "location": "query",
+          "description": "Offset"
+        },
+        {
+          "name": "Limit",
+          "type": "int",
+          "location": "query",
+          "description": "Limit"
+        }
+      ]
+    },
+    {
+      "name": "countries_get-by-iso-code",
+      "description": "Returns the country with the given ISO 3166 code. Required: isoCode.",
+      "method": "GET",
+      "path": "/countries/{isoCode}",
+      "params": [
+        {
+          "name": "isoCode",
+          "type": "string",
+          "location": "path",
+          "description": "ISO 3166 country code (e.g. 'US', 'FR').",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "creative-banner-sizes_list",
+      "description": "The list is filtered by the bellow parameters. Returns array of string.",
+      "method": "GET",
+      "path": "/creativeBannerSizes",
+      "params": []
+    },
+    {
+      "name": "deal_get-report",
+      "description": "Create a report scoped to the given deal's targeting. Targeting properties are converted to report filters before the query is forwarded to the reporting engine. Optional: apiCompliance, audienceSegmentsTargeting, callerDealIds (plus 51 more). Returns array of ReportResult.",
+      "method": "POST",
+      "path": "/deal/inventoryinsights",
+      "params": [
+        {
+          "name": "api-compliance-is-om-sdk-compliant",
+          "wire_name": "apiCompliance.isOmSdkCompliant",
+          "type": "bool",
+          "location": "body",
+          "description": "Is om sdk compliant"
+        },
+        {
+          "name": "api-compliance-is-vpaid-compliant",
+          "wire_name": "apiCompliance.isVpaidCompliant",
+          "type": "bool",
+          "location": "body",
+          "description": "Is vpaid compliant"
+        },
+        {
+          "name": "audienceSegmentsTargeting",
+          "type": "string",
+          "location": "body",
+          "description": "Audience segments targeting"
+        },
+        {
+          "name": "callerDealIds",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Caller deal ids"
+        },
+        {
+          "name": "childrenDealIds",
+          "type": "array",
+          "location": "body",
+          "description": "Children deal ids"
+        },
+        {
+          "name": "cityIds",
+          "type": "array",
+          "location": "body",
+          "description": "City ids"
+        },
+        {
+          "name": "contentCategoryNames",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content category names"
+        },
+        {
+          "name": "contentChannelNames",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content channel names"
+        },
+        {
+          "name": "contentContextIds",
+          "type": "array",
+          "location": "body",
+          "description": "Content context ids"
+        },
+        {
+          "name": "contentGenreNames",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content genre names"
+        },
+        {
+          "name": "contentIds",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content ids"
+        },
+        {
+          "name": "contentLanguageIso6391Alpha2Codes",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content language iso6391 alpha2 codes"
+        },
+        {
+          "name": "contentNetworkNames",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content network names"
+        },
+        {
+          "name": "contentTagNames",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content tag names"
+        },
+        {
+          "name": "countryCodes",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Country codes"
+        },
+        {
+          "name": "countryCodesPostalCodes",
+          "type": "array",
+          "location": "body",
+          "description": "Country codes postal codes"
+        },
+        {
+          "name": "creativeSizes",
+          "type": "array",
+          "location": "body",
+          "description": "Creative sizes"
+        },
+        {
+          "name": "ctrTargetingPercentage",
+          "type": "float",
+          "location": "body",
+          "description": "Ctr targeting percentage"
+        },
+        {
+          "name": "ctvCategoryIds",
+          "type": "array",
+          "location": "body",
+          "description": "Ctv category ids"
+        },
+        {
+          "name": "ctvChannelIds",
+          "type": "array",
+          "location": "body",
+          "description": "Ctv channel ids"
+        },
+        {
+          "name": "ctvDistributorIds",
+          "type": "array",
+          "location": "body",
+          "description": "Ctv distributor ids"
+        },
+        {
+          "name": "ctvNetworkIds",
+          "type": "array",
+          "location": "body",
+          "description": "Ctv network ids"
+        },
+        {
+          "name": "ctvOttIds",
+          "type": "array",
+          "location": "body",
+          "description": "Ctv ott ids"
+        },
+        {
+          "name": "dmaIds",
+          "type": "array",
+          "location": "body",
+          "description": "Dma ids"
+        },
+        {
+          "name": "domainCategorySegmentsTargeting",
+          "type": "string",
+          "location": "body",
+          "description": "Domain category segments targeting"
+        },
+        {
+          "name": "domainListId",
+          "type": "int",
+          "location": "body",
+          "description": "Domain list id"
+        },
+        {
+          "name": "domainListIds",
+          "type": "array",
+          "location": "body",
+          "description": "Domain list ids"
+        },
+        {
+          "name": "domains-is-blacklist",
+          "wire_name": "domains.isBlacklist",
+          "type": "bool",
+          "location": "body",
+          "description": "Is blacklist",
+          "required": true
+        },
+        {
+          "name": "domains-list",
+          "wire_name": "domains.list",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "List",
+          "required": true
+        },
+        {
+          "name": "enhancements",
+          "type": "array",
+          "location": "body",
+          "description": "Enhancements"
+        },
+        {
+          "name": "hyper-local-targeting-coordinates",
+          "wire_name": "hyperLocalTargeting.coordinates",
+          "type": "array",
+          "location": "body",
+          "description": "Coordinates"
+        },
+        {
+          "name": "hyper-local-targeting-precision",
+          "wire_name": "hyperLocalTargeting.precision",
+          "type": "int",
+          "location": "body",
+          "description": "Precision"
+        },
+        {
+          "name": "identityProviderId",
+          "type": "int",
+          "location": "body",
+          "description": "Identity provider id"
+        },
+        {
+          "name": "impressionTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Impression type ids"
+        },
+        {
+          "name": "inventoryTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Inventory type ids"
+        },
+        {
+          "name": "isCTV",
+          "type": "bool",
+          "location": "body",
+          "description": "Is ctv"
+        },
+        {
+          "name": "isCookieless",
+          "type": "bool",
+          "location": "body",
+          "description": "Is cookieless"
+        },
+        {
+          "name": "isGreenPmp",
+          "type": "bool",
+          "location": "body",
+          "description": "Is green pmp"
+        },
+        {
+          "name": "isLivestream",
+          "type": "bool",
+          "location": "body",
+          "description": "Is livestream"
+        },
+        {
+          "name": "isRewardedVideo",
+          "type": "bool",
+          "location": "body",
+          "description": "Is rewarded video"
+        },
+        {
+          "name": "networkIds",
+          "type": "array",
+          "location": "body",
+          "description": "Network ids"
+        },
+        {
+          "name": "platformIds",
+          "type": "array",
+          "location": "body",
+          "description": "Platform ids"
+        },
+        {
+          "name": "regionIds",
+          "type": "array",
+          "location": "body",
+          "description": "Region ids"
+        },
+        {
+          "name": "scoNodeBucketIds",
+          "type": "array",
+          "location": "body",
+          "description": "Sco node bucket ids"
+        },
+        {
+          "name": "semanticSegmentsTargeting",
+          "type": "string",
+          "location": "body",
+          "description": "Semantic segments targeting"
+        },
+        {
+          "name": "skippable",
+          "type": "bool",
+          "location": "body",
+          "description": "Skippable"
+        },
+        {
+          "name": "spoTargetingIds",
+          "type": "array",
+          "location": "body",
+          "description": "Spo targeting ids"
+        },
+        {
+          "name": "spoTrustedPublishersIds",
+          "type": "array",
+          "location": "body",
+          "description": "Spo trusted publishers ids"
+        },
+        {
+          "name": "stateIds",
+          "type": "array",
+          "location": "body",
+          "description": "State ids"
+        },
+        {
+          "name": "templateIds",
+          "type": "array",
+          "location": "body",
+          "description": "Template ids"
+        },
+        {
+          "name": "videoAdBreakTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Video ad break type ids"
+        },
+        {
+          "name": "videoCompletionTargetingPercentage",
+          "type": "float",
+          "location": "body",
+          "description": "Video completion targeting percentage"
+        },
+        {
+          "name": "videoMaxAdDurationIds",
+          "type": "array",
+          "location": "body",
+          "description": "Video max ad duration ids"
+        },
+        {
+          "name": "videoPlacementTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Video placement type ids"
+        },
+        {
+          "name": "videoPlayerSizeBucketIds",
+          "type": "array",
+          "location": "body",
+          "description": "Video player size bucket ids"
+        },
+        {
+          "name": "video-player-size-dimension-min-height",
+          "wire_name": "videoPlayerSizeDimension.minHeight",
+          "type": "int",
+          "location": "body",
+          "description": "Min height"
+        },
+        {
+          "name": "video-player-size-dimension-min-width",
+          "wire_name": "videoPlayerSizeDimension.minWidth",
+          "type": "int",
+          "location": "body",
+          "description": "Min width"
+        },
+        {
+          "name": "viewabilityTargetingPercentage",
+          "type": "float",
+          "location": "body",
+          "description": "Viewability targeting percentage"
+        }
+      ]
+    },
+    {
+      "name": "deals_capping-timeframes",
+      "description": "List deal frequency-capping timeframes. Returns array of DealsCappingTimeframesItem.",
+      "method": "GET",
+      "path": "/deals/cappingTimeframes",
+      "params": []
+    },
+    {
+      "name": "deals_count-breakdown",
+      "description": "Get deal count breakdown (active/archived/etc). Returns the DealsCountBreakdownResponse.",
+      "method": "GET",
+      "path": "/deals/countBreakdown",
+      "params": []
+    },
+    {
+      "name": "deals_create",
+      "description": "Create a PMP deal (write; body shape approximate, verify live). Optional: audienceSegmentsTargeting, beginDate, buyerIds (plus 17 more). Returns the new Deal.",
+      "method": "POST",
+      "path": "/deals",
+      "params": [
+        {
+          "name": "audienceSegmentsTargeting",
+          "type": "string",
+          "location": "body",
+          "description": "Audience segments targeting"
+        },
+        {
+          "name": "beginDate",
+          "type": "string",
+          "location": "body",
+          "description": "Deal start date."
+        },
+        {
+          "name": "buyerIds",
+          "type": "array",
+          "location": "body",
+          "description": "Targeted buyer (seat) ids."
+        },
+        {
+          "name": "countryIds",
+          "type": "array",
+          "location": "body",
+          "description": "Country ids"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "location": "body",
+          "description": "ISO currency code, e.g. EUR."
+        },
+        {
+          "name": "dealId",
+          "type": "string",
+          "location": "body",
+          "description": "Public deal ID trafficked in the DSP."
+        },
+        {
+          "name": "domainCategorySegmentsTargeting",
+          "type": "string",
+          "location": "body",
+          "description": "Domain category segments targeting"
+        },
+        {
+          "name": "impressionTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Impression type ids"
+        },
+        {
+          "name": "inventoryTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Inventory type ids"
+        },
+        {
+          "name": "isCTV",
+          "type": "bool",
+          "location": "body",
+          "description": "Is ctv"
+        },
+        {
+          "name": "isDealPlus",
+          "type": "bool",
+          "location": "body",
+          "description": "Is deal plus"
+        },
+        {
+          "name": "isExclusive",
+          "type": "bool",
+          "location": "body",
+          "description": "Is exclusive"
+        },
+        {
+          "name": "isGreenPmp",
+          "type": "bool",
+          "location": "body",
+          "description": "Is green pmp"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "location": "body",
+          "description": "Deal name."
+        },
+        {
+          "name": "networkIds",
+          "type": "array",
+          "location": "body",
+          "description": "Network ids"
+        },
+        {
+          "name": "price",
+          "type": "float",
+          "location": "body",
+          "description": "Deal price (CPM in deal currency)."
+        },
+        {
+          "name": "pricingModel",
+          "type": "int",
+          "location": "body",
+          "description": "Pricing model id (e.g. fixed/custom/floor)."
+        },
+        {
+          "name": "priorityId",
+          "type": "int",
+          "location": "body",
+          "description": "Priority id"
+        },
+        {
+          "name": "semanticSegmentsTargeting",
+          "type": "string",
+          "location": "body",
+          "description": "Semantic segments targeting"
+        },
+        {
+          "name": "typeId",
+          "type": "int",
+          "location": "body",
+          "description": "Type id"
+        }
+      ]
+    },
+    {
+      "name": "deals_delete",
+      "description": "Delete a PMP deal. Required: id. Destructive.",
+      "method": "DELETE",
+      "path": "/deals/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "int",
+          "location": "path",
+          "description": "Id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "deals_get",
+      "description": "Get a PMP deal by internal id. Required: id. Returns the Deal.",
+      "method": "GET",
+      "path": "/deals/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "int",
+          "location": "path",
+          "description": "Id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "deals_list",
+      "description": "List PMP deals. Optional: limit, offset, sortBy (plus 12 more). Returns array of Deal.",
+      "method": "GET",
+      "path": "/deals",
+      "params": [
+        {
+          "name": "limit",
+          "type": "int",
+          "location": "query",
+          "description": "Max results (clamped to 100)."
+        },
+        {
+          "name": "offset",
+          "type": "int",
+          "location": "query",
+          "description": "Pagination offset."
+        },
+        {
+          "name": "sortBy",
+          "type": "string",
+          "location": "query",
+          "description": "Field to sort by."
+        },
+        {
+          "name": "sortAsc",
+          "type": "bool",
+          "location": "query",
+          "description": "Sort ascending."
+        },
+        {
+          "name": "ids",
+          "type": "string",
+          "location": "query",
+          "description": "Comma-separated deal ids."
+        },
+        {
+          "name": "extendedSearch",
+          "type": "string",
+          "location": "query",
+          "description": "Search in deal name."
+        },
+        {
+          "name": "createdOrModifiedSince",
+          "type": "string",
+          "location": "query",
+          "description": "Filter by UTC datetime."
+        },
+        {
+          "name": "isArchived",
+          "type": "bool",
+          "location": "query",
+          "description": "Filter archived deals."
+        },
+        {
+          "name": "isSoonExpired",
+          "type": "bool",
+          "location": "query",
+          "description": "Filter soon-expiring deals."
+        },
+        {
+          "name": "isParentDeal",
+          "type": "bool",
+          "location": "query",
+          "description": "Filter parent (meta) deals."
+        },
+        {
+          "name": "isDealPlus",
+          "type": "bool",
+          "location": "query",
+          "description": "Filter Deal+ deals."
+        },
+        {
+          "name": "includeOnlyFavorites",
+          "type": "bool",
+          "location": "query",
+          "description": "Only favorited deals."
+        },
+        {
+          "name": "buyerIds",
+          "type": "string",
+          "location": "query",
+          "description": "Comma-separated buyer ids."
+        },
+        {
+          "name": "dspIds",
+          "type": "string",
+          "location": "query",
+          "description": "Comma-separated DSP ids."
+        },
+        {
+          "name": "platformIds",
+          "type": "string",
+          "location": "query",
+          "description": "Comma-separated platform ids."
+        }
+      ]
+    },
+    {
+      "name": "deals_list-kpitrackers",
+      "description": "Gets KPI tracking rule definitions. Returns the KpiTrackingRuleDefinition.",
+      "method": "GET",
+      "path": "/deals/kpiTrackers/definitions",
+      "params": []
+    },
+    {
+      "name": "deals_update",
+      "description": "Update a PMP deal (write; body shape approximate, verify live). Optional: apiCompliance, audienceSegmentsDataCost, audienceSegmentsTargeting (plus 40 more). Returns the updated Deal.",
+      "method": "PUT",
+      "path": "/deals",
+      "params": [
+        {
+          "name": "apiCompliance",
+          "type": "object",
+          "location": "body",
+          "description": "Api compliance"
+        },
+        {
+          "name": "audienceSegmentsDataCost",
+          "type": "float",
+          "location": "body",
+          "description": "Audience segments data cost"
+        },
+        {
+          "name": "audienceSegmentsTargeting",
+          "type": "string",
+          "location": "body",
+          "description": "Audience segments targeting"
+        },
+        {
+          "name": "beginDate",
+          "type": "string",
+          "location": "body",
+          "description": "Deal start date."
+        },
+        {
+          "name": "buyerIds",
+          "type": "array",
+          "location": "body",
+          "description": "Targeted buyer (seat) ids."
+        },
+        {
+          "name": "companyVendorCostRate",
+          "type": "float",
+          "location": "body",
+          "description": "Company vendor cost rate"
+        },
+        {
+          "name": "countryCodes",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Country codes"
+        },
+        {
+          "name": "countryIds",
+          "type": "array",
+          "location": "body",
+          "description": "Country ids"
+        },
+        {
+          "name": "createdAt",
+          "type": "string",
+          "location": "body",
+          "description": "Created at"
+        },
+        {
+          "name": "createdBySupplyLegacyWorkflow",
+          "type": "bool",
+          "location": "body",
+          "description": "Created by supply legacy workflow"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "location": "body",
+          "description": "ISO currency code, e.g. EUR."
+        },
+        {
+          "name": "customVendorCost",
+          "type": "float",
+          "location": "body",
+          "description": "Custom vendor cost"
+        },
+        {
+          "name": "dealCriticalityId",
+          "type": "int",
+          "location": "body",
+          "description": "Deal criticality id"
+        },
+        {
+          "name": "dealId",
+          "type": "string",
+          "location": "body",
+          "description": "Public deal ID trafficked in the DSP."
+        },
+        {
+          "name": "domainCategorySegmentsTargeting",
+          "type": "string",
+          "location": "body",
+          "description": "Domain category segments targeting"
+        },
+        {
+          "name": "grossPriceCpmInDealCurrency",
+          "type": "float",
+          "location": "body",
+          "description": "Gross price cpm in deal currency"
+        },
+        {
+          "name": "id",
+          "type": "int",
+          "location": "body",
+          "description": "Internal numeric deal id (path id for GET/DELETE)."
+        },
+        {
+          "name": "impressionTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Impression type ids"
+        },
+        {
+          "name": "inventoryTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Inventory type ids"
+        },
+        {
+          "name": "isActive",
+          "type": "bool",
+          "location": "body",
+          "description": "Is active"
+        },
+        {
+          "name": "isArchived",
+          "type": "bool",
+          "location": "body",
+          "description": "Is archived"
+        },
+        {
+          "name": "isCTV",
+          "type": "bool",
+          "location": "body",
+          "description": "Is ctv"
+        },
+        {
+          "name": "isCookieless",
+          "type": "bool",
+          "location": "body",
+          "description": "Is cookieless"
+        },
+        {
+          "name": "isDealPlus",
+          "type": "bool",
+          "location": "body",
+          "description": "Is deal plus"
+        },
+        {
+          "name": "isDisabledByRegulator",
+          "type": "bool",
+          "location": "body",
+          "description": "Is disabled by regulator"
+        },
+        {
+          "name": "isDspSyncEnabled",
+          "type": "bool",
+          "location": "body",
+          "description": "Is dsp sync enabled"
+        },
+        {
+          "name": "isEditable",
+          "type": "bool",
+          "location": "body",
+          "description": "Is editable"
+        },
+        {
+          "name": "isExclusive",
+          "type": "bool",
+          "location": "body",
+          "description": "Is exclusive"
+        },
+        {
+          "name": "isGreenPmp",
+          "type": "bool",
+          "location": "body",
+          "description": "Is green pmp"
+        },
+        {
+          "name": "isParentDeal",
+          "type": "bool",
+          "location": "body",
+          "description": "Is parent deal"
+        },
+        {
+          "name": "isUnderDelivering",
+          "type": "bool",
+          "location": "body",
+          "description": "Is under delivering"
+        },
+        {
+          "name": "keywordIdsTargeting",
+          "type": "string",
+          "location": "body",
+          "description": "Keyword ids targeting"
+        },
+        {
+          "name": "managementVendorCostRate",
+          "type": "float",
+          "location": "body",
+          "description": "Management vendor cost rate"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "location": "body",
+          "description": "Deal name."
+        },
+        {
+          "name": "networkIds",
+          "type": "array",
+          "location": "body",
+          "description": "Network ids"
+        },
+        {
+          "name": "price",
+          "type": "float",
+          "location": "body",
+          "description": "Deal price (CPM in deal currency)."
+        },
+        {
+          "name": "pricingModel",
+          "type": "int",
+          "location": "body",
+          "description": "Pricing model id (e.g. fixed/custom/floor)."
+        },
+        {
+          "name": "priorityId",
+          "type": "int",
+          "location": "body",
+          "description": "Priority id"
+        },
+        {
+          "name": "semanticSegmentsDataCost",
+          "type": "float",
+          "location": "body",
+          "description": "Semantic segments data cost"
+        },
+        {
+          "name": "semanticSegmentsTargeting",
+          "type": "string",
+          "location": "body",
+          "description": "Semantic segments targeting"
+        },
+        {
+          "name": "smartVendorCostRate",
+          "type": "float",
+          "location": "body",
+          "description": "Smart vendor cost rate"
+        },
+        {
+          "name": "typeId",
+          "type": "int",
+          "location": "body",
+          "description": "Type id"
+        },
+        {
+          "name": "updatedAt",
+          "type": "string",
+          "location": "body",
+          "description": "Updated at"
+        }
+      ]
+    },
+    {
+      "name": "deals_update-kpitrackers",
+      "description": "Updates a KPI Tracker. Optional: id, kpiName, operator (plus 5 more).",
+      "method": "PUT",
+      "path": "/deals/kpiTrackers",
+      "params": [
+        {
+          "name": "id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "kpiName",
+          "type": "string",
+          "location": "body",
+          "description": "Kpi name"
+        },
+        {
+          "name": "operator",
+          "type": "int",
+          "location": "body",
+          "description": "Operator"
+        },
+        {
+          "name": "status",
+          "type": "int",
+          "location": "body",
+          "description": "Status"
+        },
+        {
+          "name": "timeframe",
+          "type": "int",
+          "location": "body",
+          "description": "Timeframe"
+        },
+        {
+          "name": "triggerType",
+          "type": "int",
+          "location": "body",
+          "description": "Trigger type"
+        },
+        {
+          "name": "userIds",
+          "type": "array",
+          "location": "body",
+          "description": "User ids"
+        },
+        {
+          "name": "value",
+          "type": "float",
+          "location": "body",
+          "description": "Value"
+        }
+      ]
+    },
+    {
+      "name": "deals_kpi-trackers_get-deal",
+      "description": "Get KPI trackers for a deal. Required: id. Returns array of KpiTrackersGetDealItem.",
+      "method": "GET",
+      "path": "/deals/{id}/kpiTrackers",
+      "params": [
+        {
+          "name": "id",
+          "type": "int",
+          "location": "path",
+          "description": "Id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "dmas_get",
+      "description": "Returns the DMA with the given id. Required: id.",
+      "method": "GET",
+      "path": "/dmas/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "int",
+          "location": "path",
+          "description": "Id of the DMA to return.",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "dmas_get-all",
+      "description": "Returns all the DMAs. Optional: CountryIds, Ids, Name (plus 4 more).",
+      "method": "GET",
+      "path": "/dmas",
+      "params": [
+        {
+          "name": "CountryIds",
+          "type": "array",
+          "location": "query",
+          "description": "Country ids"
+        },
+        {
+          "name": "Ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids to filter on."
+        },
+        {
+          "name": "Name",
+          "type": "string",
+          "location": "query",
+          "description": "Name to filter on (exact match)."
+        },
+        {
+          "name": "IsArchived",
+          "type": "string",
+          "location": "query",
+          "description": "Filter by archived status."
+        },
+        {
+          "name": "ExtendedSearch",
+          "type": "string",
+          "location": "query",
+          "description": "Extended search term"
+        },
+        {
+          "name": "Offset",
+          "type": "int",
+          "location": "query",
+          "description": "Offset"
+        },
+        {
+          "name": "Limit",
+          "type": "int",
+          "location": "query",
+          "description": "Limit"
+        }
+      ]
+    },
+    {
+      "name": "fields-category_list",
+      "description": "Get all available fieldsCategory. Returns array of FieldsCategoryEntity.",
+      "method": "GET",
+      "path": "/fieldsCategory",
+      "params": []
+    },
+    {
+      "name": "filter-suggestions_create",
+      "description": "Create a new filter suggestion. Optional: allFilterFields, currency, dateFormat (plus 15 more).",
+      "method": "POST",
+      "path": "/filter-suggestions",
+      "params": [
+        {
+          "name": "allFilterFields",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "All filter fields"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "location": "body",
+          "description": "Currency"
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "location": "body",
+          "description": "Format date field to match the given format *Ex: yyyy-MM-dd'T'HH:mm:ss will ouput..."
+        },
+        {
+          "name": "dimensions",
+          "type": "array",
+          "location": "body",
+          "description": "List of dimensions to include in the report List of all dimensions on **/dimensions**..."
+        },
+        {
+          "name": "emptyDimensionValues",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Empty dimension values"
+        },
+        {
+          "name": "endDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date for the report (date excluded)."
+        },
+        {
+          "name": "filters",
+          "type": "array",
+          "location": "body",
+          "description": "List of filters to apply on dimensions Report data must fulfill all filters in the list (AND..."
+        },
+        {
+          "name": "limit",
+          "type": "int",
+          "location": "body",
+          "description": "Limit"
+        },
+        {
+          "name": "metrics",
+          "type": "array",
+          "location": "body",
+          "description": "List of metrics to include in the report List of all metrics on **/metrics** endpoint *Ex:..."
+        },
+        {
+          "name": "offset",
+          "type": "int",
+          "location": "body",
+          "description": "Offset"
+        },
+        {
+          "name": "periodicity",
+          "type": "string",
+          "location": "body",
+          "description": "Periodicity for metrics on the selected period (`StartDate`, `EndDate`) Output in the report..."
+        },
+        {
+          "name": "simulate",
+          "type": "bool",
+          "location": "body",
+          "description": "Simulate if report can be generate"
+        },
+        {
+          "name": "sortAsc",
+          "type": "string",
+          "location": "body",
+          "description": "Direction for report elements sort Accepted values: `'ASC'`, `'DESC'`"
+        },
+        {
+          "name": "sortBy",
+          "type": "string",
+          "location": "body",
+          "description": "Sort report elements on given `Metric` or `Dimension` *Ex: `'impressions'`, `'DealName'`*"
+        },
+        {
+          "name": "sortByType",
+          "type": "string",
+          "location": "body",
+          "description": "Sort report elements on given `Type` in compare mode *Ex: `'CHANGE'`, `'RELATIVE_CHANGE'`*"
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date for the report (date included) String formatted: - absolute date:..."
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "body",
+          "description": "Timezone using IANA format for `StartDate` and `EndDate` (default: user network timezone)..."
+        },
+        {
+          "name": "useCaseId",
+          "type": "string",
+          "location": "body",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "inventory-types_get",
+      "description": "Get a inventorytype. Required: id. Returns the InventoryTypeModel.",
+      "method": "GET",
+      "path": "/inventoryTypes/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "int",
+          "location": "path",
+          "description": "Id",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "inventory-types_get-all",
+      "description": "Get all. Optional: Ids, Offset, Limit. Returns array of InventoryTypeModel.",
+      "method": "GET",
+      "path": "/inventoryTypes",
+      "params": [
+        {
+          "name": "Ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids"
+        },
+        {
+          "name": "Offset",
+          "type": "int",
+          "location": "query",
+          "description": "Offset"
+        },
+        {
+          "name": "Limit",
+          "type": "int",
+          "location": "query",
+          "description": "Limit"
+        }
+      ]
+    },
+    {
+      "name": "partners_get",
+      "description": "Returns the RTB+ partner with the given id. Required: id.",
+      "method": "GET",
+      "path": "/partners/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "int",
+          "location": "path",
+          "description": "The ID of the partner to retrieve",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "partners_list",
+      "description": "Returns all the RTB+ Partners. Optional: Ids, Name, IsArchived (plus 5 more).",
+      "method": "GET",
+      "path": "/partners",
+      "params": [
+        {
+          "name": "Ids",
+          "type": "array",
+          "location": "query",
+          "description": "Filter the results to return only the partners which have the matching ids. Separated by commas."
+        },
+        {
+          "name": "Name",
+          "type": "string",
+          "location": "query",
+          "description": "Filter by name of partners"
+        },
+        {
+          "name": "IsArchived",
+          "type": "string",
+          "location": "query",
+          "description": "False if this partner can be used as parameter in other methods. True if deprecated / removed / deactivated... so archived"
+        },
+        {
+          "name": "IsDealCompliant",
+          "type": "string",
+          "location": "query",
+          "description": "Filters the results according to the fact they can be used in a deal"
+        },
+        {
+          "name": "CrossNetwork",
+          "type": "bool",
+          "location": "query",
+          "description": "If set to true, partners from all networks will be returned"
+        },
+        {
+          "name": "SmartBuyerIds",
+          "type": "array",
+          "location": "query",
+          "description": "When specified, filter on partners associated to the given buyers"
+        },
+        {
+          "name": "Offset",
+          "type": "int",
+          "location": "query",
+          "description": "Offset to start from"
+        },
+        {
+          "name": "Limit",
+          "type": "int",
+          "location": "query",
+          "description": "Maximum results to get"
+        }
+      ]
+    },
+    {
+      "name": "platforms_get",
+      "description": "Returns the platform with the given id. Required: id.",
+      "method": "GET",
+      "path": "/platforms/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "int",
+          "location": "path",
+          "description": "Id of the platform to return.",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "platforms_get-all",
+      "description": "Returns all the platforms. Optional: Ids, IncludeDiffId, Offset (plus 1 more).",
+      "method": "GET",
+      "path": "/platforms",
+      "params": [
+        {
+          "name": "Ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids to filter on."
+        },
+        {
+          "name": "IncludeDiffId",
+          "type": "bool",
+          "location": "query",
+          "description": "When true, the DiffusionId property is populated on each platform."
+        },
+        {
+          "name": "Offset",
+          "type": "int",
+          "location": "query",
+          "description": "Offset"
+        },
+        {
+          "name": "Limit",
+          "type": "int",
+          "location": "query",
+          "description": "Limit"
+        }
+      ]
+    },
+    {
+      "name": "regions_get",
+      "description": "Returns the region with the given id. Required: id.",
+      "method": "GET",
+      "path": "/regions/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "int",
+          "location": "path",
+          "description": "Id of the region to return.",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "regions_get-all",
+      "description": "Returns all the regions. Optional: CountryIds, Ids, Name (plus 4 more).",
+      "method": "GET",
+      "path": "/regions",
+      "params": [
+        {
+          "name": "CountryIds",
+          "type": "array",
+          "location": "query",
+          "description": "Country ids"
+        },
+        {
+          "name": "Ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids to filter on."
+        },
+        {
+          "name": "Name",
+          "type": "string",
+          "location": "query",
+          "description": "Name to filter on (exact match)."
+        },
+        {
+          "name": "IsArchived",
+          "type": "string",
+          "location": "query",
+          "description": "Filter by archived status."
+        },
+        {
+          "name": "ExtendedSearch",
+          "type": "string",
+          "location": "query",
+          "description": "Extended search term"
+        },
+        {
+          "name": "Offset",
+          "type": "int",
+          "location": "query",
+          "description": "Offset"
+        },
+        {
+          "name": "Limit",
+          "type": "int",
+          "location": "query",
+          "description": "Limit"
+        }
+      ]
+    },
+    {
+      "name": "report_create",
+      "description": "Generates an inventory insights report Report includes given metrics and dimensions on specified period, optional parameters allows to filter and sort result. Optional: allFilterFields, currency, dateFormat (plus 15 more).",
+      "method": "POST",
+      "path": "/report",
+      "params": [
+        {
+          "name": "allFilterFields",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "All filter fields"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "location": "body",
+          "description": "Currency"
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "location": "body",
+          "description": "Format date field to match the given format *Ex: yyyy-MM-dd'T'HH:mm:ss will ouput..."
+        },
+        {
+          "name": "dimensions",
+          "type": "array",
+          "location": "body",
+          "description": "List of dimensions to include in the report List of all dimensions on **/dimensions**..."
+        },
+        {
+          "name": "emptyDimensionValues",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Empty dimension values"
+        },
+        {
+          "name": "endDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date for the report (date excluded)."
+        },
+        {
+          "name": "filters",
+          "type": "array",
+          "location": "body",
+          "description": "List of filters to apply on dimensions Report data must fulfill all filters in the list (AND..."
+        },
+        {
+          "name": "limit",
+          "type": "int",
+          "location": "body",
+          "description": "Limit"
+        },
+        {
+          "name": "metrics",
+          "type": "array",
+          "location": "body",
+          "description": "List of metrics to include in the report List of all metrics on **/metrics** endpoint *Ex:..."
+        },
+        {
+          "name": "offset",
+          "type": "int",
+          "location": "body",
+          "description": "Offset"
+        },
+        {
+          "name": "periodicity",
+          "type": "string",
+          "location": "body",
+          "description": "Periodicity for metrics on the selected period (`StartDate`, `EndDate`) Output in the report..."
+        },
+        {
+          "name": "simulate",
+          "type": "bool",
+          "location": "body",
+          "description": "Simulate if report can be generate"
+        },
+        {
+          "name": "sortAsc",
+          "type": "string",
+          "location": "body",
+          "description": "Direction for report elements sort Accepted values: `'ASC'`, `'DESC'`"
+        },
+        {
+          "name": "sortBy",
+          "type": "string",
+          "location": "body",
+          "description": "Sort report elements on given `Metric` or `Dimension` *Ex: `'impressions'`, `'DealName'`*"
+        },
+        {
+          "name": "sortByType",
+          "type": "string",
+          "location": "body",
+          "description": "Sort report elements on given `Type` in compare mode *Ex: `'CHANGE'`, `'RELATIVE_CHANGE'`*"
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date for the report (date included) String formatted: - absolute date:..."
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "body",
+          "description": "Timezone using IANA format for `StartDate` and `EndDate` (default: user network timezone)..."
+        },
+        {
+          "name": "useCaseId",
+          "type": "string",
+          "location": "body",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "report_create-compare",
+      "description": "Report includes given metrics and dimensions on specified periods, optional parameters allows to filter and sort result. All parameters are specified in the request body. Optional: allFilterFields, comparisonStartDate, currency (plus 16 more). Returns array of ComparisonReportResult.",
+      "method": "POST",
+      "path": "/report/compare",
+      "params": [
+        {
+          "name": "allFilterFields",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "All filter fields"
+        },
+        {
+          "name": "comparisonStartDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date for report with comparison (date excluded). Comparison end date is automatically set according to first comparison period (StartDate and EndDate). String formatted : - absolute date: 'yyyy-MM-dd'T'HH:mm:ss' *(ex: `'1984-12-28T10:10:00'`)* - relative date: CURRENT-[HOUR | DAY | WEEK | MONTH | YEAR]-[Number] or NOW *(ex: `'CURRENT-DAY-1'`)*"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "location": "body",
+          "description": "Currency"
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "location": "body",
+          "description": "Format date field to match the given format *Ex: yyyy-MM-dd'T'HH:mm:ss will ouput..."
+        },
+        {
+          "name": "dimensions",
+          "type": "array",
+          "location": "body",
+          "description": "List of dimensions to include in the report List of all dimensions on **/dimensions**..."
+        },
+        {
+          "name": "emptyDimensionValues",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Empty dimension values"
+        },
+        {
+          "name": "endDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date for the report (date excluded)."
+        },
+        {
+          "name": "filters",
+          "type": "array",
+          "location": "body",
+          "description": "List of filters to apply on dimensions Report data must fulfill all filters in the list (AND..."
+        },
+        {
+          "name": "limit",
+          "type": "int",
+          "location": "body",
+          "description": "Limit"
+        },
+        {
+          "name": "metrics",
+          "type": "array",
+          "location": "body",
+          "description": "List of metrics to include in the report List of all metrics on **/metrics** endpoint *Ex:..."
+        },
+        {
+          "name": "offset",
+          "type": "int",
+          "location": "body",
+          "description": "Offset"
+        },
+        {
+          "name": "periodicity",
+          "type": "string",
+          "location": "body",
+          "description": "Periodicity for metrics on the selected period (`StartDate`, `EndDate`) Output in the report..."
+        },
+        {
+          "name": "simulate",
+          "type": "bool",
+          "location": "body",
+          "description": "Simulate if report can be generate"
+        },
+        {
+          "name": "sortAsc",
+          "type": "string",
+          "location": "body",
+          "description": "Direction for report elements sort Accepted values: `'ASC'`, `'DESC'`"
+        },
+        {
+          "name": "sortBy",
+          "type": "string",
+          "location": "body",
+          "description": "Sort report elements on given `Metric` or `Dimension` *Ex: `'impressions'`, `'DealName'`*"
+        },
+        {
+          "name": "sortByType",
+          "type": "string",
+          "location": "body",
+          "description": "Sort report elements on given `Type` in compare mode *Ex: `'CHANGE'`, `'RELATIVE_CHANGE'`*"
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date for the report (date included) String formatted: - absolute date:..."
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "body",
+          "description": "Timezone using IANA format for `StartDate` and `EndDate` (default: user network timezone)..."
+        },
+        {
+          "name": "useCaseId",
+          "type": "string",
+          "location": "body",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "report_create-deals",
+      "description": "Generates a deal metrics report Report includes StartDate, EndDate, Timezone , UseCaseId and DealIds allows to filter and sort result. Required: dealIds, endDate, startDate, timezone. Optional: useCaseId.",
+      "method": "POST",
+      "path": "/report/deals/metrics",
+      "params": [
+        {
+          "name": "dealIds",
+          "type": "array",
+          "location": "body",
+          "description": "Deal ids",
+          "required": true
+        },
+        {
+          "name": "endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date",
+          "required": true
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date",
+          "required": true
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "body",
+          "description": "Timezone",
+          "required": true
+        },
+        {
+          "name": "useCaseId",
+          "type": "string",
+          "location": "body",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "report_create-domainsorapp",
+      "description": "Creates and returns a CSV report of the last day avails and average CPM if (authorized), with publishers and domains dimensions. Optional: filters.",
+      "method": "POST",
+      "path": "/report/domainsOrApp",
+      "params": [
+        {
+          "name": "filters",
+          "type": "array",
+          "location": "body",
+          "description": "Filters"
+        }
+      ]
+    },
+    {
+      "name": "report_create-fieldrestrictionrules",
+      "description": "Validate params For MicroService calls if needed. Optional: allFilterFields, currency, dateFormat (plus 15 more).",
+      "method": "POST",
+      "path": "/report/fieldRestrictionRules",
+      "params": [
+        {
+          "name": "allFilterFields",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "All filter fields"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "location": "body",
+          "description": "Currency"
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "location": "body",
+          "description": "Format date field to match the given format *Ex: yyyy-MM-dd'T'HH:mm:ss will ouput..."
+        },
+        {
+          "name": "dimensions",
+          "type": "array",
+          "location": "body",
+          "description": "List of dimensions to include in the report List of all dimensions on **/dimensions**..."
+        },
+        {
+          "name": "emptyDimensionValues",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Empty dimension values"
+        },
+        {
+          "name": "endDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date for the report (date excluded)."
+        },
+        {
+          "name": "filters",
+          "type": "array",
+          "location": "body",
+          "description": "List of filters to apply on dimensions Report data must fulfill all filters in the list (AND..."
+        },
+        {
+          "name": "limit",
+          "type": "int",
+          "location": "body",
+          "description": "Limit"
+        },
+        {
+          "name": "metrics",
+          "type": "array",
+          "location": "body",
+          "description": "List of metrics to include in the report List of all metrics on **/metrics** endpoint *Ex:..."
+        },
+        {
+          "name": "offset",
+          "type": "int",
+          "location": "body",
+          "description": "Offset"
+        },
+        {
+          "name": "periodicity",
+          "type": "string",
+          "location": "body",
+          "description": "Periodicity for metrics on the selected period (`StartDate`, `EndDate`) Output in the report..."
+        },
+        {
+          "name": "simulate",
+          "type": "bool",
+          "location": "body",
+          "description": "Simulate if report can be generate"
+        },
+        {
+          "name": "sortAsc",
+          "type": "string",
+          "location": "body",
+          "description": "Direction for report elements sort Accepted values: `'ASC'`, `'DESC'`"
+        },
+        {
+          "name": "sortBy",
+          "type": "string",
+          "location": "body",
+          "description": "Sort report elements on given `Metric` or `Dimension` *Ex: `'impressions'`, `'DealName'`*"
+        },
+        {
+          "name": "sortByType",
+          "type": "string",
+          "location": "body",
+          "description": "Sort report elements on given `Type` in compare mode *Ex: `'CHANGE'`, `'RELATIVE_CHANGE'`*"
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date for the report (date included) String formatted: - absolute date:..."
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "body",
+          "description": "Timezone using IANA format for `StartDate` and `EndDate` (default: user network timezone)..."
+        },
+        {
+          "name": "useCaseId",
+          "type": "string",
+          "location": "body",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "report_create-instantinsights",
+      "description": "Generates a report with your data Report includes given metrics and dimensions on specified period, optional parameters allows to filter and sort result. Optional: allFilterFields, currency, dateFormat (plus 15 more).",
+      "method": "POST",
+      "path": "/report/instantInsights",
+      "params": [
+        {
+          "name": "allFilterFields",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "All filter fields"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "location": "body",
+          "description": "Currency"
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "location": "body",
+          "description": "Format date field to match the given format *Ex: yyyy-MM-dd'T'HH:mm:ss will ouput..."
+        },
+        {
+          "name": "dimensions",
+          "type": "array",
+          "location": "body",
+          "description": "List of dimensions to include in the report List of all dimensions on **/dimensions**..."
+        },
+        {
+          "name": "emptyDimensionValues",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Empty dimension values"
+        },
+        {
+          "name": "endDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date for the report (date excluded)."
+        },
+        {
+          "name": "filters",
+          "type": "array",
+          "location": "body",
+          "description": "List of filters to apply on dimensions Report data must fulfill all filters in the list (AND..."
+        },
+        {
+          "name": "limit",
+          "type": "int",
+          "location": "body",
+          "description": "Limit"
+        },
+        {
+          "name": "metrics",
+          "type": "array",
+          "location": "body",
+          "description": "List of metrics to include in the report List of all metrics on **/metrics** endpoint *Ex:..."
+        },
+        {
+          "name": "offset",
+          "type": "int",
+          "location": "body",
+          "description": "Offset"
+        },
+        {
+          "name": "periodicity",
+          "type": "string",
+          "location": "body",
+          "description": "Periodicity for metrics on the selected period (`StartDate`, `EndDate`) Output in the report..."
+        },
+        {
+          "name": "simulate",
+          "type": "bool",
+          "location": "body",
+          "description": "Simulate if report can be generate"
+        },
+        {
+          "name": "sortAsc",
+          "type": "string",
+          "location": "body",
+          "description": "Direction for report elements sort Accepted values: `'ASC'`, `'DESC'`"
+        },
+        {
+          "name": "sortBy",
+          "type": "string",
+          "location": "body",
+          "description": "Sort report elements on given `Metric` or `Dimension` *Ex: `'impressions'`, `'DealName'`*"
+        },
+        {
+          "name": "sortByType",
+          "type": "string",
+          "location": "body",
+          "description": "Sort report elements on given `Type` in compare mode *Ex: `'CHANGE'`, `'RELATIVE_CHANGE'`*"
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date for the report (date included) String formatted: - absolute date:..."
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "body",
+          "description": "Timezone using IANA format for `StartDate` and `EndDate` (default: user network timezone)..."
+        },
+        {
+          "name": "useCaseId",
+          "type": "string",
+          "location": "body",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "report_create-inventoryinsights",
+      "description": "Generates an inventory insights report Report includes given metrics and dimensions on specified period, optional parameters allows to filter and sort result. Optional: allFilterFields, currency, dateFormat (plus 15 more).",
+      "method": "POST",
+      "path": "/report/inventoryInsights",
+      "params": [
+        {
+          "name": "allFilterFields",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "All filter fields"
+        },
+        {
+          "name": "currency",
+          "type": "string",
+          "location": "body",
+          "description": "Currency"
+        },
+        {
+          "name": "dateFormat",
+          "type": "string",
+          "location": "body",
+          "description": "Format date field to match the given format *Ex: yyyy-MM-dd'T'HH:mm:ss will ouput..."
+        },
+        {
+          "name": "dimensions",
+          "type": "array",
+          "location": "body",
+          "description": "List of dimensions to include in the report List of all dimensions on **/dimensions**..."
+        },
+        {
+          "name": "emptyDimensionValues",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Empty dimension values"
+        },
+        {
+          "name": "endDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date for the report (date excluded)."
+        },
+        {
+          "name": "filters",
+          "type": "array",
+          "location": "body",
+          "description": "List of filters to apply on dimensions Report data must fulfill all filters in the list (AND..."
+        },
+        {
+          "name": "limit",
+          "type": "int",
+          "location": "body",
+          "description": "Limit"
+        },
+        {
+          "name": "metrics",
+          "type": "array",
+          "location": "body",
+          "description": "List of metrics to include in the report List of all metrics on **/metrics** endpoint *Ex:..."
+        },
+        {
+          "name": "offset",
+          "type": "int",
+          "location": "body",
+          "description": "Offset"
+        },
+        {
+          "name": "periodicity",
+          "type": "string",
+          "location": "body",
+          "description": "Periodicity for metrics on the selected period (`StartDate`, `EndDate`) Output in the report..."
+        },
+        {
+          "name": "simulate",
+          "type": "bool",
+          "location": "body",
+          "description": "Simulate if report can be generate"
+        },
+        {
+          "name": "sortAsc",
+          "type": "string",
+          "location": "body",
+          "description": "Direction for report elements sort Accepted values: `'ASC'`, `'DESC'`"
+        },
+        {
+          "name": "sortBy",
+          "type": "string",
+          "location": "body",
+          "description": "Sort report elements on given `Metric` or `Dimension` *Ex: `'impressions'`, `'DealName'`*"
+        },
+        {
+          "name": "sortByType",
+          "type": "string",
+          "location": "body",
+          "description": "Sort report elements on given `Type` in compare mode *Ex: `'CHANGE'`, `'RELATIVE_CHANGE'`*"
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date for the report (date included) String formatted: - absolute date:..."
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "body",
+          "description": "Timezone using IANA format for `StartDate` and `EndDate` (default: user network timezone)..."
+        },
+        {
+          "name": "useCaseId",
+          "type": "string",
+          "location": "body",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "report_create-publishers",
+      "description": "Gets the list of publisher ids Report includes StartDate, EndDate, DomainNameOrOutputBundleId, Timezone and Filters allows to filter and sort result. Optional: domainNameOrOutputBundleId, domainNameOrOutputBundleIdOrAppName, endDate (plus 4 more).",
+      "method": "POST",
+      "path": "/report/publishers",
+      "params": [
+        {
+          "name": "domainNameOrOutputBundleId",
+          "type": "string",
+          "location": "body",
+          "description": "Domain name or output bundle id"
+        },
+        {
+          "name": "domainNameOrOutputBundleIdOrAppName",
+          "type": "string",
+          "location": "body",
+          "description": "Domain name or output bundle id or app name"
+        },
+        {
+          "name": "endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date"
+        },
+        {
+          "name": "filters",
+          "type": "array",
+          "location": "body",
+          "description": "Filters"
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date"
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "body",
+          "description": "Timezone"
+        },
+        {
+          "name": "useCaseId",
+          "type": "string",
+          "location": "body",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "report_list",
+      "description": "Only returns dimension attributes available for the authenticated user. Optional: DimensionIds, Names, Limit (plus 1 more).",
+      "method": "GET",
+      "path": "/report/dimensionAttributes",
+      "params": [
+        {
+          "name": "DimensionIds",
+          "type": "array",
+          "location": "query",
+          "description": "The ids of dimensions the attributes we want to get belongs to"
+        },
+        {
+          "name": "Names",
+          "type": "array",
+          "location": "query",
+          "description": "The name of the dimension attributes"
+        },
+        {
+          "name": "Limit",
+          "type": "int",
+          "location": "query",
+          "description": "The number of items to return"
+        },
+        {
+          "name": "Offset",
+          "type": "int",
+          "location": "query",
+          "description": "The offset of the first item to return"
+        }
+      ]
+    },
+    {
+      "name": "report_list-campaigns",
+      "description": "List campaigns. Optional: ids.",
+      "method": "GET",
+      "path": "/report/campaigns/delivery",
+      "params": [
+        {
+          "name": "ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids"
+        }
+      ]
+    },
+    {
+      "name": "report_list-campaigns-2",
+      "description": "List campaigns 2. Required: Ids, StartDate, EndDate, Timezone.",
+      "method": "GET",
+      "path": "/report/campaigns/metrics",
+      "params": [
+        {
+          "name": "Ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids",
+          "required": true
+        },
+        {
+          "name": "StartDate",
+          "type": "string",
+          "location": "query",
+          "description": "Start date",
+          "required": true
+        },
+        {
+          "name": "EndDate",
+          "type": "string",
+          "location": "query",
+          "description": "End date",
+          "required": true
+        },
+        {
+          "name": "Timezone",
+          "type": "string",
+          "location": "query",
+          "description": "Timezone",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "report_list-campaigns-3",
+      "description": "List campaigns 3. Optional: ids, timezone.",
+      "method": "GET",
+      "path": "/report/campaigns/pacing",
+      "params": [
+        {
+          "name": "ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids"
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "query",
+          "description": "Timezone"
+        }
+      ]
+    },
+    {
+      "name": "report_list-deals",
+      "description": "List deals. Optional: ids, startDate.",
+      "method": "GET",
+      "path": "/report/deals/delivery",
+      "params": [
+        {
+          "name": "ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids"
+        },
+        {
+          "name": "startDate",
+          "type": "string",
+          "location": "query",
+          "description": "Start date"
+        }
+      ]
+    },
+    {
+      "name": "report_list-deals-2",
+      "description": "List deals 2. Optional: ids, timezone.",
+      "method": "GET",
+      "path": "/report/deals/pacing",
+      "params": [
+        {
+          "name": "ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids"
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "query",
+          "description": "Timezone"
+        }
+      ]
+    },
+    {
+      "name": "report_list-dimensions",
+      "description": "Only returns dimensions available for the authenticated user. Optional: Limit, Offset, UseCaseId.",
+      "method": "GET",
+      "path": "/report/dimensions",
+      "params": [
+        {
+          "name": "Limit",
+          "type": "int",
+          "location": "query",
+          "description": "Limit"
+        },
+        {
+          "name": "Offset",
+          "type": "int",
+          "location": "query",
+          "description": "Offset"
+        },
+        {
+          "name": "UseCaseId",
+          "type": "string",
+          "location": "query",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "report_list-fieldrestrictionrules",
+      "description": "Get the list of restriction rules.",
+      "method": "GET",
+      "path": "/report/fieldRestrictionRules",
+      "params": []
+    },
+    {
+      "name": "report_list-lineitems",
+      "description": "Generates line items report based on budgets. Optional: ids.",
+      "method": "GET",
+      "path": "/report/lineItems/delivery",
+      "params": [
+        {
+          "name": "ids",
+          "type": "array",
+          "location": "query",
+          "description": "Line item ids"
+        }
+      ]
+    },
+    {
+      "name": "report_list-lineitems-2",
+      "description": "List lineitems 2. Required: Ids, StartDate, EndDate, Timezone.",
+      "method": "GET",
+      "path": "/report/lineItems/metrics",
+      "params": [
+        {
+          "name": "Ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids",
+          "required": true
+        },
+        {
+          "name": "StartDate",
+          "type": "string",
+          "location": "query",
+          "description": "Start date",
+          "required": true
+        },
+        {
+          "name": "EndDate",
+          "type": "string",
+          "location": "query",
+          "description": "End date",
+          "required": true
+        },
+        {
+          "name": "Timezone",
+          "type": "string",
+          "location": "query",
+          "description": "Timezone",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "report_list-lineitems-3",
+      "description": "List lineitems 3. Optional: ids, timezone.",
+      "method": "GET",
+      "path": "/report/lineItems/pacing",
+      "params": [
+        {
+          "name": "ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids"
+        },
+        {
+          "name": "timezone",
+          "type": "string",
+          "location": "query",
+          "description": "Timezone"
+        }
+      ]
+    },
+    {
+      "name": "report_list-metrics",
+      "description": "Only returns metrics available for the authenticated user. Optional: Limit, Offset, UseCaseId.",
+      "method": "GET",
+      "path": "/report/metrics",
+      "params": [
+        {
+          "name": "Limit",
+          "type": "int",
+          "location": "query",
+          "description": "Limit"
+        },
+        {
+          "name": "Offset",
+          "type": "int",
+          "location": "query",
+          "description": "Offset"
+        },
+        {
+          "name": "UseCaseId",
+          "type": "string",
+          "location": "query",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "report_list-troubleshooting",
+      "description": "List troubleshooting. Optional: RuleId, DealId, LineItemId (plus 24 more).",
+      "method": "GET",
+      "path": "/report/troubleshooting",
+      "params": [
+        {
+          "name": "RuleId",
+          "type": "int",
+          "location": "query",
+          "description": "Rule id"
+        },
+        {
+          "name": "DealId",
+          "type": "int",
+          "location": "query",
+          "description": "Deal id"
+        },
+        {
+          "name": "LineItemId",
+          "type": "int",
+          "location": "query",
+          "description": "Line item id"
+        },
+        {
+          "name": "BuyerId",
+          "type": "int",
+          "location": "query",
+          "description": "Buyer id"
+        },
+        {
+          "name": "InsertionId",
+          "type": "int",
+          "location": "query",
+          "description": "Insertion id"
+        },
+        {
+          "name": "PartnerId",
+          "type": "int",
+          "location": "query",
+          "description": "Partner id"
+        },
+        {
+          "name": "ChildDealId",
+          "type": "int",
+          "location": "query",
+          "description": "Child deal id"
+        },
+        {
+          "name": "NetworkIds",
+          "type": "array",
+          "location": "query",
+          "description": "Network ids"
+        },
+        {
+          "name": "StartDate",
+          "type": "string",
+          "location": "query",
+          "description": "Start date for the report (date included) String formatted: - absolute date:..."
+        },
+        {
+          "name": "EndDate",
+          "type": "string",
+          "location": "query",
+          "description": "Start date for the report (date excluded)."
+        },
+        {
+          "name": "SortBy",
+          "type": "string",
+          "location": "query",
+          "description": "Sort report elements on given `Metric` or `Dimension` *Ex: `'impressions'`, `'DealName'`*"
+        },
+        {
+          "name": "SortByType",
+          "type": "string",
+          "location": "query",
+          "description": "Sort report elements on given `Type` in compare mode *Ex: `'CHANGE'`, `'RELATIVE_CHANGE'`*"
+        },
+        {
+          "name": "SortAsc",
+          "type": "string",
+          "location": "query",
+          "description": "Direction for report elements sort Accepted values: `'ASC'`, `'DESC'`"
+        },
+        {
+          "name": "Simulate",
+          "type": "bool",
+          "location": "query",
+          "description": "Simulate if report can be generate"
+        },
+        {
+          "name": "IsSamplingAccepted",
+          "type": "bool",
+          "location": "query",
+          "description": "If true, indicates that sampled statistics can be used for this query. Sampling will provide higher performance and greater dimension choice."
+        },
+        {
+          "name": "Limit",
+          "type": "int",
+          "location": "query",
+          "description": "Limit"
+        },
+        {
+          "name": "Offset",
+          "type": "int",
+          "location": "query",
+          "description": "Offset"
+        },
+        {
+          "name": "Metrics",
+          "type": "array",
+          "location": "query",
+          "description": "List of metrics to include in the report List of all metrics on **/metrics** endpoint *Ex:..."
+        },
+        {
+          "name": "Dimensions",
+          "type": "array",
+          "location": "query",
+          "description": "List of dimensions to include in the report List of all dimensions on **/dimensions**..."
+        },
+        {
+          "name": "EmptyDimensionValues",
+          "type": "array",
+          "location": "query",
+          "description": "Empty dimension values"
+        },
+        {
+          "name": "Periodicity",
+          "type": "string",
+          "location": "query",
+          "description": "Periodicity for metrics on the selected period (`StartDate`, `EndDate`) Output in the report..."
+        },
+        {
+          "name": "Filters",
+          "type": "array",
+          "location": "query",
+          "description": "List of filters to apply on dimensions Report data must fulfill all filters in the list (AND..."
+        },
+        {
+          "name": "AllFilterFields",
+          "type": "array",
+          "location": "query",
+          "description": "All filter fields"
+        },
+        {
+          "name": "Timezone",
+          "type": "string",
+          "location": "query",
+          "description": "Timezone using IANA format for `StartDate` and `EndDate` (default: user network timezone)..."
+        },
+        {
+          "name": "Currency",
+          "type": "string",
+          "location": "query",
+          "description": "Currency"
+        },
+        {
+          "name": "DateFormat",
+          "type": "string",
+          "location": "query",
+          "description": "Format date field to match the given format *Ex: yyyy-MM-dd'T'HH:mm:ss will ouput..."
+        },
+        {
+          "name": "UseCaseId",
+          "type": "string",
+          "location": "query",
+          "description": "Defines which kind of data is requested"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_create",
+      "description": "Create new Advertiser resource. Optional: data. Returns the new SelfServeCreateResponse.",
+      "method": "POST",
+      "path": "/selfServe/advertisers",
+      "params": [
+        {
+          "name": "data-attributes-description",
+          "wire_name": "data.attributes.description",
+          "type": "string",
+          "location": "body",
+          "description": "Description"
+        },
+        {
+          "name": "data-attributes-domain",
+          "wire_name": "data.attributes.domain",
+          "type": "string",
+          "location": "body",
+          "description": "Domain",
+          "required": true
+        },
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-name",
+          "wire_name": "data.attributes.name",
+          "type": "string",
+          "location": "body",
+          "description": "Name",
+          "required": true
+        },
+        {
+          "name": "data-attributes-status",
+          "wire_name": "data.attributes.status",
+          "type": "string",
+          "location": "body",
+          "description": "Status"
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-relationships-campaigns",
+          "wire_name": "data.relationships.campaigns",
+          "type": "array",
+          "location": "body",
+          "description": "Campaigns"
+        },
+        {
+          "name": "data-relationships-creatives",
+          "wire_name": "data.relationships.creatives",
+          "type": "array",
+          "location": "body",
+          "description": "Creatives"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of Advertiser resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_create-selfserve",
+      "description": "Create new CampaignBudget resource. Optional: data. Returns the new SelfServeCreateSelfserveResponse.",
+      "method": "POST",
+      "path": "/selfServe/campaignBudgets",
+      "params": [
+        {
+          "name": "data-attributes-daily-cents",
+          "wire_name": "data.attributes.dailyCents",
+          "type": "float",
+          "location": "body",
+          "description": "Daily cents"
+        },
+        {
+          "name": "data-attributes-daily-cents-pacing",
+          "wire_name": "data.attributes.dailyCentsPacing",
+          "type": "string",
+          "location": "body",
+          "description": "Daily cents pacing"
+        },
+        {
+          "name": "data-attributes-daily-units",
+          "wire_name": "data.attributes.dailyUnits",
+          "type": "int",
+          "location": "body",
+          "description": "Daily units"
+        },
+        {
+          "name": "data-attributes-daily-units-pacing",
+          "wire_name": "data.attributes.dailyUnitsPacing",
+          "type": "string",
+          "location": "body",
+          "description": "Daily units pacing"
+        },
+        {
+          "name": "data-attributes-end-date",
+          "wire_name": "data.attributes.endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date",
+          "required": true
+        },
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-overall-cents",
+          "wire_name": "data.attributes.overallCents",
+          "type": "float",
+          "location": "body",
+          "description": "Overall cents"
+        },
+        {
+          "name": "data-attributes-overall-cents-pacing",
+          "wire_name": "data.attributes.overallCentsPacing",
+          "type": "string",
+          "location": "body",
+          "description": "Overall cents pacing"
+        },
+        {
+          "name": "data-attributes-overall-units",
+          "wire_name": "data.attributes.overallUnits",
+          "type": "int",
+          "location": "body",
+          "description": "Overall units"
+        },
+        {
+          "name": "data-attributes-overall-units-pacing",
+          "wire_name": "data.attributes.overallUnitsPacing",
+          "type": "string",
+          "location": "body",
+          "description": "Overall units pacing"
+        },
+        {
+          "name": "data-attributes-start-date",
+          "wire_name": "data.attributes.startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date",
+          "required": true
+        },
+        {
+          "name": "data-attributes-unit-price-cents",
+          "wire_name": "data.attributes.unitPriceCents",
+          "type": "float",
+          "location": "body",
+          "description": "Unit price cents",
+          "required": true
+        },
+        {
+          "name": "data-attributes-unit-type",
+          "wire_name": "data.attributes.unitType",
+          "type": "string",
+          "location": "body",
+          "description": "Unit type",
+          "required": true
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of CampaignBudget resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_create-selfserve-2",
+      "description": "Create new Campaign resource. Optional: data. Returns the new SelfServeCreateSelfserve2Response.",
+      "method": "POST",
+      "path": "/selfServe/campaigns",
+      "params": [
+        {
+          "name": "data-attributes-currency-code",
+          "wire_name": "data.attributes.currencyCode",
+          "type": "string",
+          "location": "body",
+          "description": "Currency code",
+          "required": true
+        },
+        {
+          "name": "data-attributes-duplicate-dependencies-from-campaign-id",
+          "wire_name": "data.attributes.duplicateDependenciesFromCampaignId",
+          "type": "int",
+          "location": "body",
+          "description": "Duplicate dependencies from campaign id"
+        },
+        {
+          "name": "data-attributes-end-date",
+          "wire_name": "data.attributes.endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date"
+        },
+        {
+          "name": "data-attributes-fc-impressions-per-interval",
+          "wire_name": "data.attributes.fcImpressionsPerInterval",
+          "type": "int",
+          "location": "body",
+          "description": "Fc impressions per interval"
+        },
+        {
+          "name": "data-attributes-fc-interval",
+          "wire_name": "data.attributes.fcInterval",
+          "type": "int",
+          "location": "body",
+          "description": "Fc interval"
+        },
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-name",
+          "wire_name": "data.attributes.name",
+          "type": "string",
+          "location": "body",
+          "description": "Name",
+          "required": true
+        },
+        {
+          "name": "data-attributes-start-date",
+          "wire_name": "data.attributes.startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date"
+        },
+        {
+          "name": "data-attributes-status",
+          "wire_name": "data.attributes.status",
+          "type": "string",
+          "location": "body",
+          "description": "Status"
+        },
+        {
+          "name": "data-attributes-timezone",
+          "wire_name": "data.attributes.timezone",
+          "type": "string",
+          "location": "body",
+          "description": "Timezone",
+          "required": true
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-relationships-budgets",
+          "wire_name": "data.relationships.budgets",
+          "type": "array",
+          "location": "body",
+          "description": "Budgets"
+        },
+        {
+          "name": "data-relationships-line-items",
+          "wire_name": "data.relationships.lineItems",
+          "type": "array",
+          "location": "body",
+          "description": "Line items"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of Campaign resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_create-selfserve-3",
+      "description": "Create new Creative resource. Optional: data. Returns the new SelfServeCreateSelfserve3Response.",
+      "method": "POST",
+      "path": "/selfServe/creatives",
+      "params": [
+        {
+          "name": "data-attributes-click-url",
+          "wire_name": "data.attributes.clickUrl",
+          "type": "string",
+          "location": "body",
+          "description": "Click url"
+        },
+        {
+          "name": "data-attributes-height",
+          "wire_name": "data.attributes.height",
+          "type": "int",
+          "location": "body",
+          "description": "Height"
+        },
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-impression-url",
+          "wire_name": "data.attributes.impressionUrl",
+          "type": "string",
+          "location": "body",
+          "description": "Impression url"
+        },
+        {
+          "name": "data-attributes-name",
+          "wire_name": "data.attributes.name",
+          "type": "string",
+          "location": "body",
+          "description": "Name",
+          "required": true
+        },
+        {
+          "name": "data-attributes-resource",
+          "wire_name": "data.attributes.resource",
+          "type": "string",
+          "location": "body",
+          "description": "Resource",
+          "required": true
+        },
+        {
+          "name": "data-attributes-third-party-tracking-url",
+          "wire_name": "data.attributes.thirdPartyTrackingUrl",
+          "type": "string",
+          "location": "body",
+          "description": "Third party tracking url"
+        },
+        {
+          "name": "data-attributes-url",
+          "wire_name": "data.attributes.url",
+          "type": "string",
+          "location": "body",
+          "description": "Url"
+        },
+        {
+          "name": "data-attributes-width",
+          "wire_name": "data.attributes.width",
+          "type": "int",
+          "location": "body",
+          "description": "Width"
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-relationships-line-items",
+          "wire_name": "data.relationships.lineItems",
+          "type": "array",
+          "location": "body",
+          "description": "Line items"
+        },
+        {
+          "name": "data-relationships-trackers",
+          "wire_name": "data.relationships.trackers",
+          "type": "array",
+          "location": "body",
+          "description": "Trackers"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of Creative resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_create-selfserve-4",
+      "description": "Create new LineItemBudget resource. Optional: data. Returns the new SelfServeCreateSelfserve4Response.",
+      "method": "POST",
+      "path": "/selfServe/lineItemBudgets",
+      "params": [
+        {
+          "name": "data-attributes-daily-cents",
+          "wire_name": "data.attributes.dailyCents",
+          "type": "float",
+          "location": "body",
+          "description": "Daily cents"
+        },
+        {
+          "name": "data-attributes-daily-units",
+          "wire_name": "data.attributes.dailyUnits",
+          "type": "int",
+          "location": "body",
+          "description": "Daily units"
+        },
+        {
+          "name": "data-attributes-end-date",
+          "wire_name": "data.attributes.endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date",
+          "required": true
+        },
+        {
+          "name": "data-attributes-hourly-schedule",
+          "wire_name": "data.attributes.hourlySchedule",
+          "type": "string",
+          "location": "body",
+          "description": "168-character bitmask representing the weekly delivery schedule (7 days × 24 hours). Position = (day_index × 24) + hour_index, where day 0 = Monday, hour 0 = 00:00–01:00. '1' = active, '0' = inactive. Null means no schedule restriction (budget delivers at all hours). Only applicable to line item budgets; ignored for campaign and company budgets."
+        },
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-overall-cents",
+          "wire_name": "data.attributes.overallCents",
+          "type": "float",
+          "location": "body",
+          "description": "Overall cents"
+        },
+        {
+          "name": "data-attributes-overall-units",
+          "wire_name": "data.attributes.overallUnits",
+          "type": "int",
+          "location": "body",
+          "description": "Overall units"
+        },
+        {
+          "name": "data-attributes-start-date",
+          "wire_name": "data.attributes.startDate",
+          "type": "string",
+          "location": "body",
+          "description": "Start date",
+          "required": true
+        },
+        {
+          "name": "data-attributes-unit-price-cents",
+          "wire_name": "data.attributes.unitPriceCents",
+          "type": "float",
+          "location": "body",
+          "description": "Unit price cents",
+          "required": true
+        },
+        {
+          "name": "data-attributes-unit-type",
+          "wire_name": "data.attributes.unitType",
+          "type": "string",
+          "location": "body",
+          "description": "Unit type",
+          "required": true
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of LineItemBudget resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_create-selfserve-5",
+      "description": "Create new LineItem resource. Optional: data. Returns the new SelfServeCreateSelfserve5Response.",
+      "method": "POST",
+      "path": "/selfServe/lineitems",
+      "params": [
+        {
+          "name": "data-attributes-audience-segments-targeting",
+          "wire_name": "data.attributes.audienceSegmentsTargeting",
+          "type": "string",
+          "location": "body",
+          "description": "Audience segments targeting"
+        },
+        {
+          "name": "data-attributes-children-deal-ids",
+          "wire_name": "data.attributes.childrenDealIds",
+          "type": "array",
+          "location": "body",
+          "description": "Children deal ids"
+        },
+        {
+          "name": "data-attributes-city-ids",
+          "wire_name": "data.attributes.cityIds",
+          "type": "array",
+          "location": "body",
+          "description": "City ids"
+        },
+        {
+          "name": "data-attributes-content-category-names",
+          "wire_name": "data.attributes.contentCategoryNames",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content category names"
+        },
+        {
+          "name": "data-attributes-content-channel-names",
+          "wire_name": "data.attributes.contentChannelNames",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content channel names"
+        },
+        {
+          "name": "data-attributes-content-context-ids",
+          "wire_name": "data.attributes.contentContextIds",
+          "type": "array",
+          "location": "body",
+          "description": "Content context ids"
+        },
+        {
+          "name": "data-attributes-content-genre-names",
+          "wire_name": "data.attributes.contentGenreNames",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content genre names"
+        },
+        {
+          "name": "data-attributes-content-ids",
+          "wire_name": "data.attributes.contentIds",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content ids"
+        },
+        {
+          "name": "data-attributes-content-language-iso6391-alpha2-codes",
+          "wire_name": "data.attributes.contentLanguageIso6391Alpha2Codes",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content language iso6391 alpha2 codes"
+        },
+        {
+          "name": "data-attributes-content-network-names",
+          "wire_name": "data.attributes.contentNetworkNames",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content network names"
+        },
+        {
+          "name": "data-attributes-content-tag-names",
+          "wire_name": "data.attributes.contentTagNames",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content tag names"
+        },
+        {
+          "name": "data-attributes-country-codes",
+          "wire_name": "data.attributes.countryCodes",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Country codes"
+        },
+        {
+          "name": "data-attributes-country-codes-postal-codes",
+          "wire_name": "data.attributes.countryCodesPostalCodes",
+          "type": "array",
+          "location": "body",
+          "description": "Country codes postal codes"
+        },
+        {
+          "name": "data-attributes-creative-sizes",
+          "wire_name": "data.attributes.creativeSizes",
+          "type": "array",
+          "location": "body",
+          "description": "Creative sizes"
+        },
+        {
+          "name": "data-attributes-ctr-targeting-percentage",
+          "wire_name": "data.attributes.ctrTargetingPercentage",
+          "type": "float",
+          "location": "body",
+          "description": "Ctr targeting percentage"
+        },
+        {
+          "name": "data-attributes-ctv-ott-ids",
+          "wire_name": "data.attributes.ctvOttIds",
+          "type": "array",
+          "location": "body",
+          "description": "Ctv ott ids"
+        },
+        {
+          "name": "data-attributes-dma-ids",
+          "wire_name": "data.attributes.dmaIds",
+          "type": "array",
+          "location": "body",
+          "description": "Dma ids"
+        },
+        {
+          "name": "data-attributes-domain-list-id",
+          "wire_name": "data.attributes.domainListId",
+          "type": "int",
+          "location": "body",
+          "description": "Domain list id"
+        },
+        {
+          "name": "data-attributes-domain-list-ids",
+          "wire_name": "data.attributes.domainListIds",
+          "type": "array",
+          "location": "body",
+          "description": "Domain list ids"
+        },
+        {
+          "name": "data-attributes-fc-impressions-per-interval",
+          "wire_name": "data.attributes.fcImpressionsPerInterval",
+          "type": "int",
+          "location": "body",
+          "description": "Fc impressions per interval"
+        },
+        {
+          "name": "data-attributes-fc-interval",
+          "wire_name": "data.attributes.fcInterval",
+          "type": "int",
+          "location": "body",
+          "description": "Fc interval"
+        },
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-impression-type-ids",
+          "wire_name": "data.attributes.impressionTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Impression type ids"
+        },
+        {
+          "name": "data-attributes-inventory-type-ids",
+          "wire_name": "data.attributes.inventoryTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Inventory type ids"
+        },
+        {
+          "name": "data-attributes-is-ctv",
+          "wire_name": "data.attributes.isCTV",
+          "type": "bool",
+          "location": "body",
+          "description": "Is ctv"
+        },
+        {
+          "name": "data-attributes-is-green-pmp",
+          "wire_name": "data.attributes.isGreenPmp",
+          "type": "bool",
+          "location": "body",
+          "description": "Is green pmp"
+        },
+        {
+          "name": "data-attributes-is-livestream",
+          "wire_name": "data.attributes.isLivestream",
+          "type": "bool",
+          "location": "body",
+          "description": "Is livestream"
+        },
+        {
+          "name": "data-attributes-is-rewarded-video",
+          "wire_name": "data.attributes.isRewardedVideo",
+          "type": "bool",
+          "location": "body",
+          "description": "Is rewarded video"
+        },
+        {
+          "name": "data-attributes-name",
+          "wire_name": "data.attributes.name",
+          "type": "string",
+          "location": "body",
+          "description": "Name",
+          "required": true
+        },
+        {
+          "name": "data-attributes-network-ids",
+          "wire_name": "data.attributes.networkIds",
+          "type": "array",
+          "location": "body",
+          "description": "Network ids"
+        },
+        {
+          "name": "data-attributes-platform-ids",
+          "wire_name": "data.attributes.platformIds",
+          "type": "array",
+          "location": "body",
+          "description": "Platform ids"
+        },
+        {
+          "name": "data-attributes-region-ids",
+          "wire_name": "data.attributes.regionIds",
+          "type": "array",
+          "location": "body",
+          "description": "Region ids"
+        },
+        {
+          "name": "data-attributes-sco-node-bucket-ids",
+          "wire_name": "data.attributes.scoNodeBucketIds",
+          "type": "array",
+          "location": "body",
+          "description": "Sco node bucket ids"
+        },
+        {
+          "name": "data-attributes-semantic-segments-targeting",
+          "wire_name": "data.attributes.semanticSegmentsTargeting",
+          "type": "string",
+          "location": "body",
+          "description": "Semantic segments targeting"
+        },
+        {
+          "name": "data-attributes-skippable",
+          "wire_name": "data.attributes.skippable",
+          "type": "bool",
+          "location": "body",
+          "description": "Skippable"
+        },
+        {
+          "name": "data-attributes-state-ids",
+          "wire_name": "data.attributes.stateIds",
+          "type": "array",
+          "location": "body",
+          "description": "State ids"
+        },
+        {
+          "name": "data-attributes-status",
+          "wire_name": "data.attributes.status",
+          "type": "string",
+          "location": "body",
+          "description": "Status"
+        },
+        {
+          "name": "data-attributes-template-ids",
+          "wire_name": "data.attributes.templateIds",
+          "type": "array",
+          "location": "body",
+          "description": "Template ids"
+        },
+        {
+          "name": "data-attributes-video-ad-break-type-ids",
+          "wire_name": "data.attributes.videoAdBreakTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Video ad break type ids"
+        },
+        {
+          "name": "data-attributes-video-completion-targeting-percentage",
+          "wire_name": "data.attributes.videoCompletionTargetingPercentage",
+          "type": "float",
+          "location": "body",
+          "description": "Video completion targeting percentage"
+        },
+        {
+          "name": "data-attributes-video-max-ad-duration-ids",
+          "wire_name": "data.attributes.videoMaxAdDurationIds",
+          "type": "array",
+          "location": "body",
+          "description": "Video max ad duration ids"
+        },
+        {
+          "name": "data-attributes-video-placement-type-ids",
+          "wire_name": "data.attributes.videoPlacementTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Video placement type ids"
+        },
+        {
+          "name": "data-attributes-video-player-size-bucket-ids",
+          "wire_name": "data.attributes.videoPlayerSizeBucketIds",
+          "type": "array",
+          "location": "body",
+          "description": "Video player size bucket ids"
+        },
+        {
+          "name": "data-attributes-viewability-targeting-percentage",
+          "wire_name": "data.attributes.viewabilityTargetingPercentage",
+          "type": "float",
+          "location": "body",
+          "description": "Viewability targeting percentage"
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-relationships-budgets",
+          "wire_name": "data.relationships.budgets",
+          "type": "array",
+          "location": "body",
+          "description": "Budgets"
+        },
+        {
+          "name": "data-relationships-creatives",
+          "wire_name": "data.relationships.creatives",
+          "type": "array",
+          "location": "body",
+          "description": "Creatives"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of LineItem resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_create-selfserve-6",
+      "description": "Create new Native Asset resource. Optional: data. Returns the new SelfServeCreateSelfserve6Response.",
+      "method": "POST",
+      "path": "/selfServe/nativeAssets",
+      "params": [
+        {
+          "name": "data-attributes",
+          "wire_name": "data.attributes",
+          "type": "object",
+          "location": "body",
+          "description": "Attributes of Native Asset resource"
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of Native Asset resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_create-selfserve-7",
+      "description": "Create new Tracker resource. Optional: data. Returns the new SelfServeCreateSelfserve7Response.",
+      "method": "POST",
+      "path": "/selfServe/trackers",
+      "params": [
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-script",
+          "wire_name": "data.attributes.script",
+          "type": "string",
+          "location": "body",
+          "description": "Script"
+        },
+        {
+          "name": "data-attributes-url",
+          "wire_name": "data.attributes.url",
+          "type": "string",
+          "location": "body",
+          "description": "Url"
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of Tracker resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_delete",
+      "description": "Delete Advertiser resource. Required: id. Destructive.",
+      "method": "DELETE",
+      "path": "/selfServe/advertisers/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Advertiser resource",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "self-serve_delete-selfserve",
+      "description": "Delete CampaignBudget resource. Required: id. Destructive.",
+      "method": "DELETE",
+      "path": "/selfServe/campaignBudgets/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of CampaignBudget resource",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "self-serve_delete-selfserve-2",
+      "description": "Delete Campaign resource. Required: id. Destructive.",
+      "method": "DELETE",
+      "path": "/selfServe/campaigns/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Campaign resource",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "self-serve_delete-selfserve-3",
+      "description": "Delete Creative resource. Required: id. Destructive.",
+      "method": "DELETE",
+      "path": "/selfServe/creatives/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Creative resource",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "self-serve_delete-selfserve-4",
+      "description": "Delete LineItemBudget resource. Required: id. Destructive.",
+      "method": "DELETE",
+      "path": "/selfServe/lineItemBudgets/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of LineItemBudget resource",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "self-serve_delete-selfserve-5",
+      "description": "Delete LineItem resource. Required: id. Destructive.",
+      "method": "DELETE",
+      "path": "/selfServe/lineitems/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of LineItem resource",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "self-serve_delete-selfserve-6",
+      "description": "Delete Native Asset resource. Required: id. Destructive.",
+      "method": "DELETE",
+      "path": "/selfServe/nativeAssets/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Native Asset resource",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "self-serve_delete-selfserve-7",
+      "description": "Delete Tracker resource. Required: id. Destructive.",
+      "method": "DELETE",
+      "path": "/selfServe/trackers/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Tracker resource",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "self-serve_get",
+      "description": "Get a single Advertiser resource. Required: id. Optional: include. Returns the SelfServeGetResponse.",
+      "method": "GET",
+      "path": "/selfServe/advertisers/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Advertiser resource",
+          "required": true
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_get-selfserve",
+      "description": "Get a single CampaignBudget resource. Required: id. Optional: include. Returns the SelfServeGetSelfserveResponse.",
+      "method": "GET",
+      "path": "/selfServe/campaignBudgets/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of CampaignBudget resource",
+          "required": true
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_get-selfserve-2",
+      "description": "Get a single Campaign resource. Required: id. Optional: include. Returns the SelfServeGetSelfserve2Response.",
+      "method": "GET",
+      "path": "/selfServe/campaigns/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Campaign resource",
+          "required": true
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_get-selfserve-3",
+      "description": "Get a single Creative resource. Required: id. Optional: include. Returns the SelfServeGetSelfserve3Response.",
+      "method": "GET",
+      "path": "/selfServe/creatives/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Creative resource",
+          "required": true
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_get-selfserve-4",
+      "description": "Get a single LineItemBudget resource. Required: id. Optional: include. Returns the SelfServeGetSelfserve4Response.",
+      "method": "GET",
+      "path": "/selfServe/lineItemBudgets/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of LineItemBudget resource",
+          "required": true
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_get-selfserve-5",
+      "description": "Get a single LineItem resource. Required: id. Optional: include. Returns the SelfServeGetSelfserve5Response.",
+      "method": "GET",
+      "path": "/selfServe/lineitems/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of LineItem resource",
+          "required": true
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_get-selfserve-6",
+      "description": "Get a single Native Asset resource. Required: id. Optional: include. Returns the SelfServeGetSelfserve6Response.",
+      "method": "GET",
+      "path": "/selfServe/nativeAssets/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Native Asset resource",
+          "required": true
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_get-selfserve-7",
+      "description": "Get a single Tracker resource. Required: id. Optional: include. Returns the SelfServeGetSelfserve7Response.",
+      "method": "GET",
+      "path": "/selfServe/trackers/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Tracker resource",
+          "required": true
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_get-selfserve-8",
+      "description": "Get a single CampaignHistory resource. Required: id. Returns array of SelfServeGetSelfserve8Item.",
+      "method": "GET",
+      "path": "/selfServe/campaigns/{id}/history",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Campaign resource",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "self-serve_get-selfserve-9",
+      "description": "Get a single LineItemHistory resource. Required: id. Returns array of SelfServeGetSelfserve9Item.",
+      "method": "GET",
+      "path": "/selfServe/lineitems/{id}/history",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of LineItem resource",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "self-serve_list",
+      "description": "Get all Advertiser resources. Optional: filter, sort, page[size] (plus 2 more). Returns the SelfServeListResponse.",
+      "method": "GET",
+      "path": "/selfServe/advertisers",
+      "params": [
+        {
+          "name": "filter",
+          "type": "string",
+          "location": "query",
+          "description": "The filtering strategy. The value is an expression composed using the available functions..."
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "location": "query",
+          "description": "Allows sorting by one or more attributes in ascending or descending order."
+        },
+        {
+          "name": "page[size]",
+          "type": "int",
+          "location": "query",
+          "description": "The number of items to return per page"
+        },
+        {
+          "name": "page[number]",
+          "type": "int",
+          "location": "query",
+          "description": "The page number to return"
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_list-selfserve",
+      "description": "Get all CampaignBudget resources. Optional: filter, sort, page[size] (plus 2 more). Returns the SelfServeListSelfserveResponse.",
+      "method": "GET",
+      "path": "/selfServe/campaignBudgets",
+      "params": [
+        {
+          "name": "filter",
+          "type": "string",
+          "location": "query",
+          "description": "The filtering strategy. The value is an expression composed using the available functions..."
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "location": "query",
+          "description": "Allows sorting by one or more attributes in ascending or descending order."
+        },
+        {
+          "name": "page[size]",
+          "type": "int",
+          "location": "query",
+          "description": "The number of items to return per page"
+        },
+        {
+          "name": "page[number]",
+          "type": "int",
+          "location": "query",
+          "description": "The page number to return"
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_list-selfserve-10",
+      "description": "Get all Tracker resources. Optional: filter, sort, page[size] (plus 2 more). Returns the SelfServeListSelfserve10Response.",
+      "method": "GET",
+      "path": "/selfServe/trackers",
+      "params": [
+        {
+          "name": "filter",
+          "type": "string",
+          "location": "query",
+          "description": "The filtering strategy. The value is an expression composed using the available functions..."
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "location": "query",
+          "description": "Allows sorting by one or more attributes in ascending or descending order."
+        },
+        {
+          "name": "page[size]",
+          "type": "int",
+          "location": "query",
+          "description": "The number of items to return per page"
+        },
+        {
+          "name": "page[number]",
+          "type": "int",
+          "location": "query",
+          "description": "The page number to return"
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_list-selfserve-2",
+      "description": "Get all Campaign resources. Optional: filter, sort, page[size] (plus 2 more). Returns the SelfServeListSelfserve2Response.",
+      "method": "GET",
+      "path": "/selfServe/campaigns",
+      "params": [
+        {
+          "name": "filter",
+          "type": "string",
+          "location": "query",
+          "description": "The filtering strategy. The value is an expression composed using the available functions..."
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "location": "query",
+          "description": "Allows sorting by one or more attributes in ascending or descending order."
+        },
+        {
+          "name": "page[size]",
+          "type": "int",
+          "location": "query",
+          "description": "The number of items to return per page"
+        },
+        {
+          "name": "page[number]",
+          "type": "int",
+          "location": "query",
+          "description": "The page number to return"
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_list-selfserve-3",
+      "description": "Get all Creative resources. Optional: filter, sort, page[size] (plus 2 more). Returns the SelfServeListSelfserve3Response.",
+      "method": "GET",
+      "path": "/selfServe/creatives",
+      "params": [
+        {
+          "name": "filter",
+          "type": "string",
+          "location": "query",
+          "description": "The filtering strategy. The value is an expression composed using the available functions..."
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "location": "query",
+          "description": "Allows sorting by one or more attributes in ascending or descending order."
+        },
+        {
+          "name": "page[size]",
+          "type": "int",
+          "location": "query",
+          "description": "The number of items to return per page"
+        },
+        {
+          "name": "page[number]",
+          "type": "int",
+          "location": "query",
+          "description": "The page number to return"
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_list-selfserve-4",
+      "description": "Get all IabCategory resources. Optional: filter, sort, page[size] (plus 2 more). Returns the SelfServeListSelfserve4Response.",
+      "method": "GET",
+      "path": "/selfServe/iabCategories",
+      "params": [
+        {
+          "name": "filter",
+          "type": "string",
+          "location": "query",
+          "description": "The filtering strategy. The value is an expression composed using the available functions..."
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "location": "query",
+          "description": "Allows sorting by one or more attributes in ascending or descending order."
+        },
+        {
+          "name": "page[size]",
+          "type": "int",
+          "location": "query",
+          "description": "The number of items to return per page"
+        },
+        {
+          "name": "page[number]",
+          "type": "int",
+          "location": "query",
+          "description": "The page number to return"
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_list-selfserve-5",
+      "description": "Get all LineItemBudget resources. Optional: filter, sort, page[size] (plus 2 more). Returns the SelfServeListSelfserve5Response.",
+      "method": "GET",
+      "path": "/selfServe/lineItemBudgets",
+      "params": [
+        {
+          "name": "filter",
+          "type": "string",
+          "location": "query",
+          "description": "The filtering strategy. The value is an expression composed using the available functions..."
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "location": "query",
+          "description": "Allows sorting by one or more attributes in ascending or descending order."
+        },
+        {
+          "name": "page[size]",
+          "type": "int",
+          "location": "query",
+          "description": "The number of items to return per page"
+        },
+        {
+          "name": "page[number]",
+          "type": "int",
+          "location": "query",
+          "description": "The page number to return"
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_list-selfserve-6",
+      "description": "Get all LineItem resources. Optional: filter, sort, page[size] (plus 2 more). Returns the SelfServeListSelfserve6Response.",
+      "method": "GET",
+      "path": "/selfServe/lineitems",
+      "params": [
+        {
+          "name": "filter",
+          "type": "string",
+          "location": "query",
+          "description": "The filtering strategy. The value is an expression composed using the available functions..."
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "location": "query",
+          "description": "Allows sorting by one or more attributes in ascending or descending order."
+        },
+        {
+          "name": "page[size]",
+          "type": "int",
+          "location": "query",
+          "description": "The number of items to return per page"
+        },
+        {
+          "name": "page[number]",
+          "type": "int",
+          "location": "query",
+          "description": "The page number to return"
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_list-selfserve-7",
+      "description": "Get all Native Asset resources. Optional: filter, sort, page[size] (plus 2 more). Returns the SelfServeListSelfserve7Response.",
+      "method": "GET",
+      "path": "/selfServe/nativeAssets",
+      "params": [
+        {
+          "name": "filter",
+          "type": "string",
+          "location": "query",
+          "description": "The filtering strategy. The value is an expression composed using the available functions..."
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "location": "query",
+          "description": "Allows sorting by one or more attributes in ascending or descending order."
+        },
+        {
+          "name": "page[size]",
+          "type": "int",
+          "location": "query",
+          "description": "The number of items to return per page"
+        },
+        {
+          "name": "page[number]",
+          "type": "int",
+          "location": "query",
+          "description": "The page number to return"
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_list-selfserve-8",
+      "description": "Get all TcfPurpose resources. Optional: filter, sort, page[size] (plus 2 more). Returns the SelfServeListSelfserve8Response.",
+      "method": "GET",
+      "path": "/selfServe/tcfPurposes",
+      "params": [
+        {
+          "name": "filter",
+          "type": "string",
+          "location": "query",
+          "description": "The filtering strategy. The value is an expression composed using the available functions..."
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "location": "query",
+          "description": "Allows sorting by one or more attributes in ascending or descending order."
+        },
+        {
+          "name": "page[size]",
+          "type": "int",
+          "location": "query",
+          "description": "The number of items to return per page"
+        },
+        {
+          "name": "page[number]",
+          "type": "int",
+          "location": "query",
+          "description": "The page number to return"
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_list-selfserve-9",
+      "description": "Get all TcfVendor resources. Optional: filter, sort, page[size] (plus 2 more). Returns the SelfServeListSelfserve9Response.",
+      "method": "GET",
+      "path": "/selfServe/tcfVendors",
+      "params": [
+        {
+          "name": "filter",
+          "type": "string",
+          "location": "query",
+          "description": "The filtering strategy. The value is an expression composed using the available functions..."
+        },
+        {
+          "name": "sort",
+          "type": "string",
+          "location": "query",
+          "description": "Allows sorting by one or more attributes in ascending or descending order."
+        },
+        {
+          "name": "page[size]",
+          "type": "int",
+          "location": "query",
+          "description": "The number of items to return per page"
+        },
+        {
+          "name": "page[number]",
+          "type": "int",
+          "location": "query",
+          "description": "The page number to return"
+        },
+        {
+          "name": "include",
+          "type": "string",
+          "location": "query",
+          "description": "The related resources to include in the response."
+        }
+      ]
+    },
+    {
+      "name": "self-serve_update",
+      "description": "Update Advertiser resource. Required: id. Optional: data. Returns the updated SelfServeUpdateResponse.",
+      "method": "PATCH",
+      "path": "/selfServe/advertisers/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Advertiser resource",
+          "required": true
+        },
+        {
+          "name": "data-attributes-description",
+          "wire_name": "data.attributes.description",
+          "type": "string",
+          "location": "body",
+          "description": "Description"
+        },
+        {
+          "name": "data-attributes-domain",
+          "wire_name": "data.attributes.domain",
+          "type": "string",
+          "location": "body",
+          "description": "Domain"
+        },
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-name",
+          "wire_name": "data.attributes.name",
+          "type": "string",
+          "location": "body",
+          "description": "Name"
+        },
+        {
+          "name": "data-attributes-status",
+          "wire_name": "data.attributes.status",
+          "type": "string",
+          "location": "body",
+          "description": "Status"
+        },
+        {
+          "name": "data-id",
+          "wire_name": "data.id",
+          "type": "string",
+          "location": "body",
+          "description": "A unique identifier for the resource"
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-relationships-campaigns",
+          "wire_name": "data.relationships.campaigns",
+          "type": "array",
+          "location": "body",
+          "description": "Campaigns"
+        },
+        {
+          "name": "data-relationships-creatives",
+          "wire_name": "data.relationships.creatives",
+          "type": "array",
+          "location": "body",
+          "description": "Creatives"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of Advertiser resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_update-selfserve",
+      "description": "Update CampaignBudget resource. Required: id. Optional: data. Returns the updated SelfServeUpdateSelfserveResponse.",
+      "method": "PATCH",
+      "path": "/selfServe/campaignBudgets/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of CampaignBudget resource",
+          "required": true
+        },
+        {
+          "name": "data-attributes-daily-cents",
+          "wire_name": "data.attributes.dailyCents",
+          "type": "float",
+          "location": "body",
+          "description": "Daily cents"
+        },
+        {
+          "name": "data-attributes-daily-cents-pacing",
+          "wire_name": "data.attributes.dailyCentsPacing",
+          "type": "string",
+          "location": "body",
+          "description": "Daily cents pacing"
+        },
+        {
+          "name": "data-attributes-daily-units",
+          "wire_name": "data.attributes.dailyUnits",
+          "type": "int",
+          "location": "body",
+          "description": "Daily units"
+        },
+        {
+          "name": "data-attributes-daily-units-pacing",
+          "wire_name": "data.attributes.dailyUnitsPacing",
+          "type": "string",
+          "location": "body",
+          "description": "Daily units pacing"
+        },
+        {
+          "name": "data-attributes-end-date",
+          "wire_name": "data.attributes.endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date"
+        },
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-overall-cents",
+          "wire_name": "data.attributes.overallCents",
+          "type": "float",
+          "location": "body",
+          "description": "Overall cents"
+        },
+        {
+          "name": "data-attributes-overall-cents-pacing",
+          "wire_name": "data.attributes.overallCentsPacing",
+          "type": "string",
+          "location": "body",
+          "description": "Overall cents pacing"
+        },
+        {
+          "name": "data-attributes-overall-units",
+          "wire_name": "data.attributes.overallUnits",
+          "type": "int",
+          "location": "body",
+          "description": "Overall units"
+        },
+        {
+          "name": "data-attributes-overall-units-pacing",
+          "wire_name": "data.attributes.overallUnitsPacing",
+          "type": "string",
+          "location": "body",
+          "description": "Overall units pacing"
+        },
+        {
+          "name": "data-attributes-unit-price-cents",
+          "wire_name": "data.attributes.unitPriceCents",
+          "type": "float",
+          "location": "body",
+          "description": "Unit price cents"
+        },
+        {
+          "name": "data-attributes-unit-type",
+          "wire_name": "data.attributes.unitType",
+          "type": "string",
+          "location": "body",
+          "description": "Unit type"
+        },
+        {
+          "name": "data-id",
+          "wire_name": "data.id",
+          "type": "string",
+          "location": "body",
+          "description": "A unique identifier for the resource"
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of CampaignBudget resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_update-selfserve-2",
+      "description": "Update Campaign resource. Required: id. Optional: data. Returns the updated SelfServeUpdateSelfserve2Response.",
+      "method": "PATCH",
+      "path": "/selfServe/campaigns/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Campaign resource",
+          "required": true
+        },
+        {
+          "name": "data-attributes-currency-code",
+          "wire_name": "data.attributes.currencyCode",
+          "type": "string",
+          "location": "body",
+          "description": "Currency code"
+        },
+        {
+          "name": "data-attributes-end-date",
+          "wire_name": "data.attributes.endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date"
+        },
+        {
+          "name": "data-attributes-fc-impressions-per-interval",
+          "wire_name": "data.attributes.fcImpressionsPerInterval",
+          "type": "int",
+          "location": "body",
+          "description": "Fc impressions per interval"
+        },
+        {
+          "name": "data-attributes-fc-interval",
+          "wire_name": "data.attributes.fcInterval",
+          "type": "int",
+          "location": "body",
+          "description": "Fc interval"
+        },
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-name",
+          "wire_name": "data.attributes.name",
+          "type": "string",
+          "location": "body",
+          "description": "Name"
+        },
+        {
+          "name": "data-attributes-status",
+          "wire_name": "data.attributes.status",
+          "type": "string",
+          "location": "body",
+          "description": "Status"
+        },
+        {
+          "name": "data-attributes-timezone",
+          "wire_name": "data.attributes.timezone",
+          "type": "string",
+          "location": "body",
+          "description": "Timezone"
+        },
+        {
+          "name": "data-id",
+          "wire_name": "data.id",
+          "type": "string",
+          "location": "body",
+          "description": "A unique identifier for the resource"
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-relationships-budgets",
+          "wire_name": "data.relationships.budgets",
+          "type": "array",
+          "location": "body",
+          "description": "Budgets"
+        },
+        {
+          "name": "data-relationships-line-items",
+          "wire_name": "data.relationships.lineItems",
+          "type": "array",
+          "location": "body",
+          "description": "Line items"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of Campaign resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_update-selfserve-3",
+      "description": "Update Creative resource. Required: id. Optional: data. Returns the updated SelfServeUpdateSelfserve3Response.",
+      "method": "PATCH",
+      "path": "/selfServe/creatives/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Creative resource",
+          "required": true
+        },
+        {
+          "name": "data-attributes-click-url",
+          "wire_name": "data.attributes.clickUrl",
+          "type": "string",
+          "location": "body",
+          "description": "Click url"
+        },
+        {
+          "name": "data-attributes-height",
+          "wire_name": "data.attributes.height",
+          "type": "int",
+          "location": "body",
+          "description": "Height"
+        },
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-impression-url",
+          "wire_name": "data.attributes.impressionUrl",
+          "type": "string",
+          "location": "body",
+          "description": "Impression url"
+        },
+        {
+          "name": "data-attributes-name",
+          "wire_name": "data.attributes.name",
+          "type": "string",
+          "location": "body",
+          "description": "Name"
+        },
+        {
+          "name": "data-attributes-resource",
+          "wire_name": "data.attributes.resource",
+          "type": "string",
+          "location": "body",
+          "description": "Resource"
+        },
+        {
+          "name": "data-attributes-third-party-tracking-url",
+          "wire_name": "data.attributes.thirdPartyTrackingUrl",
+          "type": "string",
+          "location": "body",
+          "description": "Third party tracking url"
+        },
+        {
+          "name": "data-attributes-url",
+          "wire_name": "data.attributes.url",
+          "type": "string",
+          "location": "body",
+          "description": "Url"
+        },
+        {
+          "name": "data-attributes-width",
+          "wire_name": "data.attributes.width",
+          "type": "int",
+          "location": "body",
+          "description": "Width"
+        },
+        {
+          "name": "data-id",
+          "wire_name": "data.id",
+          "type": "string",
+          "location": "body",
+          "description": "A unique identifier for the resource"
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-relationships-line-items",
+          "wire_name": "data.relationships.lineItems",
+          "type": "array",
+          "location": "body",
+          "description": "Line items"
+        },
+        {
+          "name": "data-relationships-trackers",
+          "wire_name": "data.relationships.trackers",
+          "type": "array",
+          "location": "body",
+          "description": "Trackers"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of Creative resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_update-selfserve-4",
+      "description": "Update LineItemBudget resource. Required: id. Optional: data. Returns the updated SelfServeUpdateSelfserve4Response.",
+      "method": "PATCH",
+      "path": "/selfServe/lineItemBudgets/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of LineItemBudget resource",
+          "required": true
+        },
+        {
+          "name": "data-attributes-daily-cents",
+          "wire_name": "data.attributes.dailyCents",
+          "type": "float",
+          "location": "body",
+          "description": "Daily cents"
+        },
+        {
+          "name": "data-attributes-daily-units",
+          "wire_name": "data.attributes.dailyUnits",
+          "type": "int",
+          "location": "body",
+          "description": "Daily units"
+        },
+        {
+          "name": "data-attributes-end-date",
+          "wire_name": "data.attributes.endDate",
+          "type": "string",
+          "location": "body",
+          "description": "End date"
+        },
+        {
+          "name": "data-attributes-hourly-schedule",
+          "wire_name": "data.attributes.hourlySchedule",
+          "type": "string",
+          "location": "body",
+          "description": "168-character bitmask representing the weekly delivery schedule (7 days × 24 hours). Position = (day_index × 24) + hour_index, where day 0 = Monday, hour 0 = 00:00–01:00. '1' = active, '0' = inactive. Null means no schedule restriction (budget delivers at all hours). Only applicable to line item budgets; ignored for campaign and company budgets."
+        },
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-overall-cents",
+          "wire_name": "data.attributes.overallCents",
+          "type": "float",
+          "location": "body",
+          "description": "Overall cents"
+        },
+        {
+          "name": "data-attributes-overall-units",
+          "wire_name": "data.attributes.overallUnits",
+          "type": "int",
+          "location": "body",
+          "description": "Overall units"
+        },
+        {
+          "name": "data-attributes-unit-price-cents",
+          "wire_name": "data.attributes.unitPriceCents",
+          "type": "float",
+          "location": "body",
+          "description": "Unit price cents"
+        },
+        {
+          "name": "data-attributes-unit-type",
+          "wire_name": "data.attributes.unitType",
+          "type": "string",
+          "location": "body",
+          "description": "Unit type"
+        },
+        {
+          "name": "data-id",
+          "wire_name": "data.id",
+          "type": "string",
+          "location": "body",
+          "description": "A unique identifier for the resource"
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of LineItemBudget resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_update-selfserve-5",
+      "description": "Update LineItem resource. Required: id. Optional: data. Returns the updated SelfServeUpdateSelfserve5Response.",
+      "method": "PATCH",
+      "path": "/selfServe/lineitems/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of LineItem resource",
+          "required": true
+        },
+        {
+          "name": "data-attributes-audience-segments-targeting",
+          "wire_name": "data.attributes.audienceSegmentsTargeting",
+          "type": "string",
+          "location": "body",
+          "description": "Audience segments targeting"
+        },
+        {
+          "name": "data-attributes-children-deal-ids",
+          "wire_name": "data.attributes.childrenDealIds",
+          "type": "array",
+          "location": "body",
+          "description": "Children deal ids"
+        },
+        {
+          "name": "data-attributes-city-ids",
+          "wire_name": "data.attributes.cityIds",
+          "type": "array",
+          "location": "body",
+          "description": "City ids"
+        },
+        {
+          "name": "data-attributes-content-category-names",
+          "wire_name": "data.attributes.contentCategoryNames",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content category names"
+        },
+        {
+          "name": "data-attributes-content-context-ids",
+          "wire_name": "data.attributes.contentContextIds",
+          "type": "array",
+          "location": "body",
+          "description": "Content context ids"
+        },
+        {
+          "name": "data-attributes-content-genre-names",
+          "wire_name": "data.attributes.contentGenreNames",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content genre names"
+        },
+        {
+          "name": "data-attributes-content-ids",
+          "wire_name": "data.attributes.contentIds",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content ids"
+        },
+        {
+          "name": "data-attributes-content-language-iso6391-alpha2-codes",
+          "wire_name": "data.attributes.contentLanguageIso6391Alpha2Codes",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content language iso6391 alpha2 codes"
+        },
+        {
+          "name": "data-attributes-content-tag-names",
+          "wire_name": "data.attributes.contentTagNames",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Content tag names"
+        },
+        {
+          "name": "data-attributes-country-codes",
+          "wire_name": "data.attributes.countryCodes",
+          "type": "string_csv_array",
+          "location": "body",
+          "description": "Country codes"
+        },
+        {
+          "name": "data-attributes-country-codes-postal-codes",
+          "wire_name": "data.attributes.countryCodesPostalCodes",
+          "type": "array",
+          "location": "body",
+          "description": "Country codes postal codes"
+        },
+        {
+          "name": "data-attributes-creative-sizes",
+          "wire_name": "data.attributes.creativeSizes",
+          "type": "array",
+          "location": "body",
+          "description": "Creative sizes"
+        },
+        {
+          "name": "data-attributes-ctr-targeting-percentage",
+          "wire_name": "data.attributes.ctrTargetingPercentage",
+          "type": "float",
+          "location": "body",
+          "description": "Ctr targeting percentage"
+        },
+        {
+          "name": "data-attributes-dma-ids",
+          "wire_name": "data.attributes.dmaIds",
+          "type": "array",
+          "location": "body",
+          "description": "Dma ids"
+        },
+        {
+          "name": "data-attributes-domain-list-id",
+          "wire_name": "data.attributes.domainListId",
+          "type": "int",
+          "location": "body",
+          "description": "Domain list id"
+        },
+        {
+          "name": "data-attributes-domain-list-ids",
+          "wire_name": "data.attributes.domainListIds",
+          "type": "array",
+          "location": "body",
+          "description": "Domain list ids"
+        },
+        {
+          "name": "data-attributes-fc-impressions-per-interval",
+          "wire_name": "data.attributes.fcImpressionsPerInterval",
+          "type": "int",
+          "location": "body",
+          "description": "Fc impressions per interval"
+        },
+        {
+          "name": "data-attributes-fc-interval",
+          "wire_name": "data.attributes.fcInterval",
+          "type": "int",
+          "location": "body",
+          "description": "Fc interval"
+        },
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-impression-type-ids",
+          "wire_name": "data.attributes.impressionTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Impression type ids"
+        },
+        {
+          "name": "data-attributes-inventory-type-ids",
+          "wire_name": "data.attributes.inventoryTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Inventory type ids"
+        },
+        {
+          "name": "data-attributes-is-ctv",
+          "wire_name": "data.attributes.isCTV",
+          "type": "bool",
+          "location": "body",
+          "description": "Is ctv"
+        },
+        {
+          "name": "data-attributes-is-cookieless",
+          "wire_name": "data.attributes.isCookieless",
+          "type": "bool",
+          "location": "body",
+          "description": "Is cookieless"
+        },
+        {
+          "name": "data-attributes-is-green-pmp",
+          "wire_name": "data.attributes.isGreenPmp",
+          "type": "bool",
+          "location": "body",
+          "description": "Is green pmp"
+        },
+        {
+          "name": "data-attributes-is-livestream",
+          "wire_name": "data.attributes.isLivestream",
+          "type": "bool",
+          "location": "body",
+          "description": "Is livestream"
+        },
+        {
+          "name": "data-attributes-is-rewarded-video",
+          "wire_name": "data.attributes.isRewardedVideo",
+          "type": "bool",
+          "location": "body",
+          "description": "Is rewarded video"
+        },
+        {
+          "name": "data-attributes-name",
+          "wire_name": "data.attributes.name",
+          "type": "string",
+          "location": "body",
+          "description": "Name"
+        },
+        {
+          "name": "data-attributes-network-ids",
+          "wire_name": "data.attributes.networkIds",
+          "type": "array",
+          "location": "body",
+          "description": "Network ids"
+        },
+        {
+          "name": "data-attributes-platform-ids",
+          "wire_name": "data.attributes.platformIds",
+          "type": "array",
+          "location": "body",
+          "description": "Platform ids"
+        },
+        {
+          "name": "data-attributes-region-ids",
+          "wire_name": "data.attributes.regionIds",
+          "type": "array",
+          "location": "body",
+          "description": "Region ids"
+        },
+        {
+          "name": "data-attributes-semantic-segments-targeting",
+          "wire_name": "data.attributes.semanticSegmentsTargeting",
+          "type": "string",
+          "location": "body",
+          "description": "Semantic segments targeting"
+        },
+        {
+          "name": "data-attributes-skippable",
+          "wire_name": "data.attributes.skippable",
+          "type": "bool",
+          "location": "body",
+          "description": "Skippable"
+        },
+        {
+          "name": "data-attributes-state-ids",
+          "wire_name": "data.attributes.stateIds",
+          "type": "array",
+          "location": "body",
+          "description": "State ids"
+        },
+        {
+          "name": "data-attributes-status",
+          "wire_name": "data.attributes.status",
+          "type": "string",
+          "location": "body",
+          "description": "Status"
+        },
+        {
+          "name": "data-attributes-template-ids",
+          "wire_name": "data.attributes.templateIds",
+          "type": "array",
+          "location": "body",
+          "description": "Template ids"
+        },
+        {
+          "name": "data-attributes-video-ad-break-type-ids",
+          "wire_name": "data.attributes.videoAdBreakTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Video ad break type ids"
+        },
+        {
+          "name": "data-attributes-video-completion-targeting-percentage",
+          "wire_name": "data.attributes.videoCompletionTargetingPercentage",
+          "type": "float",
+          "location": "body",
+          "description": "Video completion targeting percentage"
+        },
+        {
+          "name": "data-attributes-video-max-ad-duration-ids",
+          "wire_name": "data.attributes.videoMaxAdDurationIds",
+          "type": "array",
+          "location": "body",
+          "description": "Video max ad duration ids"
+        },
+        {
+          "name": "data-attributes-video-placement-type-ids",
+          "wire_name": "data.attributes.videoPlacementTypeIds",
+          "type": "array",
+          "location": "body",
+          "description": "Video placement type ids"
+        },
+        {
+          "name": "data-attributes-video-player-size-bucket-ids",
+          "wire_name": "data.attributes.videoPlayerSizeBucketIds",
+          "type": "array",
+          "location": "body",
+          "description": "Video player size bucket ids"
+        },
+        {
+          "name": "data-attributes-viewability-targeting-percentage",
+          "wire_name": "data.attributes.viewabilityTargetingPercentage",
+          "type": "float",
+          "location": "body",
+          "description": "Viewability targeting percentage"
+        },
+        {
+          "name": "data-id",
+          "wire_name": "data.id",
+          "type": "string",
+          "location": "body",
+          "description": "A unique identifier for the resource"
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-relationships-budgets",
+          "wire_name": "data.relationships.budgets",
+          "type": "array",
+          "location": "body",
+          "description": "Budgets"
+        },
+        {
+          "name": "data-relationships-creatives",
+          "wire_name": "data.relationships.creatives",
+          "type": "array",
+          "location": "body",
+          "description": "Creatives"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of LineItem resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_update-selfserve-6",
+      "description": "Update Native Asset resource. Required: id. Optional: data. Returns the updated SelfServeUpdateSelfserve6Response.",
+      "method": "PATCH",
+      "path": "/selfServe/nativeAssets/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Native Asset resource",
+          "required": true
+        },
+        {
+          "name": "data-attributes-asset-text",
+          "wire_name": "data.attributes.assetText",
+          "type": "string",
+          "location": "body",
+          "description": "Asset text"
+        },
+        {
+          "name": "data-attributes-data-type",
+          "wire_name": "data.attributes.dataType",
+          "type": "int",
+          "location": "body",
+          "description": "Data type"
+        },
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-image-type",
+          "wire_name": "data.attributes.imageType",
+          "type": "int",
+          "location": "body",
+          "description": "Image type"
+        },
+        {
+          "name": "data-attributes-image-url",
+          "wire_name": "data.attributes.imageUrl",
+          "type": "string",
+          "location": "body",
+          "description": "Image url"
+        },
+        {
+          "name": "data-id",
+          "wire_name": "data.id",
+          "type": "string",
+          "location": "body",
+          "description": "A unique identifier for the resource"
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of Native Asset resource"
+        }
+      ]
+    },
+    {
+      "name": "self-serve_update-selfserve-7",
+      "description": "Update Tracker resource. Required: id. Optional: data. Returns the updated SelfServeUpdateSelfserve7Response.",
+      "method": "PATCH",
+      "path": "/selfServe/trackers/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "string",
+          "location": "path",
+          "description": "Id of Tracker resource",
+          "required": true
+        },
+        {
+          "name": "data-attributes-id",
+          "wire_name": "data.attributes.id",
+          "type": "int",
+          "location": "body",
+          "description": "Id"
+        },
+        {
+          "name": "data-attributes-script",
+          "wire_name": "data.attributes.script",
+          "type": "string",
+          "location": "body",
+          "description": "Script"
+        },
+        {
+          "name": "data-attributes-url",
+          "wire_name": "data.attributes.url",
+          "type": "string",
+          "location": "body",
+          "description": "Url"
+        },
+        {
+          "name": "data-id",
+          "wire_name": "data.id",
+          "type": "string",
+          "location": "body",
+          "description": "A unique identifier for the resource"
+        },
+        {
+          "name": "data-included",
+          "wire_name": "data.included",
+          "type": "array",
+          "location": "body",
+          "description": "Included"
+        },
+        {
+          "name": "data-type",
+          "wire_name": "data.type",
+          "type": "string",
+          "location": "body",
+          "description": "Type of Tracker resource"
+        }
+      ]
+    },
+    {
+      "name": "states_get",
+      "description": "Returns the state with the given id. Required: id.",
+      "method": "GET",
+      "path": "/states/{id}",
+      "params": [
+        {
+          "name": "id",
+          "type": "int",
+          "location": "path",
+          "description": "Id of the state to return.",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "states_get-all",
+      "description": "Returns all the states. Optional: CountryIds, RegionIds, Ids (plus 5 more).",
+      "method": "GET",
+      "path": "/states",
+      "params": [
+        {
+          "name": "CountryIds",
+          "type": "array",
+          "location": "query",
+          "description": "Country ids"
+        },
+        {
+          "name": "RegionIds",
+          "type": "array",
+          "location": "query",
+          "description": "Region ids"
+        },
+        {
+          "name": "Ids",
+          "type": "array",
+          "location": "query",
+          "description": "Ids to filter on."
+        },
+        {
+          "name": "Name",
+          "type": "string",
+          "location": "query",
+          "description": "Name to filter on (exact match)."
+        },
+        {
+          "name": "IsArchived",
+          "type": "string",
+          "location": "query",
+          "description": "Filter by archived status."
+        },
+        {
+          "name": "ExtendedSearch",
+          "type": "string",
+          "location": "query",
+          "description": "Extended search term"
+        },
+        {
+          "name": "Offset",
+          "type": "int",
+          "location": "query",
+          "description": "Offset"
+        },
+        {
+          "name": "Limit",
+          "type": "int",
+          "location": "query",
+          "description": "Limit"
+        }
+      ]
+    }
+  ]
+}

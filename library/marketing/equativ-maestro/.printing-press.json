@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-18T00:59:26.704954Z",
+  "printing_press_version": "4.24.0",
+  "api_name": "equativ-maestro",
+  "display_name": "Maestro by Equativ",
+  "cli_name": "equativ-maestro-pp-cli",
+  "creator": {
+    "handle": "stellato",
+    "name": "Greg Stellato"
+  },
+  "owner": "stellato",
+  "printer": "stellato",
+  "printer_name": "Greg Stellato",
+  "spec_format": "openapi3",
+  "spec_checksum": "sha256:36d23794de028b43894caa0a73581e3ae7c74e93c1e94e6d5c1503b467910cf0",
+  "run_id": "20260617-135316-f1a2a051",
+  "category": "marketing",
+  "description": "Every Maestro deal, avails forecast, and report — scriptable, with a local database and offline analytics the web UI and official MCP server can't match.",
+  "mcp_binary": "equativ-maestro-pp-mcp",
+  "mcp_tool_count": 110,
+  "mcp_ready": "full",
+  "api_version": "V1",
+  "auth_type": "bearer_token",
+  "auth_env_vars": [
+    "EQUATIV_CLIENT_ID",
+    "EQUATIV_CLIENT_SECRET"
+  ],
+  "auth_key_url": "https://help.equativ.com/get-started-with-user-administration/create-and-manage-api-users",
+  "novel_features": [
+    {
+      "name": "Pacing drift sweep",
+      "command": "deals drift",
+      "description": "See which PMP deals drifted off pace since your last sync — one ranked view across your whole deal book."
+    },
+    {
+      "name": "Forecast permutation sweep",
+      "command": "forecast sweep",
+      "description": "Run an avails forecast across a whole targeting matrix (geo x format x audience) in one command and get the grid."
+    },
+    {
+      "name": "Cross-entity reconciliation",
+      "command": "reconcile",
+      "description": "Find structural problems across your book: deals with no line item, line items with zero delivery, budgets that don't match delivered spend."
+    },
+    {
+      "name": "Bulk deal writer with quota guard",
+      "command": "deals apply",
+      "description": "Stage a batch of deal creates/updates from a file, validate locally, dry-run by default, and commit within the daily rate caps."
+    },
+    {
+      "name": "Bid-funnel win-rate ranking",
+      "command": "deals funnel-rank",
+      "description": "Rank every deal by its bid-funnel win rate (eligible to bid to win) so the worst performers surface first."
+    }
+  ]
+}
