@@ -86,12 +86,23 @@ type sinceReport struct {
 	Cancelled []sinceChange `json:"cancelled"`
 }
 
+// snapKey returns a stable snapshot key for an event. Real events carry a
+// unique non-zero ID; for the rare element whose ID is 0, fall back to a
+// composite of start + title so multiple zero-ID events do not collide on the
+// key "0" and silently overwrite each other in the snapshot map.
+func snapKey(e calEvent) string {
+	if e.ID != 0 {
+		return fmt.Sprintf("%d", e.ID)
+	}
+	return "z|" + e.StartRaw + "|" + e.Title
+}
+
 // diffSnapshots compares a previous keyed snapshot against current events.
-// Pure and unit-tested. Keys are event IDs as strings.
+// Pure and unit-tested. Keys come from snapKey (ID, or a composite for ID 0).
 func diffSnapshots(prev map[string]snapEvent, cur []calEvent) sinceReport {
 	rep := sinceReport{Added: []sinceChange{}, Moved: []sinceChange{}, Cancelled: []sinceChange{}}
 	for _, e := range cur {
-		key := fmt.Sprintf("%d", e.ID)
+		key := snapKey(e)
 		old, ok := prev[key]
 		switch {
 		case !ok:
@@ -169,7 +180,7 @@ func loadSnapshot(path string) (map[string]snapEvent, bool, error) {
 func saveSnapshot(path string, events []calEvent) error {
 	snap := make(map[string]snapEvent, len(events))
 	for _, e := range events {
-		snap[fmt.Sprintf("%d", e.ID)] = snapEvent{Start: e.StartRaw, Title: e.Title, Cancelled: e.Cancelled}
+		snap[snapKey(e)] = snapEvent{Start: e.StartRaw, Title: e.Title, Cancelled: e.Cancelled}
 	}
 	data, err := json.MarshalIndent(snap, "", "  ")
 	if err != nil {

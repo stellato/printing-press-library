@@ -64,7 +64,8 @@ func newNovelIcalCmd(flags *rootFlags) *cobra.Command {
 // and unit-tested.
 func buildICS(events []calEvent, now time.Time) string {
 	var b strings.Builder
-	crlf := func(s string) { b.WriteString(s); b.WriteString("\r\n") }
+	// Fold each content line per RFC 5545 §3.1 before terminating with CRLF.
+	crlf := func(s string) { b.WriteString(foldICSLine(s)); b.WriteString("\r\n") }
 	crlf("BEGIN:VCALENDAR")
 	crlf("VERSION:2.0")
 	crlf("PRODID:-//sprocket-pp-cli//Sprocket Sports CLI//EN")
@@ -111,6 +112,31 @@ func icalSummary(e calEvent) string {
 		s = fmt.Sprintf("%s vs %s", s, e.Opponent)
 	}
 	return s
+}
+
+// foldICSLine folds a content line to the RFC 5545 §3.1 limit of 75 octets:
+// the first segment is at most 75 octets, and each continuation line begins
+// with a single space (which counts toward its 75-octet budget, so 74 octets
+// of payload). Folding is octet-based per the spec; a multi-byte rune may be
+// split across a fold and is reassembled by the unfolding parser before
+// charset decoding.
+func foldICSLine(s string) string {
+	const limit = 75
+	if len(s) <= limit {
+		return s
+	}
+	var b strings.Builder
+	b.WriteString(s[:limit])
+	for rest := s[limit:]; len(rest) > 0; {
+		n := 74
+		if len(rest) < n {
+			n = len(rest)
+		}
+		b.WriteString("\r\n ")
+		b.WriteString(rest[:n])
+		rest = rest[n:]
+	}
+	return b.String()
 }
 
 // icalEscape escapes the RFC-5545 special characters in text property values.

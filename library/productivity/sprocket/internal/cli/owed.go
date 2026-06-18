@@ -7,6 +7,7 @@ package cli
 import (
 	"encoding/json"
 	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -123,8 +124,26 @@ func asObjects(data json.RawMessage) (objs []map[string]any, ok bool) {
 	}
 	var generic map[string]json.RawMessage
 	if json.Unmarshal(data, &generic) == nil {
-		// First array-valued field wins (data/results/items/etc.).
-		for _, raw := range generic {
+		// Pick the array-valued field deterministically: prefer common wrapper
+		// keys, then fall back to alphabetical order. Go map iteration is
+		// randomized, so an undefined order would make field selection
+		// non-deterministic across runs for multi-array responses.
+		keys := make([]string, 0, len(generic))
+		for k := range generic {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		ordered := append([]string{"data", "results", "items", "records", "value"}, keys...)
+		seen := map[string]bool{}
+		for _, k := range ordered {
+			if seen[k] {
+				continue
+			}
+			seen[k] = true
+			raw, exists := generic[k]
+			if !exists {
+				continue
+			}
 			var inner []map[string]any
 			if json.Unmarshal(raw, &inner) == nil {
 				return inner, true

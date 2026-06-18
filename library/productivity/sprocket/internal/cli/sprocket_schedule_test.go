@@ -303,3 +303,49 @@ func TestBuildDeadlines(t *testing.T) {
 		t.Errorf("views[2] = %+v", views[2])
 	}
 }
+
+func TestFoldICSLine(t *testing.T) {
+	short := "SUMMARY:short line"
+	if foldICSLine(short) != short {
+		t.Errorf("short line should not fold")
+	}
+	long := "SUMMARY:" + strings.Repeat("x", 200)
+	folded := foldICSLine(long)
+	for i, seg := range strings.Split(folded, "\r\n") {
+		// First segment <=75 octets; continuations start with a space and are
+		// <=75 octets including that leading space.
+		if len(seg) > 75 {
+			t.Errorf("segment %d exceeds 75 octets: %d", i, len(seg))
+		}
+		if i > 0 && (len(seg) == 0 || seg[0] != ' ') {
+			t.Errorf("continuation segment %d must start with a space: %q", i, seg)
+		}
+	}
+	// Unfolding (strip CRLF+space) must recover the original.
+	if unfolded := strings.ReplaceAll(folded, "\r\n ", ""); unfolded != long {
+		t.Errorf("unfold mismatch:\n got %q\nwant %q", unfolded, long)
+	}
+}
+
+func TestSnapKeyZeroIDNoCollision(t *testing.T) {
+	a := calEvent{ID: 0, StartRaw: "2026-06-20T10:00:00", Title: "Practice A"}
+	b := calEvent{ID: 0, StartRaw: "2026-06-20T12:00:00", Title: "Practice B"}
+	if snapKey(a) == snapKey(b) {
+		t.Errorf("distinct zero-ID events must not share a snapshot key: %q", snapKey(a))
+	}
+	if snapKey(calEvent{ID: 42}) != "42" {
+		t.Errorf("non-zero ID should key by ID")
+	}
+}
+
+func TestAsObjectsDeterministicWrapper(t *testing.T) {
+	// Two array-valued fields: the priority key ("data") must win regardless of
+	// Go's randomized map iteration order. Run repeatedly to surface flakiness.
+	raw := json.RawMessage(`{"zzz":[{"a":1}],"data":[{"b":2},{"b":3}]}`)
+	for i := 0; i < 20; i++ {
+		objs, ok := asObjects(raw)
+		if !ok || len(objs) != 2 {
+			t.Fatalf("iter %d: expected the 2-element 'data' array, got ok=%v len=%d", i, ok, len(objs))
+		}
+	}
+}
