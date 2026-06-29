@@ -45,7 +45,10 @@ func newNovelDeadlinesCmd(flags *rootFlags) *cobra.Command {
 			if err != nil {
 				return fmt.Errorf("fetching open programs: %w", err)
 			}
-			views := buildDeadlines(data, time.Now(), days)
+			views, err := buildDeadlines(data, time.Now(), days)
+			if err != nil {
+				return err
+			}
 			if !wantsHumanTable(cmd.OutOrStdout(), flags) {
 				return flags.printJSON(cmd, views)
 			}
@@ -86,9 +89,14 @@ type deadlineView struct {
 
 // buildDeadlines parses open-program objects, extracts a registration close
 // date, and sorts ascending by close date (programs without a date sort last).
-// Pure and unit-tested.
-func buildDeadlines(data json.RawMessage, now time.Time, withinDays int) []deadlineView {
-	objs, _ := asObjects(data)
+// Returns an error when a non-empty response cannot be interpreted, matching
+// buildOwedReport, so an unexpected API shape surfaces as an error rather than
+// silently reporting "No open programs". Pure and unit-tested.
+func buildDeadlines(data json.RawMessage, now time.Time, withinDays int) ([]deadlineView, error) {
+	objs, ok := asObjects(data)
+	if !ok {
+		return nil, fmt.Errorf("could not interpret open-programs response (unexpected shape)")
+	}
 	views := make([]deadlineView, 0, len(objs))
 	nowDay := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
 	for _, m := range objs {
@@ -117,7 +125,7 @@ func buildDeadlines(data json.RawMessage, now time.Time, withinDays int) []deadl
 		}
 		return views[i].DaysUntilClose < views[j].DaysUntilClose
 	})
-	return views
+	return views, nil
 }
 
 // firstString returns the first key whose value is a non-empty string.

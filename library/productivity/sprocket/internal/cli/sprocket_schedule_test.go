@@ -288,7 +288,10 @@ func TestBuildDeadlines(t *testing.T) {
 		{"name":"Spring Travel","registrationEndDate":"2026-06-20"},
 		{"name":"Open Always"}
 	]`)
-	views := buildDeadlines(data, now, 14)
+	views, err := buildDeadlines(data, now, 14)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
 	if len(views) != 3 {
 		t.Fatalf("expected 3 views, got %d", len(views))
 	}
@@ -301,6 +304,60 @@ func TestBuildDeadlines(t *testing.T) {
 	}
 	if views[2].Name != "Open Always" || views[2].ClosesAt != "" || views[2].ClosingSoon {
 		t.Errorf("views[2] = %+v", views[2])
+	}
+}
+
+func TestBuildDeadlinesUninterpretable(t *testing.T) {
+	// A non-empty body that is neither an array nor an object must error rather
+	// than silently report "No open programs" (parity with buildOwedReport).
+	if _, err := buildDeadlines(json.RawMessage(`"unexpected"`), time.Now(), 14); err == nil {
+		t.Fatalf("expected error for uninterpretable open-programs response")
+	}
+	// Empty/array bodies stay non-error.
+	if _, err := buildDeadlines(json.RawMessage(`[]`), time.Now(), 14); err != nil {
+		t.Errorf("empty array should not error: %v", err)
+	}
+}
+
+func TestIcalUIDZeroIDDistinct(t *testing.T) {
+	// Distinct zero-ID events that share a start timestamp must get distinct
+	// UIDs, or calendar apps drop one of the merged events.
+	start := mustTime(t, "2026-06-20T18:00:00")
+	a := calEvent{ID: 0, Start: start, StartRaw: "2026-06-20T18:00:00", Title: "U10 Practice", LocationID: 1}
+	b := calEvent{ID: 0, Start: start, StartRaw: "2026-06-20T18:00:00", Title: "U12 Game", LocationID: 2}
+	if icalUID(a) == icalUID(b) {
+		t.Fatalf("distinct zero-ID events at the same start must not share a UID: %q", icalUID(a))
+	}
+	// Same event content -> stable UID (re-import updates, not duplicates).
+	if icalUID(a) != icalUID(a) {
+		t.Errorf("UID must be stable for identical content")
+	}
+	// Non-zero ID still keys by ID.
+	if icalUID(calEvent{ID: 99}) != "sprocket-99@sprocketsports.com" {
+		t.Errorf("non-zero ID UID changed")
+	}
+}
+
+func TestBuildICSDistinctUIDsForZeroIDEvents(t *testing.T) {
+	now := time.Date(2026, 6, 18, 0, 0, 0, 0, time.UTC)
+	start := mustTime(t, "2026-06-20T18:00:00")
+	events := []calEvent{
+		{ID: 0, Start: start, StartRaw: "2026-06-20T18:00:00", HasStart: true, Title: "Kid A practice"},
+		{ID: 0, Start: start, StartRaw: "2026-06-20T18:00:00", HasStart: true, Title: "Kid B game"},
+	}
+	ics := buildICS(events, now)
+	if c := strings.Count(ics, "BEGIN:VEVENT"); c != 2 {
+		t.Fatalf("expected 2 VEVENTs, got %d", c)
+	}
+	// Collect UID lines; they must differ.
+	var uids []string
+	for _, line := range strings.Split(ics, "\r\n") {
+		if strings.HasPrefix(line, "UID:") {
+			uids = append(uids, line)
+		}
+	}
+	if len(uids) != 2 || uids[0] == uids[1] {
+		t.Fatalf("expected 2 distinct UIDs, got %v", uids)
 	}
 }
 

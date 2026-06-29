@@ -6,6 +6,9 @@ package cli
 
 import (
 	"fmt"
+	"hash/fnv"
+	"io"
+	"strconv"
 	"strings"
 	"time"
 
@@ -103,7 +106,15 @@ func icalUID(e calEvent) string {
 	if e.ID != 0 {
 		return fmt.Sprintf("sprocket-%d@sprocketsports.com", e.ID)
 	}
-	return fmt.Sprintf("sprocket-%s@sprocketsports.com", e.Start.Format("20060102T150405"))
+	// Zero-ID events: a start timestamp alone is not unique — two of a family's
+	// children can have distinct events at the same time, and identical UIDs
+	// make calendar apps silently drop one (defeating the multi-child merge).
+	// Disambiguate with a stable content hash of the distinguishing fields so
+	// distinct events get distinct UIDs while re-imports of the same event stay
+	// stable.
+	h := fnv.New32a()
+	_, _ = io.WriteString(h, e.StartRaw+"\x00"+e.EndRaw+"\x00"+e.Title+"\x00"+e.Opponent+"\x00"+strconv.Itoa(e.LocationID))
+	return fmt.Sprintf("sprocket-%s-%08x@sprocketsports.com", e.Start.Format("20060102T150405"), h.Sum32())
 }
 
 func icalSummary(e calEvent) string {
