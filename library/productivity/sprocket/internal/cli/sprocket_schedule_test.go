@@ -406,3 +406,34 @@ func TestAsObjectsDeterministicWrapper(t *testing.T) {
 		}
 	}
 }
+
+func TestAwayRowMarksCancelled(t *testing.T) {
+	live := awayRow(calEvent{Title: "vs Rivals", Opponent: "Rivals", HasStart: false})
+	if strings.Contains(live[4], "CANCELLED") {
+		t.Errorf("live game should not be marked cancelled: %q", live[4])
+	}
+	off := awayRow(calEvent{Title: "vs Rivals", Opponent: "Rivals", Cancelled: true})
+	if !strings.HasPrefix(off[4], "[CANCELLED] ") {
+		t.Errorf("cancelled away game must be marked: %q", off[4])
+	}
+}
+
+func TestClubKeyFromBaseURL(t *testing.T) {
+	cases := map[string]string{
+		"https://jfcsoccer.sprocketsports.com":      "jfcsoccer-sprocketsports-com",
+		"https://otherclub.sprocketsports.com/":     "otherclub-sprocketsports-com",
+		"jfcsoccer.sprocketsports.com":              "jfcsoccer-sprocketsports-com",
+		"":                                          "default",
+	}
+	for in, want := range cases {
+		if got := clubKeyFromBaseURL(in); got != want {
+			t.Errorf("clubKeyFromBaseURL(%q) = %q, want %q", in, got, want)
+		}
+	}
+	// Distinct clubs must yield distinct snapshot paths.
+	a, _ := sinceSnapshotPath(clubKeyFromBaseURL("https://jfcsoccer.sprocketsports.com"))
+	b, _ := sinceSnapshotPath(clubKeyFromBaseURL("https://otherclub.sprocketsports.com"))
+	if a == b {
+		t.Errorf("distinct clubs must use distinct snapshot files: %q", a)
+	}
+}

@@ -7,8 +7,10 @@ package cli
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -47,7 +49,7 @@ func newNovelSinceCmd(flags *rootFlags) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			snapPath, err := sinceSnapshotPath()
+			snapPath, err := sinceSnapshotPath(clubKeyFromBaseURL(c.RequestBaseURL()))
 			if err != nil {
 				return err
 			}
@@ -150,18 +152,45 @@ func renderSinceReport(cmd *cobra.Command, flags *rootFlags, rep sinceReport, tr
 	return nil
 }
 
-func sinceSnapshotPath() (string, error) {
+// clubKeyFromBaseURL derives a filesystem-safe key from the configured base
+// URL's host so each club's `since` snapshot is stored separately. Without
+// this, switching SPROCKET_CLUB / SPROCKET_BASE_URL between runs would
+// overwrite one club's snapshot with another's and report every event as
+// "Added" on the next run. The key is restricted to [a-z0-9-], so it can never
+// introduce path traversal.
+func clubKeyFromBaseURL(baseURL string) string {
+	host := baseURL
+	if u, err := url.Parse(baseURL); err == nil && u.Host != "" {
+		host = u.Host
+	}
+	var b strings.Builder
+	for _, r := range strings.ToLower(host) {
+		if (r >= 'a' && r <= 'z') || (r >= '0' && r <= '9') {
+			b.WriteRune(r)
+		} else {
+			b.WriteByte('-')
+		}
+	}
+	key := strings.Trim(b.String(), "-")
+	if key == "" {
+		return "default"
+	}
+	return key
+}
+
+func sinceSnapshotPath(clubKey string) (string, error) {
 	dir, err := os.UserConfigDir()
 	if err != nil {
 		return "", fmt.Errorf("resolving config dir: %w", err)
 	}
-	return filepath.Join(dir, "sprocket-pp-cli", "since-snapshot.json"), nil
+	return filepath.Join(dir, "sprocket-pp-cli", "since-snapshot-"+clubKey+".json"), nil
 }
 
 func loadSnapshot(path string) (map[string]snapEvent, bool, error) {
 	// #nosec G304 -- path is program-controlled: os.UserConfigDir() joined with
-	// the fixed "sprocket-pp-cli/since-snapshot.json" segments (see sinceSnapshotPath).
-	// No user- or network-supplied component reaches this read.
+	// the fixed "sprocket-pp-cli/since-snapshot-<clubKey>.json" segments, where
+	// clubKey is sanitized to [a-z0-9-] (see clubKeyFromBaseURL/sinceSnapshotPath).
+	// No raw user- or network-supplied component reaches this read.
 	data, err := os.ReadFile(path)
 	if os.IsNotExist(err) {
 		return map[string]snapEvent{}, false, nil

@@ -89,5 +89,11 @@ func awayRow(e calEvent) []string {
 	if loc == "" && e.LocationID != 0 {
 		loc = fmt.Sprintf("location #%d", e.LocationID)
 	}
-	return []string{date, tm, e.Opponent, loc, e.Title}
+	title := e.Title
+	if e.Cancelled {
+		// Mark cancelled games, like eventRow — a carpool drive list must not
+		// send families to a field for a game that is off.
+		title = "[CANCELLED] " + title
+	}
+	return []string{date, tm, e.Opponent, loc, title}
 }
